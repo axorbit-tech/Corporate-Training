@@ -2,7 +2,9 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cookieParser from "cookie-parser";
 import connectDB from './config/dbConfig';
-
+// import userRoutes from './routes/userRoutes'
+import adminRoutes from './routes/adminRoutes'
+// import trainerRoutes from './routes/trainerRoutes'
 
 dotenv.config()
 
@@ -16,6 +18,10 @@ app.use(cookieParser());
 app.get('/', (req, res)=> {
     res.send('application is running successfully')
 })
+
+// app.use('/api', userRoutes)
+app.use('/api/admin', adminRoutes)
+// app.use('/api/trainer', trainerRoutes)
 
 const startServer = async () => {
   await connectDB();
