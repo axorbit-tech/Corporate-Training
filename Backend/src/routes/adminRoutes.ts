@@ -21,5 +21,7 @@ router.delete('/delete-location/:id', locationController.deleteLocation)
 
 // add, edit, delete services routes
 router.post('/add-service', serviceController.addService)
+router.put('/edit-service/:id', serviceController.editService)
+router.delete('/delete-service/:id', serviceController.deleteService)
 
 export default router;
