@@ -5,6 +5,8 @@ import locationController from "../controllers/adminControllers/locationControll
 import serviceController from "../controllers/adminControllers/serviceController";
 import eventController from "../controllers/adminControllers/eventController";
 import blogController from "../controllers/adminControllers/blogController";
+import whyUsController from "../controllers/adminControllers/whyUsController";
+import testimonialController from "../controllers/adminControllers/testimonialController";
 const router = express.Router();
 
 // authentication routes
@@ -12,28 +14,38 @@ router.post('/login', adminController.login)
 // router.post('/signup', adminController.signupAdmin)
 
 // add, edit, delete languages routes
-router.post('/add-language', languageController.addLanguage)
-router.put('/edit-language/:id', languageController.editLanguage)
-router.delete('/delete-language/:id', languageController.deleteLanguage)
+router.post('/language', languageController.addLanguage)
+router.put('/language/:id', languageController.editLanguage)
+router.delete('/language/:id', languageController.deleteLanguage)
 
 // add, edit, delete locations routes
-router.post('/add-location', locationController.addLocation)
-router.put('/edit-location/:id', locationController.editLocation)
-router.delete('/delete-location/:id', locationController.deleteLocation)
+router.post('/location', locationController.addLocation)
+router.put('/location/:id', locationController.editLocation)
+router.delete('/location/:id', locationController.deleteLocation)
 
 // add, edit, delete services routes
-router.post('/add-service', serviceController.addService)
-router.put('/edit-service/:id', serviceController.editService)
-router.delete('/delete-service/:id', serviceController.deleteService)
+router.post('/service', serviceController.addService)
+router.put('/service/:id', serviceController.editService)
+router.delete('/service/:id', serviceController.deleteService)
 
 // add, edit, delete event routes
-router.post('/add-event', eventController.addEvent)
-router.put('/edit-event/:id', eventController.editEvent)
-router.delete('/delete-event/:id', eventController.deleteEvent)
+router.post('/event', eventController.addEvent)
+router.put('/event/:id', eventController.editEvent)
+router.delete('/event/:id', eventController.deleteEvent)
 
 // add, edit, delete blog routes
-router.post('/add-blog', blogController.addBlog)
-router.put('/edit-blog/:id', blogController.editBlog)
-router.delete('/delete-blog/:id', blogController.deleteBlog)
+router.post('/blog', blogController.addBlog)
+router.put('/blog/:id', blogController.editBlog)
+router.delete('/blog/:id', blogController.deleteBlog)
+
+// add, edit, delete whyUs routes
+router.post('/why-us', whyUsController.addWhyUs)
+router.put('/why-us/:id', whyUsController.editWhyUs)
+router.delete('/why-us/:id', whyUsController.deleteWhyUs)
+
+// add, edit, delete testimonials routes
+router.post('/testimonials', testimonialController.addTestimonial)
+router.put('/testimonials/:id', testimonialController.editTestimonial)
+router.delete('/testimonials/:id', testimonialController.deleteTestimonial)
 
 export default router;
