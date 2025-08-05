@@ -16,6 +16,8 @@ router.delete('/delete-language/:id', languageController.deleteLanguage)
 
 // add, edit, delete locations routes
 router.post('/add-location', locationController.addLocation)
+router.put('/edit-location/:id', locationController.editLocation)
+router.delete('/delete-location/:id', locationController.deleteLocation)
 
 // add, edit, delete services routes
 router.post('/add-service', serviceController.addService)

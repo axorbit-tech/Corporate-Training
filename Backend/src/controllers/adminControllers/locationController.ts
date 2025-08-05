@@ -3,9 +3,9 @@ import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import LocationModel from "../../models/adminModels/locationModel";
 import { locationSchema } from "../../validations/adminValidation/locationValidation";
 
+// ✅ add Location
 const addLocation = async (req: Request, res: Response): Promise<void> => {
   try {
-
     const { error } = locationSchema.validate(req.body);
 
     if (error) {
@@ -44,8 +44,79 @@ const addLocation = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const languageController = {
-  addLocation,
+// ✅ Edit Location
+const editLocation = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { location, code } = req.body;
+
+    const { error } = locationSchema.validate({ location, code });
+    if (error) {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        error: error.details[0].message,
+      });
+      return;
+    }
+
+    const updated = await LocationModel.findByIdAndUpdate(
+      id,
+      { location, code },
+      { new: true }
+    );
+
+    if (!updated) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Location not found",
+      });
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Location updated successfully",
+      data: updated,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error updating Location",
+    });
+  }
 };
 
-export default languageController;
+// ✅ Delete Location
+const deleteLocation = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await LocationModel.findByIdAndDelete(id);
+
+    if (!deleted) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Location not found",
+      });
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Location deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error deleting Location",
+    });
+  }
+};
+
+const locationController = {
+  addLocation,
+  editLocation,
+  deleteLocation,
+};
+
+export default locationController;
