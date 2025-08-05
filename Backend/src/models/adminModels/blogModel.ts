@@ -3,7 +3,6 @@ import mongoose, { Document } from "mongoose";
 export interface IBlog extends Document {
   title: string;
   content: string;
-  coverImage: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -17,11 +16,7 @@ const blogSchema = new mongoose.Schema(
     content: {
       type: String,
       required: true,
-    },
-    coverImage: {
-      type: String,
-      required: true,
-    },
+    }
   },
   { timestamps: true }
 );
