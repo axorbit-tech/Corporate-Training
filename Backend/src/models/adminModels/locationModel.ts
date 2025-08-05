@@ -1,12 +1,12 @@
 import mongoose, { Document } from 'mongoose';
 
 export interface ILocation extends Document {
-  language: string;
+  location: string;
   code: string;
 }
 
 const locationSchema = new mongoose.Schema({
-  language: {
+  location: {
     type: String,
     required: true
   },

@@ -40,7 +40,7 @@ const addLanguage = async (req: Request, res: Response): Promise<void> => {
     console.error(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      .json({ error: "Error logging in user" });
+      .json({ error: "Error adding languages" });
   }
 };
 
