@@ -44,8 +44,78 @@ const addLanguage = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const editLanguage = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { language, code } = req.body;
+
+    const { error } = languageSchema.validate({ language, code });
+    if (error) {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        error: error.details[0].message,
+      });
+      return;
+    }
+
+    const updated = await LanguageModel.findByIdAndUpdate(
+      id,
+      { language, code },
+      { new: true }
+    );
+
+    if (!updated) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Language not found",
+      });
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Language updated successfully",
+      data: updated,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error updating language",
+    });
+  }
+};
+
+// ✅ Delete Language
+const deleteLanguage = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await LanguageModel.findByIdAndDelete(id);
+
+    if (!deleted) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Language not found",
+      });
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Language deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error deleting language",
+    });
+  }
+};
+
 const languageController = {
   addLanguage,
+  editLanguage,
+  deleteLanguage
 };
 
 export default languageController;

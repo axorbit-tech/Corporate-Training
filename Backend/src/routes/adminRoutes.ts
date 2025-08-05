@@ -5,10 +5,19 @@ import locationController from "../controllers/adminControllers/locationControll
 import serviceController from "../controllers/adminControllers/serviceController";
 const router = express.Router();
 
+// authentication routes
 router.post('/login', adminController.login)
 // router.post('/signup', adminController.signupAdmin)
+
+// add, edit, delete languages routes
 router.post('/add-language', languageController.addLanguage)
+router.put('/edit-language/:id', languageController.editLanguage)
+router.delete('/delete-language/:id', languageController.deleteLanguage)
+
+// add, edit, delete locations routes
 router.post('/add-location', locationController.addLocation)
+
+// add, edit, delete services routes
 router.post('/add-service', serviceController.addService)
 
 export default router;
