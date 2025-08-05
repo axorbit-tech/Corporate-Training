@@ -3,7 +3,7 @@ import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import blogModel from "../../models/adminModels/blogModel";
 import { blogSchema } from "../../validations/adminValidation/blogValidation";
 
-// ✅ Edit Blog
+// ✅ Add Blog
 const addBlog = async (req: Request, res: Response): Promise<void> => {
   try {
     const { error } = blogSchema.validate(req.body);

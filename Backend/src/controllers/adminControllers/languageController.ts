@@ -3,6 +3,7 @@ import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import LanguageModel from "../../models/adminModels/languageModel";
 import { languageSchema } from "../../validations/adminValidation/languageValidation";
 
+// ✅ Add Language
 const addLanguage = async (req: Request, res: Response): Promise<void> => {
   try {
 
@@ -44,6 +45,7 @@ const addLanguage = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+// ✅ Edit Language
 const editLanguage = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;

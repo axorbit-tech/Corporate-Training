@@ -86,7 +86,7 @@ const editTestimonial = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// ✅ Delete Service
+// ✅ Delete Testimonial
 const deleteTestimonial = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;

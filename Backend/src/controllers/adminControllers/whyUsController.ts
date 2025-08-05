@@ -3,7 +3,7 @@ import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import whyUsModel from "../../models/adminModels/whyUsModel";
 import { whyUsSchema } from "../../validations/adminValidation/whyUsValidation";
 
-// ✅ Edit WhyUs
+// ✅ Add WhyUs
 const addWhyUs = async (req: Request, res: Response): Promise<void> => {
   try {
     const { error } = whyUsSchema.validate(req.body);

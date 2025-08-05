@@ -3,7 +3,7 @@ import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import serviceModel from "../../models/adminModels/serviceModel";
 import { serviceSchema } from "../../validations/adminValidation/serviceValidation";
 
-// ✅ Edit Service
+// ✅ Add Service
 const addService = async (req: Request, res: Response): Promise<void> => {
   try {
     const { error } = serviceSchema.validate(req.body);

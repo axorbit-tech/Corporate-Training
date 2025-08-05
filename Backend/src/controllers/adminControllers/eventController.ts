@@ -3,7 +3,7 @@ import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import eventModel from "../../models/adminModels/eventModel";
 import { eventSchema } from "../../validations/adminValidation/eventValidation";
 
-// ✅ Edit Service
+// ✅ Add Event
 const addEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { error } = eventSchema.validate(req.body);
@@ -44,7 +44,7 @@ const addEvent = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// ✅ Edit Service
+// ✅ Edit Event
 const editEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
@@ -86,7 +86,7 @@ const editEvent = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// ✅ Delete Service
+// ✅ Delete Event
 const deleteEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
@@ -113,10 +113,10 @@ const deleteEvent = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const serviceController = {
+const EventController = {
   addEvent,
   editEvent,
   deleteEvent
 };
 
-export default serviceController;
+export default EventController;

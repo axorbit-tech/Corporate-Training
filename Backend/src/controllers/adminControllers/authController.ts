@@ -8,6 +8,7 @@ import { authSchema } from "../../validations/adminValidation/authValidation";
 
 dotenv.config();
 
+// Login for Admin
 const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { error } = authSchema.validate(req.body);
