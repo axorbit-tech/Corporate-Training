@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 
 const TestimonialsSection = () => {
@@ -44,18 +42,18 @@ const TestimonialsSection = () => {
   }
 
   return (
-    <section className="bg-gray-50 py-16 lg:py-16">
+    <section className="testimonial-section bg-gray-50 py-16 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Testimonials</h2>
+          <h2 className="testimonial-main-heading text-3xl lg:text-4xl font-bold text-blue-600 mb-2">Testimonials</h2>
           {/* Blue underline */}
-          <div className="w-16 h-1 bg-blue-500 mx-auto"></div>
+          {/* <div className="w-16 h-1 bg-blue-500 mx-auto"></div> */}
         </div>
 
         {/* Subheading */}
         <div className="mb-16">
-          <h3 className="text-2xl lg:text-3xl text-center font-bold text-gray-900">What Employees & Leaders Are Saying</h3>
+          <h3 className="testimonial-subheading text-2xl lg:text-3xl text-center font-bold text-gray-900">What Employees & Leaders Are Saying</h3>
         </div>
 
         {/* Testimonial Carousel */}
@@ -63,7 +61,7 @@ const TestimonialsSection = () => {
           {/* Navigation Arrows */}
           <button
             onClick={goToPrevious}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-12 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group z-10"
+            className="absolute left-2 lg:left-0 top-1/2 transform -translate-y-1/2 lg:-translate-x-12 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group z-10"
             aria-label="Previous testimonial"
           >
             <svg
@@ -78,7 +76,7 @@ const TestimonialsSection = () => {
 
           <button
             onClick={goToNext}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-12 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group z-10"
+            className="absolute right-2 lg:right-0 top-1/2 transform -translate-y-1/2 lg:translate-x-12 w-10 h-10 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group z-10"
             aria-label="Next testimonial"
           >
             <svg

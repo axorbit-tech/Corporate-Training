@@ -9,7 +9,7 @@ const ServiceSection = () => {
         "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges. Whether it's work-related stress, anxiety, burnout, or personal life difficulties, our licensed counsellors are here to help your team stay mentally healthy and emotionally resilient.",
+        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
     },
     {
       id: 2,
@@ -17,7 +17,7 @@ const ServiceSection = () => {
         "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges. Whether it's work-related stress, anxiety, burnout, or personal life difficulties, our licensed counsellors are here to help your team stay mentally healthy and emotionally resilient.",
+        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
     },
     {
       id: 3,
@@ -25,15 +25,15 @@ const ServiceSection = () => {
         "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges. Whether it's work-related stress, anxiety, burnout, or personal life difficulties, our licensed counsellors are here to help your team stay mentally healthy and emotionally resilient.",
+        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
     },
     {
       id: 4,
       image:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+        "/assets/heroSectionImage.jpg",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges. Whether it's work-related stress, anxiety, burnout, or personal life difficulties, our licensed counsellors are here to help your team stay mentally healthy and emotionally resilient.",
+        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
     },
     {
       id: 5,
@@ -41,18 +41,26 @@ const ServiceSection = () => {
         "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges. Whether it's work-related stress, anxiety, burnout, or personal life difficulties, our licensed counsellors are here to help your team stay mentally healthy and emotionally resilient.",
+        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
+    },
+    {
+      id: 6,
+      image:
+        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+      title: "CORPORATE COUNSELLING SERVICES",
+      description:
+        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
     },
   ]
 
   return (
-    <section className="bg-gray-50 py-16 lg:py-16">
+    <section className="service-section py-16 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Services</h2>
+          <h2 className="service-main-heading text-3xl lg:text-4xl font-bold text-blue-600 mb-2">Services</h2>
           {/* Blue underline */}
-          <div className="w-16 h-1 bg-blue-500 mx-auto"></div>
+          {/* <div className="w-16 h-1 bg-blue-500 mx-auto"></div> */}
         </div>
 
         {/* Services Grid */}
@@ -66,6 +74,13 @@ const ServiceSection = () => {
             />
           ))}
         </div>
+
+          <div className="text-center">
+          <button className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+            ALL SERVICES
+          </button>
+        </div>
+
 
         {/* Know More Button */}
         {/* <div className="flex justify-center lg:justify-end">

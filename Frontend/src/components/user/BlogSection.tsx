@@ -21,18 +21,18 @@ const BlogSection = () => {
   ]
 
   return (
-    <section className="bg-gray-50 py-16 lg:py-24">
+    <section className="blog-section bg-gray-50 py-16 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Our Blogs</h2>
+          <h2 className="blog-main-heading text-3xl lg:text-4xl font-bold text-blue-600 mb-2">Our Blogs</h2>
           {/* Blue underline */}
-          <div className="w-16 h-1 bg-blue-500 mx-auto"></div>
+          {/* <div className="w-16 h-1 bg-blue-500 mx-auto"></div> */}
         </div>
 
         {/* Description */}
         <div className="text-center mb-16">
-          <p className="text-xl lg:text-2xl text-gray-700 leading-relaxed max-w-4xl mx-auto">
+          <p className="blog-subheading text-xl lg:text-2xl text-gray-700 leading-relaxed max-w-4xl mx-auto">
             Every post is crafted to deliver value, offering actionable advice that supports your goals.
           </p>
         </div>
@@ -68,7 +68,7 @@ const BlogSection = () => {
 
         {/* All Posts Button */}
         <div className="text-center">
-          <button className="bg-gradient-to-r from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600 text-white px-12 py-4 rounded-full font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+          <button className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
             ALL POSTS
           </button>
         </div>
