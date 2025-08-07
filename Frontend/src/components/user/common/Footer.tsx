@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer: React.FC = () => {
   return (
-    <footer className="footer-section bg-blue-100 py-8 sm:py-12 lg:py-16">
+    <footer className="footer-section bg-green-50 py-8 sm:pt-10 lg:pt-10 sm:pb-6 lg:pb-6">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Left Column - Company Info & Social Media */}
@@ -118,16 +118,16 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Copyright */}
-            <div className="pt-6 space-y-2">
-              <p className="footer-copyright text-xs text-gray-600">
-                All Rights Reserved By Axorbit Technologies ®
-              </p>
-              <p className="footer-copyright text-xs text-gray-600">
-                Copyright © 2025
-              </p>
-            </div>
           </div>
         </div>
+            <div className="pt-10 space-y-2 text-center">
+              <p className="footer-copyright text-xs text-gray-600">
+                All Rights Reserved By Axorbit Technologies ® Copyright © 2025
+              </p>
+              {/* <p className="footer-copyright text-xs text-gray-600">
+                
+              </p> */}
+            </div>
       </div>
     </footer>
   )

@@ -210,3 +210,40 @@
 .stats-section .stats-number {
   animation: countUp 0.8s ease-out;
 }
+
+.mission-vision-section .mission-heading,
+.mission-vision-section .vision-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.3;
+}
+
+.mission-vision-section .mission-text,
+.mission-vision-section .vision-text {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.6;
+}
+
+/* Responsive image adjustments */
+@media (max-width: 768px) {
+  .mission-vision-section .mission-vision-image {
+    min-height: 250px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .mission-vision-section .mission-vision-image {
+    min-height: 300px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mission-vision-section .mission-vision-image {
+    min-height: 400px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}

@@ -29,11 +29,11 @@ const StatsSection: React.FC = () => {
   ]
 
   return (
-    <section className="stats-section bg-gray-50 py-16 sm:py-20 lg:py-10 lg:px-10">
+    <section className="stats-section bg-gray-50 py-16 sm:py-20 lg:pt-10 lg:pb-24 lg:px-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+        <div className="text-center mb-12 sm:mb-16 lg:mb-12">
           <h2 className="stats-main-heading text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
             Our Achievements
           </h2>
@@ -48,7 +48,7 @@ const StatsSection: React.FC = () => {
           <div className="absolute inset-0 bg-gray-50 rounded-xl opacity-50"></div>
           
           {/* Main Stats Card */}
-          <div className="relative bg-white/80 backdrop-blur-sm border border-gray-200 shadow-xl p-6 sm:p-8 lg:p-12">
+          <div className="relative bg-white/80 backdrop-blur-sm border border-gray-200 shadow-xl p-6 sm:p-7 lg:p-7">
             
             {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
@@ -73,7 +73,7 @@ const StatsSection: React.FC = () => {
                       {/* Background Circle */}
                       <div className="w-20 h-20 sm:w-24 sm:h-24 bg-blue-50 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-blue-100 transition-colors duration-300">
                         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
-                          <svg className="w-5 h-5 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-7 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
@@ -81,7 +81,7 @@ const StatsSection: React.FC = () => {
                       
                       {/* Number */}
                       <div className="flex items-center justify-center space-x-1">
-                        <span className="stats-number text-4xl sm:text-5xl md:text-xl lg:text-2xl xl:text-3xl font-bold text-blue-500">
+                        <span className="stats-main-heading text-4xl sm:text-5xl md:text-xl lg:text-2xl xl:text-3xl font-bold text-blue-500">
                           {stat.number}
                         </span>
                         <span className="stats-suffix text-3xl sm:text-4xl md:text-xl lg:text-2xl xl:text-3xl font-bold text-blue-500">
@@ -91,7 +91,7 @@ const StatsSection: React.FC = () => {
                     </div>
 
                     {/* Title */}
-                    <h3 className="stats-title text-lg sm:text-xl md:text-2xl font-bold text-gray-900 leading-tight">
+                    <h3 className="stats-main-heading text-lg sm:text-xl md:text-2xl font-bold text-gray-900 leading-tight">
                       {stat.title}
                     </h3>
 
