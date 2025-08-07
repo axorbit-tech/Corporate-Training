@@ -41,7 +41,7 @@ const SolutionsSection: React.FC = () => {
   ]
 
   return (
-    <section className="solutions-section bg-white py-16 sm:py-20 lg:py-24 md:my-10 md:mx-10">
+    <section className="solutions-section bg-white py-16 sm:py-20 md:my-10 lg-my-16 md:mx-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="text-center mb-12 sm:mb-16 lg:mb-20">

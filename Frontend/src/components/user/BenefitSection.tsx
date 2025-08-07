@@ -25,8 +25,8 @@ const BenefitsSection: React.FC = () => {
   ]
 
   return (
-    <section className="benefits-section py-8 px-4 sm:px-6 lg:px-8">
-      <div className="relative overflow-hidden rounded-3xl shadow-2xl max-w-8xl md:mx-8">
+    <section className="benefits-section px-4 sm:px-6 lg:px-8">
+      <div className="relative overflow-hidden rounded-3xl shadow-xl max-w-8xl md:mx-8">
         {/* Background Image Section */}
         <div className="relative h-96 sm:h-[50vh] min-h-[400px] overflow-hidden rounded-t-3xl">
           <img

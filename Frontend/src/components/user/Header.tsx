@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
           {/* Desktop Navigation - Center */}
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center space-x-10 xl:space-x-13">
+            <div className="flex items-center space-x-6 xl:space-x-11">
               <a 
                 href="/" 
                 className="text-blue-600 font-medium text-sm tracking-wide hover:text-blue-700 transition-colors py-2"

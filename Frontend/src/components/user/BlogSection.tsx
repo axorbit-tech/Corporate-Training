@@ -25,7 +25,7 @@ const BlogSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="blog-main-heading text-3xl lg:text-4xl font-bold text-blue-600 mb-2">Our Blogs</h2>
+          <h2 className="blog-main-heading text-3xl font-bold text-blue-600 mb-2">Our Blogs</h2>
           {/* Blue underline */}
           {/* <div className="w-16 h-1 bg-blue-500 mx-auto"></div> */}
         </div>

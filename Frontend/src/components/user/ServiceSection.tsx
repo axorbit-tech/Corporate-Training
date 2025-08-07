@@ -14,7 +14,7 @@ const ServiceSection = () => {
     {
       id: 2,
       image:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+        "/assets/heroSectionImage.jpg",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
         "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
@@ -46,7 +46,7 @@ const ServiceSection = () => {
     {
       id: 6,
       image:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+        "/assets/heroSectionImage.jpg",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
         "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
@@ -58,7 +58,7 @@ const ServiceSection = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="service-main-heading text-3xl lg:text-4xl font-bold text-blue-600 mb-2">Services</h2>
+          <h2 className="service-main-heading text-3xl font-bold text-blue-600 mb-2">Services</h2>
           {/* Blue underline */}
           {/* <div className="w-16 h-1 bg-blue-500 mx-auto"></div> */}
         </div>
