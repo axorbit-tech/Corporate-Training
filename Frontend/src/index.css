@@ -12,6 +12,10 @@
   letter-spacing: -0.02em;
 }
 
+.blog-details-heading {
+  font-family: "Lusitana", serif;
+}
+
 .about-section .about-body-text {
   font-family: "Montserrat", sans-serif;
   line-height: 1.7;
