@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./routers/ProtectedRoutes";
 import PublicRoute from "./routers/PublicRoutes";
 import Home from "./pages/user/Home";
+import About from './pages/user/About'
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route element={<PublicRoute />}>
             {/* <Route path="/login" element={<Login />} />
             <Route path="/resetPassword/:token" element={<ResetPassword />} /> */}
