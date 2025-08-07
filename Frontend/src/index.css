@@ -247,3 +247,134 @@
     object-position: center center;
   }
 }
+
+.services-overview-section .services-main-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.services-overview-section .services-description {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.7;
+}
+
+/* Responsive image adjustments */
+@media (max-width: 640px) {
+  .services-overview-section .services-team-image {
+    min-height: 250px;
+    max-height: 300px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .services-overview-section .services-team-image {
+    min-height: 300px;
+    max-height: 400px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+@media (min-width: 1025px) {
+  .services-overview-section .services-team-image {
+    min-height: 400px;
+    max-height: 500px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+.service-card .service-card-title {
+  font-family: "Lusitana", serif;
+  line-height: 1.3;
+}
+
+.service-card .service-card-description,
+.service-card .service-card-link {
+  font-family: "Montserrat", sans-serif;
+}
+
+.service-card .service-card-description {
+  line-height: 1.6;
+}
+
+.services-grid-section .services-grid-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.services-grid-section .services-grid-subheading {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.6;
+}
+
+.event-card .event-card-date,
+.event-card .event-card-month,
+.event-card .event-card-title {
+  font-family: "Lusitana", serif;
+}
+
+.event-card .event-card-description,
+.event-card .event-card-link {
+  font-family: "Montserrat", sans-serif;
+}
+
+.event-card .line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  line-clamp: 2;
+  box-orient: vertical;
+}
+
+.event-card .line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  /* Future standard syntax */
+  line-clamp: 3;
+  box-orient: vertical;
+}
+
+.upcoming-events-section .upcoming-events-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.upcoming-events-section .events-carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.upcoming-events-section .scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.upcoming-events-section .nav-arrow-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Smooth scroll behavior */
+.upcoming-events-section .events-carousel-container {
+  scroll-behavior: smooth;
+}
+
+/* Mobile scroll snap */
+@media (max-width: 1024px) {
+  .upcoming-events-section .events-carousel-container {
+    scroll-snap-type: x mandatory;
+  }
+
+  .upcoming-events-section .event-card {
+    scroll-snap-align: start;
+  }
+}

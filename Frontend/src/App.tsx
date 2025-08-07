@@ -4,6 +4,8 @@ import ProtectedRoute from "./routers/ProtectedRoutes";
 import PublicRoute from "./routers/PublicRoutes";
 import Home from "./pages/user/Home";
 import About from './pages/user/About'
+import Services from './pages/user/Services'
+import Events from './pages/user/Events'
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/events" element={<Events />} />
           <Route element={<PublicRoute />}>
             {/* <Route path="/login" element={<Login />} />
             <Route path="/resetPassword/:token" element={<ResetPassword />} /> */}
