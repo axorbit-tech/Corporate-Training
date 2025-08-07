@@ -1,13 +1,13 @@
-import Header from '../../components/user/Header'
-import Hero from '../../components/user/HeroSection'
-import Footer from '../../components/user/Footer'
-import About from '../../components/user/AboutSection'
-import ServiceSection from '../../components/user/ServiceSection'
-import TestimonialsSection from '../../components/user/TestimonialSection'
-import BlogSection from '../../components/user/BlogSection'
-import SolutionsSection from '../../components/user/SolutionsSection'
-import BenefitsSection from '../../components/user/BenefitSection'
-import MindsetCTASection from '../../components/user/MindsetCTASection'
+import Header from '../../components/user/common/Header'
+import Hero from '../../components/user/home/HeroSection'
+import Footer from '../../components/user/common/Footer'
+import About from '../../components/user/home/AboutSection'
+import ServiceSection from '../../components/user/home/ServiceSection'
+import TestimonialsSection from '../../components/user/home/TestimonialSection'
+import BlogSection from '../../components/user/home/BlogSection'
+import SolutionsSection from '../../components/user/home/SolutionsSection'
+import BenefitsSection from '../../components/user/home/BenefitSection'
+import MindsetCTASection from '../../components/user/home/MindsetCTASection'
 
 export default function home() {
   return (

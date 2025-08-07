@@ -1,4 +1,4 @@
-import ServiceCard from "./cards/ServiceCard"
+import ServiceCard from "../cards/ServiceCard"
 
 const ServiceSection = () => {
   // Sample service data - you can modify this as needed
@@ -6,7 +6,7 @@ const ServiceSection = () => {
     {
       id: 1,
       image:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+        "/assets/aboutpageImage1.jpg",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
         "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
@@ -22,7 +22,7 @@ const ServiceSection = () => {
     {
       id: 3,
       image:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+        "/assets/benefitSectionImage.jpg",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
         "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
@@ -30,7 +30,7 @@ const ServiceSection = () => {
     {
       id: 4,
       image:
-        "/assets/heroSectionImage.jpg",
+        "/assets/aboutpageImage2.jpg",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
         "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
@@ -38,7 +38,7 @@ const ServiceSection = () => {
     {
       id: 5,
       image:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1026&q=80",
+        "/assets/aboutpageImage3.jpg",
       title: "CORPORATE COUNSELLING SERVICES",
       description:
         "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",

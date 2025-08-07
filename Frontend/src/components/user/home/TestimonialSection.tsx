@@ -45,7 +45,7 @@ const TestimonialsSection = () => {
     <section className="testimonial-section bg-gray-50 py-16 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-6">
           <h2 className="testimonial-main-heading text-3xl font-bold text-blue-600 mb-2">Testimonials</h2>
           {/* Blue underline */}
           {/* <div className="w-16 h-1 bg-blue-500 mx-auto"></div> */}
