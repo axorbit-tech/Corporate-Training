@@ -4,13 +4,16 @@ import ProtectedRoute from "./routers/ProtectedRoutes";
 import Home from "./pages/user/Home";
 
 import About from './pages/user/About';
-import BlogDetails from './pages/user/BlogDetails';
+
 
 import Services from './pages/user/Services'
 import Events from './pages/user/Events'
 import Blogs from "./pages/user/Blogs";
 import Counsellors from "./pages/user/Counsellors";
 import Booking from './pages/user/Booking'
+
+import BlogDetails from './pages/user/BlogDetails';
+import EventDetails from './pages/user/EventDetails';
 
 function App() {
   return (
@@ -21,6 +24,7 @@ function App() {
           <Route path="/about" element={<About />} />
 
           <Route path="/blog-details/id" element={<BlogDetails />} />
+          <Route path="/event-details/id" element={<EventDetails />} />
 
           <Route path="/services" element={<Services />} />
           <Route path="/events" element={<Events />} />
