@@ -16,8 +16,9 @@ const Header: React.FC = () => {
 
   const headerStyle: React.CSSProperties = {
     fontFamily: "Montserrat, sans-serif",
-    background: isScrolled ? "rgba(255, 255, 255, 0.95)" : "transparent",
+    backgroundColor: isScrolled ? "rgba(255, 255, 255, 0.3)" : "transparent", // semi-transparent
     backdropFilter: isScrolled ? "blur(10px)" : "none",
+    WebkitBackdropFilter: isScrolled ? "blur(10px)" : "none", // Safari support
     transition: "all 0.3s ease-in-out",
   };
 
@@ -68,7 +69,7 @@ const Header: React.FC = () => {
                 EVENTS
               </a>
               <a
-                href="/blog"
+                href="/blogs"
                 className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
@@ -82,11 +83,11 @@ const Header: React.FC = () => {
                 CONTACT US
               </a>
               <a
-                href="/therapist"
+                href="/counsellors"
                 className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
-                THERAPIST
+                COUNSELLORS
               </a>
             </div>
           </nav>

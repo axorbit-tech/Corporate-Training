@@ -382,3 +382,148 @@
     scroll-snap-align: start;
   }
 }
+
+.blog-hero-section .blog-hero-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.blog-hero-section .blog-hero-description {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.7;
+}
+
+/* Responsive image adjustments */
+@media (max-width: 640px) {
+  .blog-hero-section .blog-hero-image {
+    min-height: 250px;
+    max-height: 300px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .blog-hero-section .blog-hero-image {
+    min-height: 300px;
+    max-height: 400px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+@media (min-width: 1025px) {
+  .blog-hero-section .blog-hero-image {
+    min-height: 400px;
+    max-height: 500px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+.blog-posts-section .blog-posts-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.blog-posts-section .blog-posts-subheading,
+.blog-posts-section .blog-load-more-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+.blog-posts-section .blog-posts-subheading {
+  line-height: 1.6;
+}
+
+.blog-post-card .author-name,
+.blog-post-card .post-date {
+  font-family: "Montserrat", sans-serif;
+}
+
+.blog-post-card .blog-post-title {
+  font-family: "Lusitana", serif;
+  line-height: 1.3;
+}
+
+.blog-post-card .blog-post-excerpt {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .blog-post-card .blog-post-image-container {
+    order: -1;
+  }
+}
+
+.counsellor-card .counsellor-name,
+.counsellor-card .counsellor-about-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.3;
+}
+
+.counsellor-card .counsellor-profession,
+.counsellor-card .counsellor-contact-link,
+.counsellor-card .counsellor-about-text,
+.counsellor-card .counsellor-appointment-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+.counsellor-card .counsellor-about-text {
+  line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .counsellor-card .counsellor-image-section {
+    order: -1;
+    min-height: 200px;
+  }
+}
+
+.counsellor-profile-section .counsellor-section-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.counsellor-profile-section .counsellor-section-subheading {
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.6;
+}
+
+.contact-form-section .contact-form-heading {
+  font-family: "Lusitana", serif;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+.contact-form-section .contact-form-description,
+.contact-form-section .form-label,
+.contact-form-section .form-input,
+.contact-form-section .form-select,
+.contact-form-section .form-submit-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+.contact-form-section .contact-form-description {
+  line-height: 1.6;
+}
+
+/* Custom dropdown arrow */
+.contact-form-section .form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' strokeLinecap='round' strokeLinejoin='round' strokeWidth='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Focus states */
+.contact-form-section .form-input:focus,
+.contact-form-section .form-select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}

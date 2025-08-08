@@ -83,7 +83,7 @@ const UpcomingEventsSection: React.FC = () => {
   }
 
   return (
-    <section className="upcoming-events-section bg-gray-50 py-12 sm:py-12 lg:py-12 lg:px-10">
+    <section className="upcoming-events-section bg-gray-50 pt-12 sm:pt-12 lg:pt-24 lg:px-10">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
