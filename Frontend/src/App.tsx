@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./routers/ProtectedRoutes";
 import Home from "./pages/user/Home";
-
 import About from './pages/user/About';
 
 
@@ -14,6 +13,13 @@ import Booking from './pages/user/Booking'
 
 import BlogDetails from './pages/user/BlogDetails';
 import EventDetails from './pages/user/EventDetails';
+import Contact from "./pages/user/Contact";
+import AdminDashboardPage from "./pages/admin/Dashboard";
+import AdminBlogListingPage from "./pages/admin/BlogListing";
+import AdminAddBlogPage from "./pages/admin/AddBlog";
+import AdminBlogDetailsPage from "./pages/admin/BlogDetails";
+import AddEvent from "./pages/admin/AddEvent";
+import AdminEventDetailsPage from "./pages/admin/EventDetails";
 
 function App() {
   return (
@@ -31,6 +37,17 @@ function App() {
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/counsellors" element={<Counsellors />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/contact" element={<Contact />} />
+
+
+          
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/blogs" element={<AdminBlogListingPage />} />
+          <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
+          <Route path="/admin/blog-details" element={<AdminBlogDetailsPage />} />
+
+          <Route path="/admin/add-event" element={<AddEvent/> } />
+          <Route path="/admin/event-details" element={<AdminEventDetailsPage/> } />
 
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/admin" element={<About />} />

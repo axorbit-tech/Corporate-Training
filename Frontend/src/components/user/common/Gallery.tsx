@@ -1,47 +1,24 @@
 import React from 'react';
 
-const imageGroups = [
-  [
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-1.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-2.jpg",
-  ],
-  [
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-3.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-5.jpg",
-  ],
-  [
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-6.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-7.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-8.jpg",
-  ],
-  [
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-9.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-10.jpg",
-    "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-11.jpg",
-  ],
-];
-
 const Gallery: React.FC = () => {
   return (
-    <div className="mt-5 sm:mt-10 md:mt-0">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {imageGroups.map((group, groupIndex) => (
-          <div className="grid gap-4" key={groupIndex}>
-            {group.map((src, imgIndex) => (
-              <div key={imgIndex}>
-                <img
-                  className="h-auto max-w-full rounded-lg"
-                  src={src}
-                  alt={`Gallery image ${groupIndex}-${imgIndex}`}
-                />
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+    
+
+<div className="grid grid-cols-2 gap-2">
+        <div>
+            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt=""/>
+        </div>
+        <div>
+            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt=""/>
+        </div>
+        <div>
+            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt=""/>
+        </div>
+        <div>
+            <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt=""/>
+        </div>
     </div>
+
   );
 };
 

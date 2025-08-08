@@ -1,17 +1,14 @@
 import React, { useState } from 'react'
 
-const BookingFormSection: React.FC = () => {
+const ContactFormSection: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
-    age: '',
-    category: '',
-    country: '',
-    state: ''
+    subject: '',
+    message: '',
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -25,33 +22,6 @@ const BookingFormSection: React.FC = () => {
     // Handle form submission logic here
   }
 
-  const categories = [
-    'Individual Counseling',
-    'Corporate Training',
-    'Group Therapy',
-    'Family Counseling',
-    'Stress Management',
-    'Career Counseling'
-  ]
-
-  const countries = [
-    'India',
-    'United States',
-    'United Kingdom',
-    'Canada',
-    'Australia',
-    'Other'
-  ]
-
-  const states = [
-    'Kerala',
-    'Karnataka',
-    'Tamil Nadu',
-    'Maharashtra',
-    'Delhi',
-    'Gujarat',
-    'Other'
-  ]
 
   return (
     <section className="contact-form-section py-16 sm:py-20 lg:py-24 lg:px-10 lg:mt-12">
@@ -64,7 +34,7 @@ const BookingFormSection: React.FC = () => {
               
               {/* Main Heading */}
               <h2 className="contact-form-heading text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">
-                Start Your Journey to Clarity and Well-being
+                Contact Us
               </h2>
 
               {/* Description Text */}
@@ -111,107 +81,35 @@ const BookingFormSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Phone and Age Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
                   <label htmlFor="phone" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    Phone
+                    Subject
                   </label>
                   <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={formData.subject}
                     onChange={handleInputChange}
                     className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="age" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    Age
+                  <label htmlFor="message" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                    Message
                   </label>
-                  <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    value={formData.age}
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={4}
+                    value={formData.message}
                     onChange={handleInputChange}
-                    min="1"
-                    max="120"
                     className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
-              </div>
-
-              {/* Category and Country Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="form-group">
-                  <label htmlFor="category" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    Category
-                  </label>
-                  <select
-                    id="category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className="form-select w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
-                    required
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="country" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    Country
-                  </label>
-                  <select
-                    id="country"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="form-select w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
-                    required
-                  >
-                    <option value="">Select Country</option>
-                    {countries.map((country, index) => (
-                      <option key={index} value={country}>
-                        {country}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* State Row */}
-              <div className="form-group">
-                <label htmlFor="state" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                  State
-                </label>
-                <select
-                  id="state"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  className="form-select w-full px-4 py-3 border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
-                  required
-                >
-                  <option value="">Select State</option>
-                  {states.map((state, index) => (
-                    <option key={index} value={state}>
-                      {state}
-                    </option>
-                  ))}
-                </select>
-              </div>
 
               {/* Submit Button */}
               <div className="pt-4 text-center">
@@ -230,4 +128,4 @@ const BookingFormSection: React.FC = () => {
   )
 }
 
-export default BookingFormSection
+export default ContactFormSection

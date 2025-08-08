@@ -20,7 +20,7 @@ const EventDetailsMainSection: React.FC = () => {
                         <p className="absolute top-1 left-16  text-sm text-gray-500">August 7, 2025</p>
 
                     </div>
-                    <p className="text-sm sm:text-sm md:text-base mt-2 mx-16 text-justify mt-10">
+                    <p className="text-sm sm:text-sm md:text-base mx-16 text-justify mt-10">
                         {paras}
                     </p>
                 </div>
