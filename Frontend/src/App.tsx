@@ -20,6 +20,7 @@ import AdminAddBlogPage from "./pages/admin/AddBlog";
 import AdminBlogDetailsPage from "./pages/admin/BlogDetails";
 import AddEvent from "./pages/admin/AddEvent";
 import AdminEventDetailsPage from "./pages/admin/EventDetails";
+import AdminEventListingPage from "./pages/admin/EventListing";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
           <Route path="/admin/blog-details" element={<AdminBlogDetailsPage />} />
 
+          <Route path="/admin/events" element={<AdminEventListingPage />} />
           <Route path="/admin/add-event" element={<AddEvent/> } />
           <Route path="/admin/event-details" element={<AdminEventDetailsPage/> } />
 
