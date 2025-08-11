@@ -866,3 +866,52 @@
     gap: 2px;
   }
 }
+
+.add-event .event-page-title {
+  font-family: "Lusitana", serif;
+}
+
+.add-event .event-page-subtitle,
+.add-event .form-label,
+.add-event .title-input,
+.add-event .description-textarea,
+.add-event .date-input,
+.add-event .save-event-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Animation for loading state */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.add-event .animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.add-service .service-page-title {
+  font-family: "Lusitana", serif;
+}
+
+.add-service .service-page-subtitle,
+.add-service .form-label,
+.add-service .title-input,
+.add-service .description-textarea,
+.add-service .save-service-btn,
+.add-service .add-subservice-btn,
+.add-service .subservice-card {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Animation for loading state */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.add-service .animate-spin {
+  animation: spin 1s linear infinite;
+}
