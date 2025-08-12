@@ -1,32 +1,37 @@
-"use client"
-
 import type React from "react"
 import { ArrowLeft, Eye, Edit, MoreHorizontal, ImageIcon } from "lucide-react"
-import { useGetServicesQuery } from "../../../store/slices/apiSlice"
+import { useGetServiceDetailsQuery } from "../../../store/slices/apiSlice"
+import { useParams } from "react-router-dom";
+
+type ServiceDetailsParams = {
+  id: string;
+};
 
 interface Subservice {
   title: string
   content: string
 }
 
-interface ServiceData {
-  _id: string
-  title: string
-  content: string
-  image: string
-  subServices: Subservice[]
-  createdAt: string
-  updatedAt: string
-  status: "active" | "inactive"
-}
+// interface ServiceData {
+//   _id: string
+//   title: string
+//   content: string
+//   image: string
+//   subServices: Subservice[]
+//   createdAt: string
+//   updatedAt: string
+//   status: "active" | "inactive"
+// }
 
 interface ServiceDetailsProps {
   serviceId?: string
 }
 
-const ServiceDetails: React.FC<ServiceDetailsProps> = ({ serviceId = "1" }) => {
-  const { data: service, isLoading, error } = useGetServicesQuery(serviceId)
-  const serviceData = service?.data as ServiceData
+const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
+
+  const { id } = useParams<ServiceDetailsParams>();
+
+  const { data: service, isLoading, error } = useGetServiceDetailsQuery(id)
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -49,7 +54,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({ serviceId = "1" }) => {
     )
   }
 
-  if (error || !serviceData) {
+  if (error || !service) {
     return (
       <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -86,10 +91,10 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({ serviceId = "1" }) => {
                 <div className="flex items-center space-x-2 mt-1">
                   <span
                     className={`admin-status-badge px-2 py-1 text-xs font-medium rounded-full ${
-                      serviceData.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+                      service.status === "active" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
                     }`}
                   >
-                    {serviceData.status === "active" ? "Active" : "Inactive"}
+                    {service.status === "active" ? "Active" : "Inactive"}
                   </span>
                 </div>
               </div>
@@ -121,7 +126,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({ serviceId = "1" }) => {
             {/* Service Header Info */}
             <div className="admin-service-info bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="admin-service-title text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                {serviceData.title}
+                {service.title}
               </h2>
             </div>
 
@@ -130,8 +135,8 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({ serviceId = "1" }) => {
               <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-4">Service Image</h3>
               <div className="admin-service-image-container rounded-lg overflow-hidden">
                 <img
-                  src={serviceData.image || "/placeholder.svg"}
-                  alt={serviceData.title}
+                  src={service.image || "/placeholder.svg"}
+                  alt={service.title}
                   className="admin-service-image w-full h-64 sm:h-80 object-cover"
                 />
               </div>
@@ -141,19 +146,19 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({ serviceId = "1" }) => {
             <div className="admin-service-description-section bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-4">Service Description</h3>
               <div className="admin-service-description text-gray-700 leading-relaxed">
-                <p>{serviceData.content}</p>
+                <p>{service.content}</p>
               </div>
             </div>
 
             {/* Subservices Section */}
             <div className="admin-subservices-section bg-white rounded-lg border border-gray-200 p-6">
               <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">
-                Subservices ({serviceData.subServices?.length || 0})
+                Subservices ({service.subServices?.length || 0})
               </h3>
 
-              {serviceData.subServices && serviceData.subServices.length > 0 ? (
+              {service.subServices && service.subServices.length > 0 ? (
                 <div className="space-y-6">
-                  {serviceData.subServices.map((subservice, index) => (
+                  {service.subServices.map((subservice: Subservice, index: number) => (
                     <div key={index} className="admin-subservice-card border border-gray-200 rounded-lg p-6">
                       <h4 className="admin-subservice-title text-xl font-semibold text-gray-900 mb-3">
                         {index + 1}. {subservice.title}
@@ -181,29 +186,29 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = ({ serviceId = "1" }) => {
                     <span className="admin-info-label text-sm font-medium text-gray-600">Status</span>
                     <span
                       className={`admin-info-value block text-sm font-medium ${
-                        serviceData.status === "active" ? "text-green-600" : "text-gray-600"
+                        service.status === "active" ? "text-green-600" : "text-gray-600"
                       }`}
                     >
-                      {serviceData.status === "active" ? "Active" : "Inactive"}
+                      {service.status === "active" ? "Active" : "Inactive"}
                     </span>
                   </div>
                   <div className="admin-info-item">
                     <span className="admin-info-label text-sm font-medium text-gray-600">Created</span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {formatDate(serviceData.createdAt)}
+                      {formatDate(service.createdAt)}
                     </span>
                   </div>
                   <div className="admin-info-item">
                     <span className="admin-info-label text-sm font-medium text-gray-600">Last Modified</span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {formatDate(serviceData.updatedAt)}
+                      {formatDate(service.updatedAt)}
                     </span>
                   </div>
                   <div className="admin-info-item">
                     <span className="admin-info-label text-sm font-medium text-gray-600">Subservices</span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {serviceData.subServices?.length || 0} subservice
-                      {(serviceData.subServices?.length || 0) !== 1 ? "s" : ""}
+                      {service.subServices?.length || 0} subservice
+                      {(service.subServices?.length || 0) !== 1 ? "s" : ""}
                     </span>
                   </div>
                 </div>

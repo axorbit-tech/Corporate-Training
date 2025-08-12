@@ -58,8 +58,8 @@ export const apiSlices = createApi({
       }),
     }),
     getServiceDetails: builder.query({
-      query: () => ({
-        url: "/admin/service/:id",
+      query: (id) => ({
+        url: `/admin/service/${id}`,
         method: HttpMethod.GET,
       }),
     }),
@@ -77,5 +77,6 @@ export const {
   useLoginMutation,
   useAddServiceMutation,
   useGetServicesQuery,
+  useGetServiceDetailsQuery,
   useAdminLoginMutation,
 } = apiSlices;

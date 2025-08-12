@@ -2,6 +2,7 @@ import type React from "react"
 import { useState } from "react"
 import { Eye, Edit, Trash2, Plus, Search, Filter, MoreVertical, Calendar, Tag } from "lucide-react"
 import { useGetServicesQuery } from "../../../store/slices/apiSlice"
+import { useNavigate } from "react-router-dom"
 
 interface SubService {
   title: string
@@ -20,6 +21,8 @@ interface Service {
 }
 
 const ServiceListing: React.FC = () => {
+
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
@@ -316,7 +319,7 @@ const ServiceListing: React.FC = () => {
                     <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                       <div className="admin-action-buttons flex items-center space-x-2">
                         <button
-                          onClick={() => handleViewService(service._id)}
+                          onClick={() => navigate(`/admin/service-details/${service._id}`)}
                           className="admin-action-btn p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
                           title="View Service"
                         >
