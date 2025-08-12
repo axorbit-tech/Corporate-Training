@@ -915,3 +915,118 @@
 .add-service .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+.admin-service-details .admin-service-page-title,
+.admin-service-details .admin-service-title,
+.admin-service-details .admin-section-title,
+.admin-service-details .admin-subservice-title,
+.admin-service-details .admin-card-title {
+  font-family: "Lusitana", serif;
+}
+
+.admin-service-details .admin-service-description,
+.admin-service-details .admin-subservice-description,
+.admin-service-details .admin-info-label,
+.admin-service-details .admin-info-value,
+.admin-service-details .admin-action-btn,
+.admin-service-details .admin-action-item {
+  font-family: "Montserrat", sans-serif;
+}
+
+.admin-service-details .admin-service-description,
+.admin-service-details .admin-subservice-description {
+  line-height: 1.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .admin-service-details .admin-service-image {
+    height: 200px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .admin-service-details .admin-service-image {
+    height: 300px;
+  }
+}
+
+.admin-service-listing .admin-service-title {
+  font-family: "Lusitana", serif;
+}
+
+.admin-service-listing .admin-service-subtitle,
+.admin-service-listing .admin-add-service-btn,
+.admin-service-listing .admin-search-input,
+.admin-service-listing .admin-status-filter,
+.admin-service-listing .admin-filter-btn,
+.admin-service-listing .admin-table-header-cell,
+.admin-service-listing .admin-service-title,
+.admin-service-listing .admin-pagination-info,
+.admin-service-listing .admin-pagination-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+.admin-service-listing .line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-service-listing .line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-service-listing .admin-subservices-dropdown {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-service-details .admin-service-page-title,
+.admin-service-details .admin-service-title,
+.admin-service-details .admin-section-title,
+.admin-service-details .admin-subservice-title,
+.admin-service-details .admin-card-title {
+  font-family: "Lusitana", serif;
+}
+
+.admin-service-details .admin-service-description,
+.admin-service-details .admin-subservice-description,
+.admin-service-details .admin-info-label,
+.admin-service-details .admin-info-value,
+.admin-service-details .admin-action-btn,
+.admin-service-details .admin-action-item {
+  font-family: "Montserrat", sans-serif;
+}
+
+.admin-service-details .admin-service-description,
+.admin-service-details .admin-subservice-description {
+  line-height: 1.7;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .admin-service-details .admin-service-image {
+    height: 200px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .admin-service-details .admin-service-image {
+    height: 300px;
+  }
+}

@@ -1,26 +1,29 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./routers/ProtectedRoutes";
-import Home from "./pages/user/Home";
-import About from './pages/user/About';
+import Home from "./pages/user/home/Home";
+import About from './pages/user/about/About';
 
 
-import Services from './pages/user/Services'
-import Events from './pages/user/Events'
-import Blogs from "./pages/user/Blogs";
-import Counsellors from "./pages/user/Counsellors";
-import Booking from './pages/user/Booking'
+import Services from './pages/user/service/Services'
+import Events from './pages/user/event/Events'
+import Blogs from "./pages/user/blog/Blogs";
+import Counsellors from "./pages/user/counsellors/Counsellors";
+import Booking from './pages/user/booking/Booking'
 
-import BlogDetails from './pages/user/BlogDetails';
-import EventDetails from './pages/user/EventDetails';
-import Contact from "./pages/user/Contact";
+import BlogDetails from './pages/user/blog/BlogDetails';
+import EventDetails from './pages/user/event/EventDetails';
+import Contact from "./pages/user/contact/Contact";
 import AdminDashboardPage from "./pages/admin/Dashboard";
-import AdminBlogListingPage from "./pages/admin/BlogListing";
-import AdminAddBlogPage from "./pages/admin/AddBlog";
-import AdminBlogDetailsPage from "./pages/admin/BlogDetails";
-import AddEvent from "./pages/admin/AddEvent";
-import AdminEventDetailsPage from "./pages/admin/EventDetails";
-import AdminEventListingPage from "./pages/admin/EventListing";
+import AdminBlogListingPage from "./pages/admin/blog/BlogListing";
+import AdminAddBlogPage from "./pages/admin/blog/AddBlog";
+import AdminBlogDetailsPage from "./pages/admin/blog/BlogDetails";
+import AddEvent from "./pages/admin/event/AddEvent";
+import AdminEventDetailsPage from "./pages/admin/event/EventDetails";
+import AdminEventListingPage from "./pages/admin/event/EventListing";
+import AdminAddServicePage from "./pages/admin/service/AddService";
+import AdminServiceListing from "./pages/admin/service/ServiceListing";
+import AdminServiceDetailsPage from "./pages/admin/service/ServiceDetails";
 
 function App() {
   return (
@@ -50,6 +53,10 @@ function App() {
           <Route path="/admin/events" element={<AdminEventListingPage />} />
           <Route path="/admin/add-event" element={<AddEvent/> } />
           <Route path="/admin/event-details" element={<AdminEventDetailsPage/> } />
+
+          <Route path="/admin/services" element={<AdminServiceListing />} />
+          <Route path="/admin/add-service" element={<AdminAddServicePage/> } />
+          <Route path="/admin/service-details" element={<AdminServiceDetailsPage/> } />
 
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/admin" element={<About />} />

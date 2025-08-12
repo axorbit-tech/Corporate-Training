@@ -8,9 +8,6 @@ const storage = new CloudinaryStorage({
     folder: "consultancy-app",
     resource_type: "image",
     public_id: `${Date.now()}-${file.originalname}`,
-    transformation: [
-      { width: 1000, height: 1000, crop: "limit" }
-    ]
   }),
 });
 

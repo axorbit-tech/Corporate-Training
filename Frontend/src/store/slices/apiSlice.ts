@@ -44,64 +44,29 @@ export const apiSlices = createApi({
         body: postData,
       }),
     }),
-    createTask: builder.mutation({
+    addService: builder.mutation({
       query: (postData) => ({
-        url: "/createTask",
+        url: "/admin/service",
         method: HttpMethod.POST,
         body: postData,
       }),
     }),
-    updateTask: builder.mutation({
-      query: (patchData) => ({
-        url: `/updateTask`,
-        method: HttpMethod.PATCH,
-        body: patchData,
-      }),
-    }),
-    updateStatus: builder.mutation({
-      query: (patchData) => ({
-        url: `/updateStatus`,
-        method: HttpMethod.PATCH,
-        body: patchData,
-      }),
-    }),
-    deleteTask: builder.mutation({
-      query: (taskId) => ({
-        url: "/deleteTask",
-        method: HttpMethod.DELETE,
-        body: taskId,
-      }),
-    }),
-    fetchTasks: builder.query({
-      query: ({ userId, status }) => ({
-        url: `/fetchTasks/${userId}${
-          status && status !== "all" ? `?status=${status}` : ""
-        }`,
+    getServices: builder.query({
+      query: () => ({
+        url: "/admin/service",
         method: HttpMethod.GET,
       }),
     }),
-    fetchUsers: builder.query({
+    getServiceDetails: builder.query({
       query: () => ({
-        url: `/admin/fetchUsers`,
+        url: "/admin/service/:id",
         method: HttpMethod.GET,
       }),
     }),
-    fetchUserDetails: builder.query({
-      query: (userId) => ({
-        url: `/admin/fetchUserDetails/${userId}`,
-        method: HttpMethod.GET,
-      }),
-    }),
-    logout: builder.mutation({
+    editService: builder.mutation({
       query: () => ({
-        url: "/logout",
-        method: HttpMethod.POST,
-      }),
-    }),
-    adminLogout: builder.mutation({
-      query: () => ({
-        url: "/admin/logout",
-        method: HttpMethod.POST,
+        url: "/admin/service/:id",
+        method: HttpMethod.PUT,
       }),
     }),
   }),
@@ -110,14 +75,7 @@ export const apiSlices = createApi({
 export const {
   useSignupMutation,
   useLoginMutation,
-  useCreateTaskMutation,
-  useUpdateTaskMutation,
-  useUpdateStatusMutation,
-  useDeleteTaskMutation,
-  useFetchTasksQuery,
-  useFetchUsersQuery,
-  useFetchUserDetailsQuery,
-  useLogoutMutation,
+  useAddServiceMutation,
+  useGetServicesQuery,
   useAdminLoginMutation,
-  useAdminLogoutMutation,
 } = apiSlices;

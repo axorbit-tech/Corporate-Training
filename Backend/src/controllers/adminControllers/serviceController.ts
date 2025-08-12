@@ -1,12 +1,29 @@
 import { Request, Response } from "express";
 import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import serviceModel from "../../models/adminModels/serviceModel";
-import { serviceSchema } from "../../validations/adminValidation/serviceValidation";
+import { serviceValidationSchema } from "../../validations/adminValidation/serviceValidation";
 
 // ✅ Add Service
 const addService = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { error } = serviceSchema.validate(req.body);
+
+    if (req.body.subservices) {
+      try {
+        req.body.subservices = JSON.parse(req.body.subservices);
+      } catch (e) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({
+          success: false,
+          error: "Invalid subservices format",
+        });
+        return
+      }
+    }
+
+    const {title, content, subservices } = req.body
+
+    const { error } = serviceValidationSchema.validate({title, content});
+
+    console.log("eroororor : ", error)
 
     if (error) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
@@ -16,7 +33,18 @@ const addService = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const { title, content } = req.body;
+
+    console.log(subservices,"subServicesssss")
+
+    if (!req.file) {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        error: "Service image is required!",
+      }); 
+      return;
+    }
+
+    console.log('finee')
 
     const isServiceExist = await serviceModel.findOne({ title });
 
@@ -28,7 +56,15 @@ const addService = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const newService = new serviceModel({ title, content });
+    // Check if image was uploaded and get the Cloudinary URL
+    const imageUrl = req.file ? req.file.path : undefined;
+
+    const newService = new serviceModel({
+      title,
+      content,
+      image: imageUrl, // Add the image URL from Cloudinary
+      subServices: subservices || [], // Add subServices array (empty array if not provided)
+    });
     await newService.save();
 
     res.status(HttpStatusCode.CREATED).json({
@@ -44,13 +80,32 @@ const addService = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const getAllServices = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const services = await serviceModel.find().sort({ createdAt: -1 });
+
+    console.log("servicessss : ", services)
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: services,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error fetching services",
+    });
+  }
+};
+
+
 // ✅ Edit Service
 const editService = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     const { title, content } = req.body;
 
-    const { error } = serviceSchema.validate({ title, content });
+    const { error } = serviceValidationSchema.validate({ title, content });
     if (error) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
@@ -116,7 +171,8 @@ const deleteService = async (req: Request, res: Response): Promise<void> => {
 const serviceController = {
   addService,
   editService,
-  deleteService
+  deleteService,
+  getAllServices
 };
 
 export default serviceController;

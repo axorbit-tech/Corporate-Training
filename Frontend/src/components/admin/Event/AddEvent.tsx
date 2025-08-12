@@ -225,33 +225,6 @@ const AddEvent: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Scoped Styles */}
-      <style>{`
-        .add-event .event-page-title {
-          font-family: 'Lusitana', serif;
-        }
-        
-        .add-event .event-page-subtitle,
-        .add-event .form-label,
-        .add-event .title-input,
-        .add-event .description-textarea,
-        .add-event .date-input,
-        .add-event .save-event-btn {
-          font-family: 'Montserrat', sans-serif;
-        }
-
-        /* Animation for loading state */
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        
-        .add-event .animate-spin {
-          animation: spin 1s linear infinite;
-        }
-      `}</style>
     </div>
   )
 }

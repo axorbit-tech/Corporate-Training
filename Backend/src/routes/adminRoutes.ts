@@ -7,6 +7,7 @@ import eventController from "../controllers/adminControllers/eventController";
 import blogController from "../controllers/adminControllers/blogController";
 import whyUsController from "../controllers/adminControllers/whyUsController";
 import testimonialController from "../controllers/adminControllers/testimonialController";
+import upload from "../config/multerConfig";
 const router = express.Router();
 
 // authentication routes
@@ -24,9 +25,10 @@ router.put('/location/:id', locationController.editLocation)
 router.delete('/location/:id', locationController.deleteLocation)
 
 // add, edit, delete services routes
-router.post('/service', serviceController.addService)
+router.post('/service', upload.single('image'), serviceController.addService)
 router.put('/service/:id', serviceController.editService)
 router.delete('/service/:id', serviceController.deleteService)
+router.get('/service', serviceController.getAllServices)
 
 // add, edit, delete event routes
 router.post('/event', eventController.addEvent)

@@ -1,6 +1,6 @@
-import Header from '../../components/user/common/Header'
-import Footer from '../../components/user/common/Footer'
-import EventDetailsMainSection from '../../components/user/events/EventDetailsMainSection'
+import Header from '../../../components/user/common/Header'
+import Footer from '../../../components/user/common/Footer'
+import EventDetailsMainSection from '../../../components/user/events/EventDetailsMainSection'
 
 
 export default function home() {

@@ -1,6 +1,6 @@
 import React from 'react'
-import AdminLayout from '../../components/admin/AdminLayout'
-import BlogDetails from '../../components/admin/Blog/BlogDetails'
+import AdminLayout from '../../../components/admin/AdminLayout'
+import BlogDetails from '../../../components/admin/Blog/BlogDetails'
 
 const AdminBlogDetailsPage: React.FC = () => {
   return (
