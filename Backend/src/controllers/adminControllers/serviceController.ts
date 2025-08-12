@@ -98,6 +98,21 @@ const getAllServices = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const getServiceById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const service = await serviceModel.findById(id);
+
+    if (!service) {
+      return res.status(404).json({ message: 'Service not found' });
+    }
+
+    res.json(service);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 
 // ✅ Edit Service
 const editService = async (req: Request, res: Response): Promise<void> => {
@@ -171,6 +186,7 @@ const deleteService = async (req: Request, res: Response): Promise<void> => {
 const serviceController = {
   addService,
   editService,
+  getServiceById,
   deleteService,
   getAllServices
 };

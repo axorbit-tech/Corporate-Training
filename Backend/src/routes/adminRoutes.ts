@@ -29,6 +29,7 @@ router.post('/service', upload.single('image'), serviceController.addService)
 router.put('/service/:id', serviceController.editService)
 router.delete('/service/:id', serviceController.deleteService)
 router.get('/service', serviceController.getAllServices)
+router.get('/service/:id', serviceController.getServiceById);
 
 // add, edit, delete event routes
 router.post('/event', eventController.addEvent)
