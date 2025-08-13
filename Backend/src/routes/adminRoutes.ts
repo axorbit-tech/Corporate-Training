@@ -26,7 +26,7 @@ router.delete('/location/:id', locationController.deleteLocation)
 
 // add, edit, delete services routes
 router.post('/service', upload.single('image'), serviceController.addService)
-router.put('/service/:id', serviceController.editService)
+router.put('/service/:id', upload.single('image'), serviceController.editService)
 router.delete('/service/:id', serviceController.deleteService)
 router.get('/service', serviceController.getAllServices)
 router.get('/service/:id', serviceController.getServiceById);

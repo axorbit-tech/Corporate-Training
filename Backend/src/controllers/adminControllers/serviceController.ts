@@ -117,10 +117,23 @@ const getServiceById = async (req: Request, res: Response) => {
 // ✅ Edit Service
 const editService = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (req.body.subservices) {
+      try {
+        req.body.subservices = JSON.parse(req.body.subservices);
+      } catch (e) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({
+          success: false,
+          error: "Invalid subservices format",
+        });
+        return;
+      }
+    }
+
+    const { title, content, subservices } = req.body;
     const { id } = req.params;
-    const { title, content } = req.body;
 
     const { error } = serviceValidationSchema.validate({ title, content });
+
     if (error) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
@@ -129,13 +142,9 @@ const editService = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const updated = await serviceModel.findByIdAndUpdate(
-      id,
-      { title, content },
-      { new: true }
-    );
-
-    if (!updated) {
+    // Check if service exists
+    const existingService = await serviceModel.findById(id);
+    if (!existingService) {
       res.status(HttpStatusCode.NOT_FOUND).json({
         success: false,
         error: "Service not found",
@@ -143,18 +152,37 @@ const editService = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    // Prepare update object
+    const updateData: any = {
+      title,
+      content,
+      subServices: subservices || [],
+    };
+
+    // If new image is uploaded, update image URL
+    if (req.file) {
+      updateData.image = req.file.path; // Cloudinary or multer destination path
+    }
+
+    // Update service
+    const updatedService = await serviceModel.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
     res.status(HttpStatusCode.OK).json({
       success: true,
       message: "Service updated successfully",
-      data: updated,
+      data: updatedService,
     });
   } catch (error) {
     console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
-      error: "Error updating Service",
+      success: false,
+      error: "Error updating service",
     });
   }
 };
+
 
 // ✅ Delete Service
 const deleteService = async (req: Request, res: Response): Promise<void> => {

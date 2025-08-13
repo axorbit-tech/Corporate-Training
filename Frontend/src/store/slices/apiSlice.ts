@@ -65,9 +65,10 @@ export const apiSlices = createApi({
     }),
 
     editService: builder.mutation({
-      query: () => ({
-        url: "/admin/service/:id",
+      query: ({id, data}) => ({
+        url: `/admin/service/${id}`,
         method: HttpMethod.PUT,
+        body: data
       }),
     }),
 
