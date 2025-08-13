@@ -1030,3 +1030,27 @@
     height: 300px;
   }
 }
+
+.edit-service .admin-service-page-title {
+  font-family: "Lusitana", serif;
+}
+
+.edit-service .admin-service-page-subtitle,
+.edit-service .admin-form-label,
+.edit-service .admin-title-input,
+.edit-service .admin-description-textarea,
+.edit-service .admin-save-service-btn,
+.edit-service .admin-add-subservice-btn,
+.edit-service .admin-subservice-card {
+  font-family: "Montserrat", sans-serif;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.edit-service .animate-spin {
+  animation: spin 1s linear infinite;
+}

@@ -20,7 +20,6 @@ const subServiceSchema = new mongoose.Schema<ISubService>(
     title: { type: String, required: true },
     content: { type: String, required: true },
   },
-  { _id: false } // prevents extra _id for each subService
 );
 
 const serviceSchema = new mongoose.Schema<IServices>(

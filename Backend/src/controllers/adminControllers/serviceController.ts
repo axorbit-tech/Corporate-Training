@@ -183,12 +183,41 @@ const deleteService = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+
+const updateStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const service = await serviceModel.findById(id)
+
+    if (!service) {
+      res.status(404).json({ success: false, message: "Service not found" });
+      return;
+    }
+
+    service.status = service.status == "active" ? "inactive" : "active"
+
+    await service.save()
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Service Updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error Updating Status",
+    });
+  }
+};
+
 const serviceController = {
   addService,
   editService,
   getServiceById,
   deleteService,
-  getAllServices
+  getAllServices,
+  updateStatus
 };
 
 export default serviceController;
