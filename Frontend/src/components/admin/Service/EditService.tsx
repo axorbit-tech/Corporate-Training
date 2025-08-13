@@ -3,7 +3,9 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { ArrowLeft, Upload, X, Save, Plus } from "lucide-react"
-import { useGetServiceDetailsQuery, useEditServiceMutation } from "../../../store/slices/apiSlice"
+import { useGetServiceDetailsQuery, useEditServiceMutation } from "../../../store/slices/apiSlice";
+import { useNavigate } from "react-router-dom";
+import { errorToast, successToast } from "../../../utils/toast";
 
 interface Subservice {
   _id: number
@@ -23,6 +25,7 @@ interface EditServiceProps {
 }
 
 const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
+  const navigate = useNavigate()
   // Updated hook name from useGetServiceByIdQuery to useGetServiceQuery
   const { data: serviceResponse, isLoading, error } = useGetServiceDetailsQuery(serviceId)
   const [updateService, { isLoading: isUpdating }] = useEditServiceMutation()
@@ -35,7 +38,6 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
   })
 
   const [imagePreview, setImagePreview] = useState<string>("")
-  const [existingImageUrl, setExistingImageUrl] = useState<string>("")
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [nextSubserviceId, setNextSubserviceId] = useState(0)
 
@@ -56,7 +58,6 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
       })
 
       if (service.image) {
-        setExistingImageUrl(service.image)
         setImagePreview(service.image)
       }
 
@@ -79,7 +80,6 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
       const reader = new FileReader()
       reader.onload = (event) => {
         setImagePreview(event.target?.result as string)
-        setExistingImageUrl("") // Clear existing image URL when new image is uploaded
       }
       reader.readAsDataURL(file)
     }
@@ -88,7 +88,6 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
   const removeImage = () => {
     setFormData((prev) => ({ ...prev, image: null }))
     setImagePreview("")
-    setExistingImageUrl("")
     if (fileInputRef.current) {
       fileInputRef.current.value = ""
     }
@@ -120,27 +119,35 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
   }
 
   const handleSave = async () => {
-    try {
-      const serviceData = {
-        title: formData.title,
-        content: formData.content, // Map description to content for backend
-        subServices: formData.subservices.map((sub) => ({
-          title: sub.title,
-          content: sub.content, // Map description to content for backend
-        })),
-        // Handle image upload logic here - in a real app, you'd upload the file first
-        image: formData.image ? formData.image.name : existingImageUrl,
-      }
 
-      // Updated to use correct parameter structure for updateService
-      await updateService({ id: serviceId, updates: serviceData }).unwrap()
+    // Create FormData for multipart/form-data
+    const formDataToSend = new FormData();
 
-      // Redirect to services listing or show success message
-      window.location.href = "/admin/services"
-    } catch (error) {
-      console.error("Failed to update service:", error)
+    // Add the image file (not just the name)
+    if (formData.image) {
+      formDataToSend.append("image", formData.image);
     }
-  }
+
+    formDataToSend.append("title", formData.title);
+    formDataToSend.append("content", formData.content);
+    formDataToSend.append("subservices", JSON.stringify(formData.subservices));
+    
+    try {
+
+      const res = await updateService({id: serviceId, data: formDataToSend}).unwrap();
+
+      console.log(res);
+
+      if (res.success) {
+        // Note: response structure should be res.success, not res.data.success
+        successToast('Service updated!')
+        navigate("/admin/services");
+      }
+    } catch (error) {
+        errorToast("updation failed")
+      console.error("Error adding service:", error);
+    }
+  };
 
   if (isLoading) {
     return (

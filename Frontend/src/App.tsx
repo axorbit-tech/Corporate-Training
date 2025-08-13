@@ -1,18 +1,19 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./routers/ProtectedRoutes";
 import Home from "./pages/user/home/Home";
-import About from './pages/user/about/About';
+import About from "./pages/user/about/About";
 
-
-import Services from './pages/user/service/Services'
-import Events from './pages/user/event/Events'
+import Services from "./pages/user/service/Services";
+import Events from "./pages/user/event/Events";
 import Blogs from "./pages/user/blog/Blogs";
 import Counsellors from "./pages/user/counsellors/Counsellors";
-import Booking from './pages/user/booking/Booking'
+import Booking from "./pages/user/booking/Booking";
 
-import BlogDetails from './pages/user/blog/BlogDetails';
-import EventDetails from './pages/user/event/EventDetails';
+import BlogDetails from "./pages/user/blog/BlogDetails";
+import EventDetails from "./pages/user/event/EventDetails";
 import Contact from "./pages/user/contact/Contact";
 import AdminDashboardPage from "./pages/admin/Dashboard";
 import AdminBlogListingPage from "./pages/admin/blog/BlogListing";
@@ -29,6 +30,8 @@ import AdminEditServicePage from "./pages/admin/service/EditService";
 function App() {
   return (
     <>
+      <ToastContainer position="top-center" autoClose={2000} />
+
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -44,21 +47,31 @@ function App() {
           <Route path="/booking" element={<Booking />} />
           <Route path="/contact" element={<Contact />} />
 
-
-          
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/admin/blogs" element={<AdminBlogListingPage />} />
           <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
-          <Route path="/admin/blog-details" element={<AdminBlogDetailsPage />} />
+          <Route
+            path="/admin/blog-details"
+            element={<AdminBlogDetailsPage />}
+          />
 
           <Route path="/admin/events" element={<AdminEventListingPage />} />
-          <Route path="/admin/add-event" element={<AddEvent/> } />
-          <Route path="/admin/event-details" element={<AdminEventDetailsPage/> } />
+          <Route path="/admin/add-event" element={<AddEvent />} />
+          <Route
+            path="/admin/event-details"
+            element={<AdminEventDetailsPage />}
+          />
 
           <Route path="/admin/services" element={<AdminServiceListing />} />
-          <Route path="/admin/add-service" element={<AdminAddServicePage/> } />
-          <Route path="/admin/service-details/:id" element={<AdminServiceDetailsPage/> } />
-          <Route path="/admin/edit-service/:id" element={<AdminEditServicePage/> } />
+          <Route path="/admin/add-service" element={<AdminAddServicePage />} />
+          <Route
+            path="/admin/service-details/:id"
+            element={<AdminServiceDetailsPage />}
+          />
+          <Route
+            path="/admin/edit-service/:id"
+            element={<AdminEditServicePage />}
+          />
 
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/admin" element={<About />} />
