@@ -1,8 +1,9 @@
 import type React from "react"
 import { useState } from "react"
 import { Eye, Edit, Trash2, Plus, Search, Filter, MoreVertical, Calendar, Tag } from "lucide-react"
-import { useGetServicesQuery } from "../../../store/slices/apiSlice"
+import { useGetServicesQuery, useUpdateServiceStatusMutation } from "../../../store/slices/apiSlice"
 import { useNavigate } from "react-router-dom"
+import CustomModal from "../common/CustomeModal"
 
 interface SubService {
   title: string
@@ -28,8 +29,11 @@ const ServiceListing: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedServices, setSelectedServices] = useState<number[]>([])
   const [hoveredService, setHoveredService] = useState<number | null>(null)
+  const [open, setOpen] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
 
-  const {data: getService} = useGetServicesQuery(undefined)
+  const { data: getService, refetch } = useGetServicesQuery(undefined)
+  const [changeServiceStatus] = useUpdateServiceStatusMutation();
 
   const services = getService?.data
 
@@ -114,7 +118,7 @@ const ServiceListing: React.FC = () => {
     if (selectedServices?.length === services?.length) {
       setSelectedServices([])
     } else {
-      setSelectedServices(services.map((service : Service) => service._id))
+      setSelectedServices(services.map((service: Service) => service._id))
     }
   }
 
@@ -133,8 +137,22 @@ const ServiceListing: React.FC = () => {
   }
 
   const handleToggleStatus = (serviceId: number) => {
-    alert("Toggle status for service " + serviceId)
-  }
+    setSelectedServiceId(serviceId);
+    setOpen(true); // show modal
+  };
+
+  const handleServiceStatus = async (serviceId: number) => {
+    try {
+      await new Promise((res) => setTimeout(res, 2000));
+      await changeServiceStatus(serviceId).unwrap(); // ✅ unwrap to handle errors properly
+      console.log(`Service ${serviceId} deleted successfully`);
+      refetch(); // refresh list
+      setOpen(false); // close modal
+    } catch (error) {
+      console.error(`Error deleting service ${serviceId}:`, error);
+    }
+  };
+
 
   return (
     <div className="admin-service-listing p-6 space-y-6">
@@ -253,7 +271,7 @@ const ServiceListing: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="admin-table-body bg-white divide-y divide-gray-200">
-                {services?.map((service : Service) => (
+                {services?.map((service: Service) => (
                   <tr key={service._id} className="admin-table-row hover:bg-gray-50 transition-colors duration-200">
                     <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                       <input
@@ -354,7 +372,7 @@ const ServiceListing: React.FC = () => {
 
           {/* Mobile Cards */}
           <div className="lg:hidden space-y-4 p-4">
-            {services?.map((service : Service) => (
+            {services?.map((service: Service) => (
               <div
                 key={service._id}
                 className="admin-mobile-card bg-white border border-gray-200 rounded-lg p-4 space-y-3"
@@ -457,9 +475,8 @@ const ServiceListing: React.FC = () => {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${
-                      currentPage === page ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"
-                    }`}
+                    className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${currentPage === page ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"
+                      }`}
                   >
                     {page}
                   </button>
@@ -475,6 +492,26 @@ const ServiceListing: React.FC = () => {
             </div>
           </div>
         </div>
+
+
+        {/* Custome Modal */}
+        <CustomModal
+          open={open}
+          onClose={() => setOpen(false)}
+          title="Are You sure to confirm this action?"
+          // description={`This modal works with TypeScript. Service ID: ${selectedServiceId}`}
+          size={{ width: 250 }}
+          color="#f0f0f0"
+          buttonText="OK"
+          onButtonClick={() => {
+            if (selectedServiceId) {
+              handleServiceStatus(selectedServiceId);
+            }else{
+              alert('Unable to perorm this action')
+            }
+          }}
+        />
+
       </div>
     </div>
   )

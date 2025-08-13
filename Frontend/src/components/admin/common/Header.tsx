@@ -6,32 +6,32 @@ interface AdminHeaderProps {
 }
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
-  const [showNotifications, setShowNotifications] = useState(false)
+  // const [showNotifications, setShowNotifications] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
 
-  const notifications = [
-    {
-      id: 1,
-      title: 'New appointment booked',
-      message: 'John Doe scheduled for tomorrow at 2:00 PM',
-      time: '5 min ago',
-      unread: true
-    },
-    {
-      id: 2,
-      title: 'Form submission received',
-      message: 'New client inquiry from contact form',
-      time: '15 min ago',
-      unread: true
-    },
-    {
-      id: 3,
-      title: 'Event reminder',
-      message: 'Corporate training session starts in 1 hour',
-      time: '1 hour ago',
-      unread: false
-    }
-  ]
+  // const notifications = [
+  //   {
+  //     id: 1,
+  //     title: 'New appointment booked',
+  //     message: 'John Doe scheduled for tomorrow at 2:00 PM',
+  //     time: '5 min ago',
+  //     unread: true
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Form submission received',
+  //     message: 'New client inquiry from contact form',
+  //     time: '15 min ago',
+  //     unread: true
+  //   },
+  //   {
+  //     id: 3,
+  //     title: 'Event reminder',
+  //     message: 'Corporate training session starts in 1 hour',
+  //     time: '1 hour ago',
+  //     unread: false
+  //   }
+  // ]
 
   return (
     <header className="admin-header bg-white border-b border-gray-200 shadow-sm sticky top-0 z-30">
