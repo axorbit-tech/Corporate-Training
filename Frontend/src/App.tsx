@@ -56,7 +56,7 @@ function App() {
 
           <Route path="/admin/services" element={<AdminServiceListing />} />
           <Route path="/admin/add-service" element={<AdminAddServicePage/> } />
-          <Route path="/admin/service-details" element={<AdminServiceDetailsPage/> } />
+          <Route path="/admin/service-details/:id" element={<AdminServiceDetailsPage/> } />
 
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/admin" element={<About />} />
