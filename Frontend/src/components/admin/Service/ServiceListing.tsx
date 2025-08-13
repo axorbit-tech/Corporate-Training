@@ -334,7 +334,7 @@ const ServiceListing: React.FC = () => {
                     </td>
                     <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(service.status)}`}
+                        className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor(service.status)}`}
                         onClick={() => handleToggleStatus(service._id)}
                       >
                         {service.status}

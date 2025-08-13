@@ -27,7 +27,7 @@ interface EditServiceProps {
 const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
   const navigate = useNavigate()
   // Updated hook name from useGetServiceByIdQuery to useGetServiceQuery
-  const { data: serviceResponse, isLoading, error } = useGetServiceDetailsQuery(serviceId)
+  const { data: serviceResponse, refetch, isLoading, error } = useGetServiceDetailsQuery(serviceId)
   const [updateService, { isLoading: isUpdating }] = useEditServiceMutation()
 
   const [formData, setFormData] = useState<ServiceFormData>({
@@ -141,6 +141,7 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
       if (res.success) {
         // Note: response structure should be res.success, not res.data.success
         successToast('Service updated!')
+        refetch()
         navigate("/admin/services");
       }
     } catch (error) {
