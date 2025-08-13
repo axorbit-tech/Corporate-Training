@@ -26,6 +26,7 @@ import AdminAddServicePage from "./pages/admin/service/AddService";
 import AdminServiceListing from "./pages/admin/service/ServiceListing";
 import AdminServiceDetailsPage from "./pages/admin/service/ServiceDetails";
 import AdminEditServicePage from "./pages/admin/service/EditService";
+import AdminLoginPage from "./pages/admin/auth/AdminLogin";
 
 function App() {
   return (
@@ -72,6 +73,8 @@ function App() {
             path="/admin/edit-service/:id"
             element={<AdminEditServicePage />}
           />
+
+          <Route path="/admin/login" element={<AdminLoginPage />} />
 
           <Route element={<ProtectedRoute />}>
             {/* <Route path="/admin" element={<About />} />
