@@ -78,5 +78,6 @@ export const {
   useAddServiceMutation,
   useGetServicesQuery,
   useGetServiceDetailsQuery,
+  useEditServiceMutation,
   useAdminLoginMutation,
 } = apiSlices;

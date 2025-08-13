@@ -119,11 +119,7 @@ const ServiceListing: React.FC = () => {
   }
 
   const handleViewService = (serviceId: number) => {
-    window.location.href = `/admin/service/${serviceId}`
-  }
-
-  const handleEditService = (serviceId: number) => {
-    window.location.href = `/admin/service/edit/${serviceId}`
+    navigate(`/admin/edit-service/${serviceId}`)
   }
 
   const handleDeleteService = (serviceId: number) => {
@@ -136,6 +132,10 @@ const ServiceListing: React.FC = () => {
     alert("Toggle status for service " + serviceId)
   }
 
+  const handleEditButton = (id: number)=> {
+    navigate(`/admin/edit-service/${id}`)
+  }
+
   return (
     <div className="admin-service-listing p-6 space-y-6">
       {/* Page Header */}
@@ -146,7 +146,7 @@ const ServiceListing: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-          <button className="admin-add-service-btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors duration-200">
+          <button onClick={()=> navigate('/admin/add-service')} className="admin-add-service-btn bg-blue-500 hover:bg-blue-600 text-white cursor-pointer px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors duration-200">
             <Plus className="w-4 h-4" />
             <span>Add New Service</span>
           </button>
@@ -331,7 +331,7 @@ const ServiceListing: React.FC = () => {
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleEditService(service._id)}
+                          onClick={()=> handleEditButton(service._id)}
                           className="admin-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
                           title="Edit Service"
                         >
@@ -415,7 +415,7 @@ const ServiceListing: React.FC = () => {
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleEditService(service._id)}
+                      onClick={()=> handleEditButton(service._id)}
                       className="admin-mobile-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
                       title="Edit Service"
                     >
