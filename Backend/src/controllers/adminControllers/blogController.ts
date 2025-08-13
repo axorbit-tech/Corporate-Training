@@ -113,10 +113,30 @@ const deleteBlog = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const blogs = await blogModel.find().sort({ createdAt: -1 });
+
+    console.log("servicessss : ", blogs)
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: blogs,
+    });
+    
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error deleting Event",
+    });
+  }
+}
+
 const blogController = {
   addBlog,
   editBlog,
-  deleteBlog
+  deleteBlog,
+  getAllBlogs
 };
 
 export default blogController;

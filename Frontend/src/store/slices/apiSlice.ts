@@ -63,7 +63,6 @@ export const apiSlices = createApi({
         method: HttpMethod.GET,
       }),
     }),
-
     editService: builder.mutation({
       query: ({id, data}) => ({
         url: `/admin/service/${id}`,
@@ -71,11 +70,16 @@ export const apiSlices = createApi({
         body: data
       }),
     }),
-
     updateServiceStatus: builder.mutation({
       query: (id) => ({
         url: `/admin/service/${id}`,
         method: HttpMethod.PATCH,
+      }),
+    }),
+    getBlogs: builder.query({
+      query: () => ({
+        url: "/admin/blog",
+        method: HttpMethod.GET,
       }),
     }),
   }),
@@ -89,5 +93,6 @@ export const {
   useGetServiceDetailsQuery,
   useEditServiceMutation,
   useAdminLoginMutation,
-  useUpdateServiceStatusMutation
+  useUpdateServiceStatusMutation,
+  useGetBlogsQuery
 } = apiSlices;

@@ -39,6 +39,7 @@ router.delete('/event/:id', eventController.deleteEvent)
 
 // add, edit, delete blog routes
 router.post('/blog', blogController.addBlog)
+router.get('/blog', blogController.getAllBlogs)
 router.put('/blog/:id', blogController.editBlog)
 router.delete('/blog/:id', blogController.deleteBlog)
 
