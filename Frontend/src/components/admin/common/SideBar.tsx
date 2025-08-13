@@ -70,23 +70,23 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
         { label: 'Notifications', href: '/admin/notifications' }
       ]
     },
-    {
-      id: 'analytics',
-      label: 'Analytics',
-      icon: BarChart3,
-      href: '/admin/analytics'
-    },
-    {
-      id: 'settings',
-      label: 'Settings',
-      icon: Settings,
-      submenu: [
-        { label: 'General', href: '/admin/settings/general' },
-        { label: 'Users & Permissions', href: '/admin/settings/users' },
-        { label: 'Integrations', href: '/admin/settings/integrations' },
-        { label: 'Backup', href: '/admin/settings/backup' }
-      ]
-    }
+    // {
+    //   id: 'analytics',
+    //   label: 'Analytics',
+    //   icon: BarChart3,
+    //   href: '/admin/analytics'
+    // },
+    // {
+    //   id: 'settings',
+    //   label: 'Settings',
+    //   icon: Settings,
+    //   submenu: [
+    //     { label: 'General', href: '/admin/settings/general' },
+    //     { label: 'Users & Permissions', href: '/admin/settings/users' },
+    //     { label: 'Integrations', href: '/admin/settings/integrations' },
+    //     { label: 'Backup', href: '/admin/settings/backup' }
+    //   ]
+    // }
   ]
 
   return (

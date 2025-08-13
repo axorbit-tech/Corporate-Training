@@ -48,7 +48,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
           </button>
 
           {/* Search Bar */}
-          <div className="hidden sm:block relative">
+          {/* <div className="hidden sm:block relative">
             <div className="search-container relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
@@ -57,19 +57,19 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
                 className="search-input w-64 lg:w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Right Section */}
         <div className="flex items-center space-x-4">
           
           {/* Mobile Search Button */}
-          <button className="sm:hidden p-2 rounded-md hover:bg-gray-100 transition-colors">
+          {/* <button className="sm:hidden p-2 rounded-md hover:bg-gray-100 transition-colors">
             <Search className="w-5 h-5 text-gray-600" />
-          </button>
+          </button> */}
 
           {/* Notifications */}
-          <div className="relative">
+          {/* <div className="relative">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="notification-btn relative p-2 rounded-md hover:bg-gray-100 transition-colors"
@@ -80,7 +80,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
               </span>
             </button>
 
-            {/* Notifications Dropdown */}
+            Notifications Dropdown
             {showNotifications && (
               <div className="notifications-dropdown absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                 <div className="p-4 border-b border-gray-200">
@@ -120,7 +120,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
                 </div>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* Messages */}
           <button className="messages-btn p-2 rounded-md hover:bg-gray-100 transition-colors relative">
@@ -162,19 +162,19 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
                     <span>Profile</span>
                   </a>
                   <a
-                    href="/admin/settings"
+                    href="/admin/reset-password"
                     className="profile-menu-item flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <Settings className="w-4 h-4" />
-                    <span>Settings</span>
+                    <span>Reset Password</span>
                   </a>
-                  <a
+                  {/* <a
                     href="/admin/security"
                     className="profile-menu-item flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <Shield className="w-4 h-4" />
                     <span>Security</span>
-                  </a>
+                  </a> */}
                 </div>
                 <div className="border-t border-gray-200 py-2">
                   <button className="profile-menu-item flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left">

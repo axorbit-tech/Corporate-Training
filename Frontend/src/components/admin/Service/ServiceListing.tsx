@@ -129,6 +129,10 @@ const ServiceListing: React.FC = () => {
     }
   }
 
+  const handleToggleStatus = (serviceId: number) => {
+    alert("Toggle status for service " + serviceId)
+  }
+
   return (
     <div className="admin-service-listing p-6 space-y-6">
       {/* Page Header */}
@@ -309,6 +313,7 @@ const ServiceListing: React.FC = () => {
                     <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                       <span
                         className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(service.status)}`}
+                        onClick={() => handleToggleStatus(service._id)}
                       >
                         {service.status}
                       </span>
