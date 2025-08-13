@@ -1,6 +1,10 @@
 import type React from "react"
 import { useState } from "react"
 import { Eye, EyeOff, Lock, Mail, LogIn } from "lucide-react"
+import { useAdminLoginMutation } from "../../../store/slices/apiSlice"
+import { CircularProgress } from "@mui/material";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormData {
   email: string
@@ -13,8 +17,9 @@ const AdminLogin: React.FC = () => {
     password: "",
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [login, { isLoading }] = useAdminLoginMutation()
+  const navigate = useNavigate()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -28,22 +33,25 @@ const AdminLogin: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
     setError("")
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+    
+      // Call login mutation
+      const res = await login(formData).unwrap()
 
-      // Add your authentication logic here
-      console.log("Login attempt:", formData)
-
-      // Redirect to admin dashboard on success
-      window.location.href = "/admin/dashboard"
+      if(res.success) {
+        setFormData({
+          email: "",
+          password: "",
+        })
+        // Redirect to admin dashboard on success
+        navigate("/admin")
+      }
+      // Clear form data
     } catch (err) {
-      setError("Invalid email or password. Please try again.")
-    } finally {
-      setIsLoading(false)
+      toast.error("Login failed. Please check your credentials.");
+      console.error("Login failed:", err)
     }
   }
 
@@ -146,8 +154,7 @@ const AdminLogin: React.FC = () => {
             >
               {isLoading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Signing in...</span>
+                  <CircularProgress size="30px" />
                 </>
               ) : (
                 <>
@@ -157,16 +164,6 @@ const AdminLogin: React.FC = () => {
               )}
             </button>
           </form>
-
-          {/* Footer */}
-          <div className="login-footer text-center mt-8 pt-6 border-t border-slate-200">
-            <p className="text-sm text-slate-600">
-              Need help? Contact{" "}
-              <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
-                support
-              </a>
-            </p>
-          </div>
         </div>
 
         {/* Security Notice */}
