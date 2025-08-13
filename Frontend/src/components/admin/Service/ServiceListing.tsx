@@ -33,7 +33,7 @@ const ServiceListing: React.FC = () => {
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
 
   const { data: getService, refetch } = useGetServicesQuery(undefined)
-  const [changeServiceStatus] = useUpdateServiceStatusMutation();
+  const [changeServiceStatus, { isLoading }] = useUpdateServiceStatusMutation();
 
   const services = getService?.data
 
@@ -139,7 +139,7 @@ const ServiceListing: React.FC = () => {
 
   const handleServiceStatus = async (serviceId: number) => {
     try {
-      await new Promise((res) => setTimeout(res, 2000));
+      // await new Promise((res) => setTimeout(res, 2000));
       await changeServiceStatus(serviceId).unwrap(); // ✅ unwrap to handle errors properly
       console.log(`Service ${serviceId} deleted successfully`);
       refetch(); // refresh list
@@ -500,9 +500,10 @@ const ServiceListing: React.FC = () => {
           onClose={() => setOpen(false)}
           title="Are You sure to confirm this action?"
           // description={`This modal works with TypeScript. Service ID: ${selectedServiceId}`}
-          size={{ width: 250 }}
+          size={{ width: 300 }}
           color="#f0f0f0"
           buttonText="OK"
+          loading={isLoading}
           onButtonClick={() => {
             if (selectedServiceId) {
               handleServiceStatus(selectedServiceId);

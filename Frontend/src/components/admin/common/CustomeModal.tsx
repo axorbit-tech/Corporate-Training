@@ -1,6 +1,6 @@
 import React from "react";
 import type { ReactNode } from "react";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography, CircularProgress } from "@mui/material";
 
 type ModalSize = {
     width?: number | string;
@@ -17,6 +17,7 @@ interface CustomModalProps {
     buttonText?: string;
     onButtonClick?: () => void;
     children?: ReactNode;
+    loading?: boolean;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
@@ -29,6 +30,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     buttonText,
     onButtonClick,
     children,
+    loading = false,
 }) => {
     const style = {
         position: "absolute" as const,
@@ -43,7 +45,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     };
 
     return (
-        <Modal open={open} onClose={onClose} aria-labelledby="custom-modal-title">
+        <Modal open={open} onClose={onClose} aria-labelledby="custom-modal-title" >
             <Box sx={style}>
                 {title && (
                     <Typography id="custom-modal-title" variant="h6" component="h2">
@@ -54,30 +56,37 @@ const CustomModal: React.FC<CustomModalProps> = ({
 
                 {children && <Box sx={{ mt: 2 }}>{children}</Box>}
 
-                <div className="flex justify-center gap-4">
-                    {/* Cancel Button */}
-                    <Button
-                        variant="contained"
-                        sx={{
-                            mt: 3,
-                            backgroundColor: "#dc2626", 
-                            "&:hover": { backgroundColor: "#b91c1c" }, 
-                        }}
-                        onClick={onClose}
-                    >
-                        Cancel
-                    </Button>
 
-                    {/* Confirm Button */}
-                    {buttonText && (
-                        <Button
-                            variant="contained"
-                            sx={{ mt: 3 }}
-                            onClick={onButtonClick || onClose}
+                <div className="flex justify-center mt-4 gap-4">
+                    {loading ? (
+                        <CircularProgress size="30px" />
+                    ) : (
+                        <>
+                            {/* Cancel Button */}
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    mt: 3,
+                                    backgroundColor: "#dc2626",
+                                    "&:hover": { backgroundColor: "#b91c1c" },
+                                }}
+                                onClick={onClose}
+                            >
+                                Cancel
+                            </Button>
 
-                        >
-                            {buttonText}
-                        </Button>
+                            {/* Confirm Button */}
+                            {buttonText && (
+                                <Button
+                                    variant="contained"
+                                    sx={{ mt: 3 }}
+                                    onClick={onButtonClick || onClose}
+
+                                >
+                                    {buttonText}
+                                </Button>
+                            )}
+                        </>
                     )}
                 </div>
             </Box>
