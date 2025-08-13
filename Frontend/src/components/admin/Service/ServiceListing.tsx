@@ -145,6 +145,7 @@ const ServiceListing: React.FC = () => {
       refetch(); // refresh list
       setOpen(false); // close modal
     } catch (error) {
+      alert("unable to change status");
       console.error(`Error deleting service ${serviceId}:`, error);
     }
   };
