@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { LayoutDashboard, Users, Calendar, FileText, MessageSquare, Settings, BarChart3, UserCheck, ChevronDown, ChevronRight, LogOut, X } from 'lucide-react'
+import { LayoutDashboard, Users, Calendar, FileText, MessageSquare, UserCheck, ChevronDown, ChevronRight, LogOut, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 interface AdminSidebarProps {
   isOpen: boolean
@@ -7,6 +8,7 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
+  const navigate = useNavigate()
   const [expandedMenus, setExpandedMenus] = useState<string[]>([])
 
   const toggleSubmenu = (menuId: string) => {
@@ -22,7 +24,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
       id: 'dashboard',
       label: 'Dashboard',
       icon: LayoutDashboard,
-      href: '/admin/dashboard',
+      href: '/admin',
       active: true
     },
     {
@@ -47,14 +49,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
       id: 'therapists',
       label: 'Therapists',
       icon: UserCheck,
-      href: '/admin/therapists'
+      href: '/admin/counsellors'
     },
     {
       id: 'content',
       label: 'Content Management',
       icon: FileText,
       submenu: [
-        { label: 'Blog Posts', href: '/admin/blog' },
+        { label: 'Blog Posts', href: '/admin/blogs' },
         { label: 'Events', href: '/admin/events' },
         { label: 'Services', href: '/admin/services' },
         { label: 'Pages', href: '/admin/pages' }
@@ -167,7 +169,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
                         {item.submenu.map((subItem, index) => (
                           <li key={index}>
                             <a
-                              href={subItem.href}
+                              onClick={()=> navigate(subItem.href)}
                               className="submenu-item flex items-center justify-between px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
                             >
                               <span>{subItem.label}</span>

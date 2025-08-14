@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Eye, Edit, Trash2, Plus, Search } from 'lucide-react'
 import { useGetBlogsQuery } from '../../../store/slices/apiSlice'
+import { useNavigate } from 'react-router-dom'
 
 interface BlogPost {
   _id: string
@@ -10,6 +11,8 @@ interface BlogPost {
 }
 
 const BlogListing: React.FC = () => {
+
+  const navigate = useNavigate()
   const { data: getBlogs, isLoading, isError } = useGetBlogsQuery(undefined)
 
   const [blogs, setBlogs] = useState<BlogPost[]>([])
@@ -68,7 +71,7 @@ const BlogListing: React.FC = () => {
   }
 
   const handleViewPost = (postId: string) => {
-    window.location.href = `/admin/blog/${postId}`
+    navigate(`/admin/blog-details/${postId}`)
   }
 
   const handleEditPost = (postId: string) => {

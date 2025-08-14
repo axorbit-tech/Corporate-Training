@@ -51,6 +51,7 @@ function App() {
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/admin/blogs" element={<AdminBlogListingPage />} />
           <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
+          <Route path="/admin/blog-details/:id" element={<AdminBlogDetailsPage />} />
           <Route
             path="/admin/blog-details"
             element={<AdminBlogDetailsPage />}

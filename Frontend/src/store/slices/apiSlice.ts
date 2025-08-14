@@ -65,6 +65,20 @@ export const apiSlices = createApi({
         method: HttpMethod.GET,
       }),
     }),
+
+    addBlog: builder.mutation({
+      query: (postData) => ({
+        url: "/admin/blog",
+        method: HttpMethod.POST,
+        body: postData,
+      }),
+    }),
+    getBlogDetails: builder.query({
+      query: (id) => ({
+        url: `/admin/blog/${id}`,
+        method: HttpMethod.GET,
+      }),
+    }),
   }),
 });
 
@@ -77,5 +91,7 @@ export const {
   useEditServiceMutation,
   useAdminLoginMutation,
   useUpdateServiceStatusMutation,
-  useGetBlogsQuery
+  useGetBlogsQuery,
+  useAddBlogMutation,
+  useGetBlogDetailsQuery
 } = apiSlices;

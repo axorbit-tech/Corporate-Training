@@ -678,7 +678,6 @@
 }
 
 .add-blog-post .blog-page-title,
-.add-blog-post .sidebar-title,
 .add-blog-post .preview-title {
   font-family: "Lusitana", serif;
 }
@@ -687,12 +686,9 @@
 .add-blog-post .form-label,
 .add-blog-post .title-input,
 .add-blog-post .content-textarea,
-.add-blog-post .excerpt-textarea,
 .add-blog-post .upload-text,
-.add-blog-post .preview-excerpt,
 .add-blog-post .preview-content-text,
-.add-blog-post .publish-btn,
-.add-blog-post .save-draft-btn {
+.add-blog-post .publish-btn {
   font-family: "Montserrat", sans-serif;
 }
 
