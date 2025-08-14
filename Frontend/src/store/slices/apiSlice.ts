@@ -59,6 +59,14 @@ export const apiSlices = createApi({
         method: HttpMethod.PATCH,
       }),
     }),
+
+    deleteService: builder.mutation({
+      query: (id) => ({
+        url: `/admin/service/${id}`,
+        method: HttpMethod.DELETE,
+      }),
+    }),
+
     getBlogs: builder.query({
       query: () => ({
         url: "/admin/blog",
@@ -91,6 +99,7 @@ export const {
   useEditServiceMutation,
   useAdminLoginMutation,
   useUpdateServiceStatusMutation,
+  useDeleteServiceMutation,
   useGetBlogsQuery,
   useAddBlogMutation,
   useGetBlogDetailsQuery

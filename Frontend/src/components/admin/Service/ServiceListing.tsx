@@ -1,9 +1,10 @@
 import type React from "react"
 import { useState } from "react"
 import { Eye, Edit, Trash2, Plus, Search, Filter, MoreVertical, Calendar, Tag } from "lucide-react"
-import { useGetServicesQuery, useUpdateServiceStatusMutation } from "../../../store/slices/apiSlice"
+import { useGetServicesQuery, useUpdateServiceStatusMutation, useDeleteServiceMutation } from "../../../store/slices/apiSlice"
 import { useNavigate } from "react-router-dom"
 import CustomModal from "../common/CustomeModal"
+import { toast } from "react-toastify"
 
 interface SubService {
   title: string
@@ -32,65 +33,14 @@ const ServiceListing: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
 
+
   const { data: getService, refetch } = useGetServicesQuery(undefined)
   const [changeServiceStatus, { isLoading }] = useUpdateServiceStatusMutation();
+  const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation();
+  const [modalAction, setModalAction] = useState<(() => void) | null>(null);
 
   const services = getService?.data
 
-  // const services: Service[] = [
-  //   {
-  //     id: 1,
-  //     title: "Corporate Training Programs",
-  //     description: "Comprehensive training solutions for modern businesses",
-  //     image: "/corporate-training.png",
-  //     subServices: [
-  //       { id: 1, title: "Leadership Development", description: "Advanced leadership skills training" },
-  //       { id: 2, title: "Team Building", description: "Collaborative team enhancement programs" },
-  //       { id: 3, title: "Communication Skills", description: "Professional communication training" },
-  //     ],
-  //     status: "active",
-  //     createdDate: "2024-03-15",
-  //     lastModified: "2024-03-20",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Mental Health & Wellness",
-  //     description: "Employee wellness and mental health support services",
-  //     image: "/mental-health-service.png",
-  //     subServices: [
-  //       { id: 4, title: "Stress Management", description: "Techniques for managing workplace stress" },
-  //       { id: 5, title: "Mindfulness Training", description: "Mindfulness and meditation programs" },
-  //     ],
-  //     status: "active",
-  //     createdDate: "2024-03-10",
-  //     lastModified: "2024-03-18",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Organizational Development",
-  //     description: "Strategic organizational improvement services",
-  //     image: "/org-development.png",
-  //     subServices: [
-  //       { id: 6, title: "Change Management", description: "Managing organizational transitions" },
-  //       { id: 7, title: "Culture Assessment", description: "Evaluating and improving company culture" },
-  //       { id: 8, title: "Performance Optimization", description: "Enhancing organizational performance" },
-  //       { id: 9, title: "Strategic Planning", description: "Long-term strategic development" },
-  //     ],
-  //     status: "active",
-  //     createdDate: "2024-03-12",
-  //     lastModified: "2024-03-22",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Executive Coaching",
-  //     description: "One-on-one coaching for senior executives",
-  //     image: "/executive-coaching.png",
-  //     subServices: [{ id: 10, title: "Leadership Coaching", description: "Personal leadership development" }],
-  //     status: "inactive",
-  //     createdDate: "2024-03-08",
-  //     lastModified: "2024-03-16",
-  //   },
-  // ]
 
   const servicesPerPage = 10
   const totalPages = Math.ceil(services?.length / servicesPerPage)
@@ -126,32 +76,42 @@ const ServiceListing: React.FC = () => {
     navigate(`/admin/edit-service/${serviceId}`)
   }
 
-  const handleDeleteService = (serviceId: number) => {
-    if (confirm("Are you sure you want to delete this service?")) {
-      console.log("Delete service:", serviceId)
-    }
-  }
 
-  const handleToggleStatus = (serviceId: number) => {
+
+  // Populate Modal & Trigger Function based on type
+  const handleFunctionTypes = (serviceId: number, type: "status" | "delete") => {
     setSelectedServiceId(serviceId);
-    setOpen(true); // show modal
+    setModalAction(() => () => handleServiceAction(serviceId, type));
+    setOpen(true);
   };
 
-  const handleServiceStatus = async (serviceId: number) => {
+
+
+
+  const handleServiceAction = async (serviceId: number, actionType: "status" | "delete") => {
     try {
-      // await new Promise((res) => setTimeout(res, 2000));
-      await changeServiceStatus(serviceId).unwrap(); // ✅ unwrap to handle errors properly
-      console.log(`Service ${serviceId} deleted successfully`);
-      refetch(); // refresh list
-      setOpen(false); // close modal
-    } catch (error) {
-      alert("unable to change status");
-      console.error(`Error deleting service ${serviceId}:`, error);
+      if (actionType === "status") {
+        await changeServiceStatus(serviceId).unwrap();
+        console.log(`Service ${serviceId} status changed successfully`);
+      }
+      else if (actionType === "delete") {
+        await deleteService(serviceId).unwrap();
+        console.log(`Service ${serviceId} deleted successfully`);
+      }
+
+      refetch();     // Refresh service list
+      setOpen(false); // Close modal
+    }
+    catch (error) {
+      alert(`Unable to ${actionType === "status" ? "change status" : "delete service"}`);
+      console.error(`Error performing ${actionType} for service ${serviceId}:`, error);
     }
   };
 
 
-  const handleEditButton = (id: number)=> {
+
+
+  const handleEditButton = (id: number) => {
     navigate(`/admin/edit-service/${id}`)
   }
 
@@ -165,7 +125,7 @@ const ServiceListing: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-3">
-          <button onClick={()=> navigate('/admin/add-service')} className="admin-add-service-btn bg-blue-500 hover:bg-blue-600 text-white cursor-pointer px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors duration-200">
+          <button onClick={() => navigate('/admin/add-service')} className="admin-add-service-btn bg-blue-500 hover:bg-blue-600 text-white cursor-pointer px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2 transition-colors duration-200">
             <Plus className="w-4 h-4" />
             <span>Add New Service</span>
           </button>
@@ -335,7 +295,7 @@ const ServiceListing: React.FC = () => {
                     <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                       <span
                         className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor(service.status)}`}
-                        onClick={() => handleToggleStatus(service._id)}
+                        onClick={() => handleFunctionTypes(service._id, "status")}
                       >
                         {service.status}
                       </span>
@@ -350,14 +310,14 @@ const ServiceListing: React.FC = () => {
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={()=> handleEditButton(service._id)}
+                          onClick={() => handleEditButton(service._id)}
                           className="admin-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
                           title="Edit Service"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDeleteService(service._id)}
+                          onClick={() => handleFunctionTypes(service._id, "delete")}
                           className="admin-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
                           title="Delete Service"
                         >
@@ -421,27 +381,28 @@ const ServiceListing: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span
                     className={`admin-mobile-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(service.status)}`}
+                    onClick={() => handleFunctionTypes(service._id, "status")}
                   >
                     {service.status}
                   </span>
 
                   <div className="admin-mobile-action-buttons flex items-center space-x-2">
                     <button
-                      onClick={() => handleViewService(service._id)}
+                      onClick={() => navigate(`/admin/service-details/${service._id}`)}
                       className="admin-mobile-action-btn p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
                       title="View Service"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={()=> handleEditButton(service._id)}
+                      onClick={() => handleEditButton(service._id)}
                       className="admin-mobile-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
                       title="Edit Service"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDeleteService(service._id)}
+                      onClick={() => handleFunctionTypes(service._id, "delete")}
                       className="admin-mobile-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
                       title="Delete Service"
                     >
@@ -504,12 +465,12 @@ const ServiceListing: React.FC = () => {
           size={{ width: 300 }}
           color="#f0f0f0"
           buttonText="OK"
-          loading={isLoading}
+          loading={isLoading || isDeleting}
           onButtonClick={() => {
-            if (selectedServiceId) {
-              handleServiceStatus(selectedServiceId);
-            }else{
-              alert('Unable to perorm this action')
+            if (modalAction) {
+              modalAction();
+            } else {
+              toast.error("Something went wrong");
             }
           }}
         />
