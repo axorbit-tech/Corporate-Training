@@ -37,10 +37,10 @@ const baseQueryWithAuthCheck: typeof baseQuery = async (args, api, extraOptions)
   ) {
    
     toast.error("Session expired! Logging out...");
-    // localStorage.removeItem("adminToken");
-    // setTimeout(() => {
-    //     window.location.href = "/admin/login";
-    // }, 1000);
+    localStorage.removeItem("adminToken");
+    setTimeout(() => {
+        window.location.href = "/admin/login";
+    }, 1500);
   }
 
   return result;

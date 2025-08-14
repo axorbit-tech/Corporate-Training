@@ -7,15 +7,6 @@ export const apiSlices = createApi({
   baseQuery: baseQueryWithAuthCheck,
   endpoints: (builder) => ({
     signup: builder.mutation({
-/*************  ✨ Windsurf Command ⭐  *************/
-/**
- * Constructs the query parameters for the signup mutation.
- * 
- * @param postData - The data to be sent in the body of the request.
- * @returns An object containing the URL, HTTP method, and request body.
- */
-
-/*******  bebc8d4d-6e1c-4165-80b1-3083cad7e2ba  *******/
       query: (postData) => ({
         url: "/signup",
         method: HttpMethod.POST,

@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { HttpStatusCode } from "../constants/httpStatusCodes";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 interface AuthenticatedRequest extends Request {
   user?: any;
@@ -18,7 +21,7 @@ const authMiddleware = (
       ? authHeader.substring(7)
       : req.cookies.adminToken;
 
-    if (!token) {
+    if (!token ) {
       return res
         .status(HttpStatusCode.UNAUTHORIZED)
         .json({ success: false, message: "Unauthorized" });
