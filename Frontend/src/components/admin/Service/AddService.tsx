@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import { ArrowLeft, Upload, X, Save, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAddServiceMutation } from "../../../store/slices/apiSlice";
+import { successToast } from "../../../utils/toast";
 
 interface Subservice {
   id: number;
@@ -117,8 +118,7 @@ const AddService: React.FC = () => {
       console.log(res);
 
       if (res.success) {
-        // Note: response structure should be res.success, not res.data.success
-        console.log("success");
+        successToast('service added successfully')
         navigate("/admin/services");
       }
     } catch (error) {

@@ -6,7 +6,10 @@ import { blogSchema } from "../../validations/adminValidation/blogValidation";
 // ✅ Add Blog
 const addBlog = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { error } = blogSchema.validate(req.body);
+    const { title, content } = req.body;
+
+    // Validate request body using your Joi schema
+    const { error } = blogSchema.validate({ title, content });
 
     if (error) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
@@ -16,11 +19,18 @@ const addBlog = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const { title, content } = req.body;
+    // Check if image exists
+    if (!req.file) {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        error: "Blog image is required!",
+      });
+      return;
+    }
 
-    const isEventExist = await blogModel.findOne({ title });
-
-    if (isEventExist) {
+    // Check if blog already exists
+    const isBlogExist = await blogModel.findOne({ title });
+    if (isBlogExist) {
       res.status(HttpStatusCode.CONFLICT).json({
         success: false,
         error: "Blog already exists!",
@@ -28,13 +38,22 @@ const addBlog = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const newEvent = new blogModel({ title, content });
-    await newEvent.save();
+    // Get image path (Cloudinary or local storage)
+    const imageUrl = req.file ? req.file.path : undefined;
+
+    // Create new blog document
+    const newBlog = new blogModel({
+      title,
+      content,
+      image: imageUrl,
+    });
+
+    await newBlog.save();
 
     res.status(HttpStatusCode.CREATED).json({
       success: true,
       message: "Blog added successfully",
-      data: newEvent,
+      data: newBlog,
     });
   } catch (error) {
     console.error(error);
@@ -43,6 +62,7 @@ const addBlog = async (req: Request, res: Response): Promise<void> => {
       .json({ error: "Error adding Blog" });
   }
 };
+
 
 // ✅ Edit Blog
 const editBlog = async (req: Request, res: Response): Promise<void> => {
@@ -132,11 +152,43 @@ const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    console.log('iddd: ', id)
+
+    const blog = await blogModel.findById(id);
+
+    if (!blog) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Blog not found",
+      });
+      return;
+    }
+
+    console.log('blog : ', blog)
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: blog,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error fetching blog details",
+    });
+  }
+};
+
+
 const blogController = {
   addBlog,
   editBlog,
   deleteBlog,
-  getAllBlogs
+  getAllBlogs,
+  getBlogDetails
 };
 
 export default blogController;
