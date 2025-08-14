@@ -12,4 +12,6 @@ export const userSchema = Joi.object({
   phone: Joi.number().required(),
   age: Joi.number().optional(),
   sex: Joi.string().optional(),
+  subject: Joi.string().optional(),
+  message: Joi.string().optional(),
 });

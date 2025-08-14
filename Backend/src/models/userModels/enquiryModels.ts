@@ -7,7 +7,7 @@ export interface IEnquiry extends Document {
   subject: string;
 }
 
-const trainerSchema = new mongoose.Schema({
+const enquirySchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true
@@ -22,6 +22,6 @@ const trainerSchema = new mongoose.Schema({
   },
 });
 
-const Trainer = mongoose.model<IEnquiry>('Enquiry', trainerSchema);
+const Enquiry = mongoose.model<IEnquiry>('Enquiry', enquirySchema);
 
-export default Trainer;
+export default Enquiry;
