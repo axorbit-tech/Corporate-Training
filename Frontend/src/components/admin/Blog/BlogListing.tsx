@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Eye, Edit, Trash2, Plus, Search } from 'lucide-react'
-import { useGetBlogsQuery } from '../../../store/slices/apiSlice'
+import { useGetBlogsQuery, useDeleteBlogMutation } from '../../../store/slices/apiSlice'
 import { useNavigate } from 'react-router-dom'
+import CustomModal from '../common/CustomeModal'
+import { toast } from 'react-toastify'
 
 interface BlogPost {
   _id: string
@@ -13,13 +15,16 @@ interface BlogPost {
 const BlogListing: React.FC = () => {
 
   const navigate = useNavigate()
-  const { data: getBlogs, isLoading, isError } = useGetBlogsQuery(undefined)
+  const { data: getBlogs, isLoading, isError, refetch } = useGetBlogsQuery(undefined)
+  const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation()
+  const [open, setOpen] = useState(false);
 
   const [blogs, setBlogs] = useState<BlogPost[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedPosts, setSelectedPosts] = useState<string[]>([])
+  const [selectedBlogId, setSelectedBlogId] = useState<string | null>(null)
 
   const postsPerPage = 10
 
@@ -80,8 +85,19 @@ const BlogListing: React.FC = () => {
 
 
   const handleDeletePost = (postId: string) => {
-    if (confirm('Are you sure you want to delete this blog post?')) {
-      console.log('Delete post:', postId)
+    setSelectedBlogId(postId)
+    setOpen(true)
+  }
+
+  const handleConfirmDelete = async (selectedBlogId: string) => {
+    try {
+      await deleteBlog(selectedBlogId).unwrap()
+      refetch()
+      toast.success('Blog deleted successfully')
+      setOpen(false)
+    } catch (error) {
+      toast.error('Failed to delete blog')
+      console.error('Error deleting blog:', error)
     }
   }
 
@@ -156,11 +172,11 @@ const BlogListing: React.FC = () => {
                 </td>
                 <td className="px-6 py-4">{post.title}</td>
                 <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor("active")}`}
-                      >
-                        {'posted'}
-                      </span>
+                  <span
+                    className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor("active")}`}
+                  >
+                    {'posted'}
+                  </span>
                 </td>
                 <td className="px-6 py-4">{new Date(post.createdAt).toLocaleDateString()}</td>
                 <td className="px-6 py-4 flex space-x-2">
@@ -176,43 +192,61 @@ const BlogListing: React.FC = () => {
 
       {/* Pagination */}
       <div className="admin-pagination-container border-t border-gray-200 bg-gray-50 px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="admin-pagination-info text-sm text-gray-700">
-              Showing <span className="font-medium">1</span> to{" "}
-              <span className="font-medium">{Math.min(postsPerPage ?? 0, blogs?.length ?? 0)}</span> of{" "}
-              <span className="font-medium">{blogs?.length}</span> results
+        <div className="flex items-center justify-between">
+          <div className="admin-pagination-info text-sm text-gray-700">
+            Showing <span className="font-medium">1</span> to{" "}
+            <span className="font-medium">{Math.min(postsPerPage ?? 0, blogs?.length ?? 0)}</span> of{" "}
+            <span className="font-medium">{blogs?.length}</span> results
+          </div>
+
+          <div className="admin-pagination-controls flex items-center space-x-2">
+            <button
+              disabled={currentPage === 1}
+              className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              Previous
+            </button>
+
+            <div className="admin-pagination-numbers flex items-center space-x-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${currentPage === page ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"
+                    }`}
+                >
+                  {page}
+                </button>
+              ))}
             </div>
 
-            <div className="admin-pagination-controls flex items-center space-x-2">
-              <button
-                disabled={currentPage === 1}
-                className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              >
-                Previous
-              </button>
-
-              <div className="admin-pagination-numbers flex items-center space-x-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${currentPage === page ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"
-                      }`}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                disabled={currentPage === totalPages}
-                className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              >
-                Next
-              </button>
-            </div>
+            <button
+              disabled={currentPage === totalPages}
+              className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              Next
+            </button>
           </div>
         </div>
+      </div>
+
+      <CustomModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Are You sure to confirm this action?"
+        // description={`This modal works with TypeScript. Service ID: ${selectedServiceId}`}
+        size={{ width: 300 }}
+        color="#f0f0f0"
+        buttonText="OK"
+        loading={isDeleting}
+        onButtonClick={() => {
+          if (selectedBlogId) {
+            handleConfirmDelete(selectedBlogId);
+          } else {
+            toast.error("Something went wrong");
+          }
+        }}
+      />
     </div>
   )
 }

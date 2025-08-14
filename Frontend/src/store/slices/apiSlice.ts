@@ -87,6 +87,13 @@ export const apiSlices = createApi({
         method: HttpMethod.GET,
       }),
     }),
+
+    deleteBlog: builder.mutation({
+      query: (id) => ({
+        url: `/admin/blog/${id}`,
+        method: HttpMethod.DELETE,
+      }),
+    }),
   }),
 });
 
@@ -102,5 +109,6 @@ export const {
   useDeleteServiceMutation,
   useGetBlogsQuery,
   useAddBlogMutation,
-  useGetBlogDetailsQuery
+  useGetBlogDetailsQuery,
+  useDeleteBlogMutation
 } = apiSlices;

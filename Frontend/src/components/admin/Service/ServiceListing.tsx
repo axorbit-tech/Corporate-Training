@@ -101,9 +101,10 @@ const ServiceListing: React.FC = () => {
 
       refetch();     // Refresh service list
       setOpen(false); // Close modal
+      toast.success(`Service ${actionType === "status" ? "status changed" : "deleted"} successfully`);
     }
     catch (error) {
-      alert(`Unable to ${actionType === "status" ? "change status" : "delete service"}`);
+      toast.error(`Unable to ${actionType === "status" ? "change status" : "delete service"}`);
       console.error(`Error performing ${actionType} for service ${serviceId}:`, error);
     }
   };
