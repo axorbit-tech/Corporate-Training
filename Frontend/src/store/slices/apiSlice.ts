@@ -1,29 +1,21 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { baseUrl, HttpMethod } from "../../constants/index";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { HttpMethod } from "../../constants/index";
+import  baseQueryWithAuthCheck from "../baseQueryWithAuthCheck"
 
 export const apiSlices = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
-    prepareHeaders: (headers, { endpoint }) => {
-      const isAdminEndpoint =
-        endpoint.includes("admin") ||
-        endpoint === "fetchUsers" ||
-        endpoint === "fetchUserDetails";
-
-      const token = isAdminEndpoint
-        ? localStorage.getItem("adminToken")
-        : localStorage.getItem("token");
-
-      if (token) {
-        headers.set("authorization", `Bearer ${token}`);
-      }
-
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithAuthCheck,
   endpoints: (builder) => ({
     signup: builder.mutation({
+/*************  ✨ Windsurf Command ⭐  *************/
+/**
+ * Constructs the query parameters for the signup mutation.
+ * 
+ * @param postData - The data to be sent in the body of the request.
+ * @returns An object containing the URL, HTTP method, and request body.
+ */
+
+/*******  bebc8d4d-6e1c-4165-80b1-3083cad7e2ba  *******/
       query: (postData) => ({
         url: "/signup",
         method: HttpMethod.POST,

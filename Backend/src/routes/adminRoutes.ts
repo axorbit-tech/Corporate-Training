@@ -8,11 +8,18 @@ import blogController from "../controllers/adminControllers/blogController";
 import whyUsController from "../controllers/adminControllers/whyUsController";
 import testimonialController from "../controllers/adminControllers/testimonialController";
 import upload from "../config/multerConfig";
+import authMiddleware from "../middlewares/authMiddleware";
 const router = express.Router();
+
+
 
 // authentication routes
 router.post('/login', adminController.login)
 // router.post('/signup', adminController.signupAdmin)
+
+// Protected routes (auth applies to everything below this line)
+router.use(authMiddleware);
+
 
 // add, edit, delete languages routes
 router.post('/language', languageController.addLanguage)

@@ -2,6 +2,7 @@ import React from 'react'
 import { Users, Calendar, TrendingUp, DollarSign, Clock, CheckCircle, BarChart3, ArrowUp, ArrowDown, MoreVertical } from 'lucide-react'
 
 const AdminDashboard: React.FC = () => {
+  
   const stats = [
     {
       title: 'Total Clients',

@@ -51,6 +51,22 @@ const login = async (req: Request, res: Response): Promise<void> => {
       { expiresIn: process.env.JWT_EXPIRES_IN || "1h" } as jwt.SignOptions
     );
 
+    const refreshToken = jwt.sign(
+      { userId: admin._id, isAdmin: true },
+      process.env.JWT_REFRESH_SECRET || "refreshDefaultSecret",
+      { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d" } as jwt.SignOptions
+    );
+
+
+    // Store refresh token in secure cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true, // only over HTTPS
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+    });
+
+
     res.status(HttpStatusCode.OK).json({
       success: true,
       message: "Admin logged in successfully",
@@ -70,3 +86,4 @@ const adminController = {
 };
 
 export default adminController;
+
