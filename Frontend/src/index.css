@@ -1050,3 +1050,60 @@
 .edit-service .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+.edit-blog-post .blog-page-title,
+.edit-blog-post .preview-title {
+  font-family: "Lusitana", serif;
+}
+
+.edit-blog-post .blog-page-subtitle,
+.edit-blog-post .form-label,
+.edit-blog-post .title-input,
+.edit-blog-post .content-textarea,
+.edit-blog-post .upload-text,
+.edit-blog-post .preview-content-text,
+.edit-blog-post .publish-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Custom scrollbar for content textarea */
+.edit-blog-post .content-textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.edit-blog-post .content-textarea::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.edit-blog-post .content-textarea::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.edit-blog-post .content-textarea::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .edit-blog-post .editor-toolbar {
+    flex-wrap: wrap;
+    gap: 1px;
+  }
+
+  .edit-blog-post .toolbar-btn {
+    padding: 8px;
+  }
+}
+
+/* Animation for loading state */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.edit-blog-post .animate-spin {
+  animation: spin 1s linear infinite;
+}

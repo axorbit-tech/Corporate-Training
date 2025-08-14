@@ -1,5 +1,3 @@
-"use client"
-
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { ArrowLeft, Upload, X, Save, Plus } from "lucide-react"
@@ -25,6 +23,8 @@ interface EditServiceProps {
 }
 
 const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
+
+  console.log(serviceId, "serviceeeeiddddd")
   const navigate = useNavigate()
   // Updated hook name from useGetServiceByIdQuery to useGetServiceQuery
   const { data: serviceResponse, refetch, isLoading, error } = useGetServiceDetailsQuery(serviceId)

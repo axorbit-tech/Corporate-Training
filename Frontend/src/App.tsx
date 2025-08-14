@@ -27,6 +27,7 @@ import AdminServiceListing from "./pages/admin/service/ServiceListing";
 import AdminServiceDetailsPage from "./pages/admin/service/ServiceDetails";
 import AdminEditServicePage from "./pages/admin/service/EditService";
 import AdminLoginPage from "./pages/admin/auth/AdminLogin";
+import AdminEditBlogPage from "./pages/admin/blog/EditBlog";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route path="/admin/blogs" element={<AdminBlogListingPage />} />
           <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
           <Route path="/admin/blog-details/:id" element={<AdminBlogDetailsPage />} />
+          <Route path="/admin/edit-blog/:id" element={<AdminEditBlogPage />} />
           <Route
             path="/admin/blog-details"
             element={<AdminBlogDetailsPage />}

@@ -80,7 +80,7 @@ const BlogListing: React.FC = () => {
   }
 
   const handleEditPost = (postId: string) => {
-    window.location.href = `/admin/blog/edit/${postId}`
+    navigate(`/admin/edit-blog/${postId}`)
   }
 
 

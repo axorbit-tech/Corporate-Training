@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { HttpMethod } from "../../constants/index";
-import  baseQueryWithAuthCheck from "../baseQueryWithAuthCheck"
+import baseQueryWithAuthCheck from "../baseQueryWithAuthCheck";
 
 export const apiSlices = createApi({
   reducerPath: "api",
@@ -47,10 +47,10 @@ export const apiSlices = createApi({
       }),
     }),
     editService: builder.mutation({
-      query: ({id, data}) => ({
+      query: ({ id, data }) => ({
         url: `/admin/service/${id}`,
         method: HttpMethod.PUT,
-        body: data
+        body: data,
       }),
     }),
     updateServiceStatus: builder.mutation({
@@ -87,11 +87,19 @@ export const apiSlices = createApi({
         method: HttpMethod.GET,
       }),
     }),
+<<<<<<< Updated upstream
 
     deleteBlog: builder.mutation({
       query: (id) => ({
         url: `/admin/blog/${id}`,
         method: HttpMethod.DELETE,
+=======
+    editBlog: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/admin/blog/${id}`,
+        method: HttpMethod.PUT,
+        body: data,
+>>>>>>> Stashed changes
       }),
     }),
   }),
@@ -110,5 +118,9 @@ export const {
   useGetBlogsQuery,
   useAddBlogMutation,
   useGetBlogDetailsQuery,
+<<<<<<< Updated upstream
   useDeleteBlogMutation
+=======
+  useEditBlogMutation
+>>>>>>> Stashed changes
 } = apiSlices;

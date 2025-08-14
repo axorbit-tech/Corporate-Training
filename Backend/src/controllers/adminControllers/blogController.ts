@@ -79,9 +79,21 @@ const editBlog = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    const updatedData: { 
+      title: string; 
+      content: string; 
+      image?: string;
+    } = {
+      title: title,
+      content: content,
+    };
+
+    if(req.file) {
+      updatedData.image = req.file.path
+    }
+
     const updated = await blogModel.findByIdAndUpdate(
-      id,
-      { title, content },
+      id, updatedData,
       { new: true }
     );
 
@@ -172,7 +184,7 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
 
     res.status(HttpStatusCode.OK).json({
       success: true,
-      data: blog,
+      blog,
     });
   } catch (error) {
     console.error(error);
