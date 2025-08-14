@@ -40,11 +40,16 @@ const AdminLogin: React.FC = () => {
       // Call login mutation
       const res = await login(formData).unwrap()
 
+
       if(res.success) {
         setFormData({
           email: "",
           password: "",
         })
+
+        // Store token in local storage
+        localStorage.setItem("adminToken", res.token)
+
         // Redirect to admin dashboard on success
         navigate("/admin")
       }
