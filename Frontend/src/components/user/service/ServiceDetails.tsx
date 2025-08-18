@@ -22,7 +22,8 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
 
     const { id } = useParams<ServiceDetailsParams>();
 
-    const { data: service, isLoading, error } = useGetServiceDetailsQuery(id)
+    const { data: serviceData, isLoading, error } = useGetServiceDetailsQuery(id)
+    const service = serviceData?.data
 
     if (isLoading) {
         return (
@@ -55,31 +56,31 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
         <div className="admin-service-details min-h-screen bg-gray-50  flex flex-col">
             {/* Header */}
             <div className="admin-service-header bg-white border-b border-gray-200 sticky top-0 z-30">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="grid grid-cols-3 items-center h-16">
-      
-      {/* Left Section (Back Button) */}
-      <div className="flex items-center">
-        <button
-          onClick={() => window.history.back()}
-          className="admin-back-btn p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-      </div>
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-3 items-center h-16">
 
-      {/* Center Section (Title & Status) */}
-      <div className="flex flex-col items-center">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-900 text-center">
-          Service Details
-        </h1>
-      </div>
+                        {/* Left Section (Back Button) */}
+                        <div className="flex items-center">
+                            <button
+                                onClick={() => window.history.back()}
+                                className="admin-back-btn p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
+                            >
+                                <ArrowLeft className="w-5 h-5" />
+                            </button>
+                        </div>
 
-      {/* Right Section (empty, for balance or future actions) */}
-      <div></div>
-    </div>
-  </div>
-</div>
+                        {/* Center Section (Title & Status) */}
+                        <div className="flex flex-col items-center">
+                            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 text-center">
+                                Service Details
+                            </h1>
+                        </div>
+
+                        {/* Right Section (empty, for balance or future actions) */}
+                        <div></div>
+                    </div>
+                </div>
+            </div>
 
 
             {/* Main Content */}

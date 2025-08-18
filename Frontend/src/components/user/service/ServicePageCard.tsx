@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import limitWords  from '../../../utils/wordLimitor'
 
 interface ServiceCardProps {
   id: number
@@ -12,13 +13,6 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   title,
   description,
 }) => {
-
-  // Limit to 50 words
-  const limitWords = (text: string, wordLimit: number) => {
-    const words = text.split(' ')
-    if (words.length <= wordLimit) return text
-    return words.slice(0, wordLimit).join(' ') + ' ...'
-  }
 
   const navigate = useNavigate()
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import limitWords  from '../../../utils/wordLimitor'
 
 interface BlogPostCardProps {
   id: number
@@ -25,11 +26,6 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
   const isEven = (Index ?? 0) % 2 === 0;
 
   const navigate = useNavigate()
-  const limitWords = (text: string, wordLimit: number) => {
-    const words = text.split(' ')
-    if (words.length <= wordLimit) return text
-    return words.slice(0, wordLimit).join(' ') + ' ...'
-  }
 
   return (
     <article className="blog-post-card bg-white border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300">
@@ -84,7 +80,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
 
             {/* Blog Post Excerpt */}
             <p className="blog-post-excerpt text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
-              {limitWords(description, 80)} <button onClick={() => navigate(`/services-details/${id}`)} className="bg-gradient-to-r ml-4 border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-5 py-1 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+              {limitWords(description, 80)} <button onClick={() => navigate(`/blog-details/${id}`)} className="bg-gradient-to-r ml-4 border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-5 py-1 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
                 More
               </button>
             </p>

@@ -130,7 +130,7 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
 
         res.status(HttpStatusCode.OK).json({
             success: true,
-            blog,
+            data:blog,
         });
     } catch (error) {
         console.error(error);
@@ -196,7 +196,7 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
 
         res.status(HttpStatusCode.OK).json({
             success: true,
-            event,
+            data: event,
         });
     } catch (error) {
         console.error(error);
