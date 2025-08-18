@@ -1,16 +1,23 @@
 import React, { useState, useRef } from 'react'
 import { ArrowLeft, Upload, X, Save, } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { useAddEventMutation } from '../../../store/slices/apiSlice'
+import { errorToast, successToast } from '../../../utils/toast'
 
 interface EventFormData {
   title: string
-  description: string
+  content: string
   eventDate: string
 }
 
 const AddEvent: React.FC = () => {
+
+  const navigate = useNavigate();
+  const [ addEvent ] = useAddEventMutation()
+
   const [formData, setFormData] = useState<EventFormData>({
     title: '',
-    description: '',
+    content: '',
     eventDate: ''
   })
 
@@ -64,19 +71,31 @@ const AddEvent: React.FC = () => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500))
     
-    const eventData = {
-      ...formData,
-      featuredImages: featuredImages.filter(Boolean) // Only send non-null files
+    const formDataToSend = new FormData()
+
+    if(featuredImages && featuredImages.length > 0) {
+      featuredImages.filter((file): file is File => file !== null)
+     .forEach(file => {
+       formDataToSend.append("images", file);
+     });
     }
+
+    formDataToSend.append('title', formData.title)
+    formDataToSend.append('content', formData.content)
+    formDataToSend.append('date', formData.eventDate)
     
-    console.log('Saving event:', eventData)
-    setIsSaving(false)
+    const res = await addEvent(formDataToSend).unwrap()
     
-    // Redirect to events listing or show success message
-    window.location.href = '/admin/events' // Assuming an events listing page
+    if(res.success) {
+      successToast('event added successfully')
+      navigate('/admin/events') 
+    } else {
+      errorToast('event adding failed')
+    }
   }
 
   return (
+    
     <div className="add-event min-h-screen bg-gray-50">
       
       {/* Header */}
@@ -149,13 +168,13 @@ const AddEvent: React.FC = () => {
 
           {/* Event Description */}
           <div className="description-section bg-white rounded-lg border border-gray-200 p-6">
-            <label htmlFor="description" className="form-label block text-sm font-medium text-gray-700 mb-3">
+            <label htmlFor="content" className="form-label block text-sm font-medium text-gray-700 mb-3">
               Event Description *
             </label>
             <textarea
-              id="description"
-              name="description"
-              value={formData.description}
+              id="content"
+              name="content"
+              value={formData.content}
               onChange={handleInputChange}
               placeholder="Write a detailed description for your event..."
               rows={8}
@@ -218,6 +237,7 @@ const AddEvent: React.FC = () => {
                     accept="image/*"
                     onChange={(e) => handleImageUpload(e, index)}
                     className="hidden"
+                    required
                   />
                 </div>
               ))}

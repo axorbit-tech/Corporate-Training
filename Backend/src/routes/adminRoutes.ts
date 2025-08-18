@@ -40,7 +40,9 @@ router.get('/service/:id', serviceController.getServiceById);
 router.patch('/service/:id', serviceController.updateStatus);
 
 // add, edit, delete event routes
-router.post('/event', eventController.addEvent)
+router.post('/event', upload.array('images'), eventController.addEvent)
+router.get('/event', eventController.getAllEvents)
+router.get('/event/:id', eventController.getEventDetails)
 router.put('/event/:id', eventController.editEvent)
 router.delete('/event/:id', eventController.deleteEvent)
 

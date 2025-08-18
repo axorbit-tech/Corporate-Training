@@ -59,7 +59,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
         { label: 'Blog Posts', href: '/admin/blogs' },
         { label: 'Events', href: '/admin/events' },
         { label: 'Services', href: '/admin/services' },
-        { label: 'Pages', href: '/admin/pages' }
       ]
     },
     {

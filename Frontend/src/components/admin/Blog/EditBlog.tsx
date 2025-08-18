@@ -46,7 +46,6 @@ const EditBlogPost: React.FC<EditBlogPostProps> = ({ blogId }) => {
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasImageChanged, setHasImageChanged] = useState(false);
-
   const fileInputRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
 

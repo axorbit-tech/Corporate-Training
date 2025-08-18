@@ -4,7 +4,7 @@ const Gallery: React.FC = () => {
   return (
     
 
-<div className="grid grid-cols-2 gap-2">
+<div className="grid grid-cols-2 gap-2 mx-10">
         <div>
             <img className="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt=""/>
         </div>

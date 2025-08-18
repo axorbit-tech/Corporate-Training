@@ -1107,3 +1107,62 @@
 .edit-blog-post .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+.admin-event-listing .admin-event-title {
+  font-family: "Lusitana", serif;
+}
+
+.admin-event-listing .admin-event-subtitle,
+.admin-event-listing .admin-add-event-btn,
+.admin-event-listing .admin-search-input,
+.admin-event-listing .admin-status-filter,
+.admin-event-listing .admin-filter-btn,
+.admin-event-listing .admin-table-header-cell,
+.admin-event-listing .admin-event-title,
+.admin-event-listing .admin-pagination-info,
+.admin-event-listing .admin-pagination-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+.admin-event-listing .line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.admin-event-listing .line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Mobile card hover effects */
+.admin-event-listing .admin-mobile-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.edit-event .event-page-title {
+  font-family: "Lusitana", serif;
+}
+
+.edit-event .event-page-subtitle,
+.edit-event .form-label,
+.edit-event .title-input,
+.edit-event .description-textarea,
+.edit-event .date-input,
+.edit-event .save-event-btn {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Animation for loading state */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.edit-event .animate-spin {
+  animation: spin 1s linear infinite;
+}

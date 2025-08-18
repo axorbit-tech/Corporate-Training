@@ -100,6 +100,32 @@ export const apiSlices = createApi({
         body: data,
       }),
     }),
+    addEvent: builder.mutation({
+      query: (postData) => ({
+        url: "/admin/event",
+        method: HttpMethod.POST,
+        body: postData,
+      }),
+    }),
+    getEvents: builder.query({
+      query: ()=> ({
+        url: "/admin/event",
+        method: HttpMethod.GET,
+      })
+    }),
+    getEventDetails: builder.query({
+      query: (id)=> ({
+        url: `/admin/event/${id}`,
+        method: HttpMethod.GET,
+      })
+    }),
+    editEvent: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/admin/event/${id}`,
+        method: HttpMethod.PUT,
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -117,5 +143,9 @@ export const {
   useAddBlogMutation,
   useGetBlogDetailsQuery,
   useDeleteBlogMutation,
-  useEditBlogMutation
+  useEditBlogMutation,
+  useAddEventMutation,
+  useGetEventsQuery,
+  useGetEventDetailsQuery,
+  useEditEventMutation
 } = apiSlices;

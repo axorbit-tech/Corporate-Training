@@ -1,43 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowLeft, Edit, Trash2, Calendar, ImageIcon, Globe, MoreVertical, Download, Archive } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useGetEventDetailsQuery } from '../../../store/slices/apiSlice'
 
 interface Event {
-  id: number
+  _id: number
   title: string
-  description: string
-  eventDate: string
-  images: string[] // URLs for the images
-  status: 'upcoming' | 'past' | 'cancelled'
-  lastModified: string
+  content: string
+  date: string
+  images: string[]
+  status: string
+  updatedAt: string
 }
 
 const EventDetails: React.FC = () => {
+
+  const { id } = useParams<{ id: string }>();
+
+  const {data: eventData} = useGetEventDetailsQuery(id)
+
+  console.log( "eventDAtaaa : ", eventData)
+
+  useEffect(()=> {
+    setEvent(eventData?.event)
+  },[eventData])
+
+  const navigate = useNavigate()
   const [showMoreActions, setShowMoreActions] = useState(false)
+  const [event, setEvent] = useState<Event>()
 
-  // Mock event data
-  const event: Event = {
-    id: 1,
-    title: "Corporate Leadership Workshop 2025",
-    description: `Join us for an intensive workshop designed to enhance leadership skills and team management capabilities for corporate executives and managers. This workshop will cover:
-
-- Strategic Decision Making
-- Effective Communication
-- Conflict Resolution
-- Team Motivation & Engagement
-- Innovation & Change Management
-
-Our expert facilitators will guide you through interactive sessions, case studies, and practical exercises to equip you with the tools needed to lead with confidence in today's dynamic business environment.`,
-    eventDate: "2025-01-22T09:00:00",
-    images: [
-      "/placeholder-t75i9.png", // Placeholder for first image
-      "/placeholder-k7jsl.png", // Placeholder for second image
-      "/team-building-retreat.png", // Placeholder for third image
-      "/workplace-wellness.png", // Placeholder for fourth image
-      "/vibrant-outdoor-celebration.png" // Placeholder for fifth image
-    ],
-    status: 'upcoming',
-    lastModified: "2024-03-21T14:30:00"
-  }
+  
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -52,14 +44,9 @@ Our expert facilitators will guide you through interactive sessions, case studie
     }
   }
 
-  const handleEdit = () => {
-    // Redirect to event edit page
-    window.location.href = `/admin/events/edit/${event.id}`
-  }
-
   const handleDelete = () => {
     if (confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
-      console.log('Delete event:', event.id)
+      console.log('Delete event:', event?._id)
       // Redirect to events listing
       window.location.href = '/admin/events' // Assuming an events listing page
     }
@@ -73,6 +60,14 @@ Our expert facilitators will guide you through interactive sessions, case studie
       hour: '2-digit',
       minute: '2-digit'
     })
+  }
+
+  if (!id || !event) {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+          <p className="text-red-600">No Event</p>
+        </div>
+    );
   }
 
   return (
@@ -93,11 +88,11 @@ Our expert facilitators will guide you through interactive sessions, case studie
               </button>
               <div>
                 <h1 className="event-page-title text-lg sm:text-xl font-bold text-gray-900 truncate max-w-xs sm:max-w-md">
-                  {event.title}
+                  {event?.title}
                 </h1>
                 <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <span className={`status-badge px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(event.status)}`}>
-                    {event.status}
+                  <span className={`status-badge px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(event?.status)}`}>
+                    {event?.status}
                   </span>
                 </div>
               </div>
@@ -108,7 +103,7 @@ Our expert facilitators will guide you through interactive sessions, case studie
               
               {/* View Live Button (Placeholder) */}
               <a
-                href={`/events/${event.id}`} // Assuming a public event details page
+                href={`/events/${event?._id}`} // Assuming a public event details page
                 target="_blank"
                 rel="noopener noreferrer"
                 className="view-live-btn hidden sm:flex items-center space-x-2 px-3 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
@@ -119,7 +114,7 @@ Our expert facilitators will guide you through interactive sessions, case studie
 
               {/* Edit Button */}
               <button
-                onClick={handleEdit}
+                onClick={()=> navigate(`/admin/edit-event/${event?._id}`)}
                 className="edit-btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
               >
                 <Edit className="w-4 h-4" />
@@ -180,12 +175,12 @@ Our expert facilitators will guide you through interactive sessions, case studie
               <div className="details-meta flex flex-wrap items-center gap-4 text-sm text-gray-600 pb-6 border-b border-gray-200 mb-6">
                 <div className="meta-item flex items-center space-x-2">
                   <Calendar className="w-4 h-4" />
-                  <span>{formatDate(event.eventDate)}</span>
+                  <span>{formatDate(event.date)}</span>
                 </div>
               </div>
 
               <div className="details-description text-gray-800 leading-relaxed whitespace-pre-wrap mb-8">
-                {event.description}
+                {event.content}
               </div>
 
               {/* Event Images */}
@@ -224,12 +219,12 @@ Our expert facilitators will guide you through interactive sessions, case studie
 
                 <div className="info-item">
                   <label className="info-label text-sm font-medium text-gray-700">Event Date</label>
-                  <p className="info-value text-sm text-gray-900 mt-1">{formatDate(event.eventDate)}</p>
+                  <p className="info-value text-sm text-gray-900 mt-1">{formatDate(event.date)}</p>
                 </div>
 
                 <div className="info-item">
                   <label className="info-label text-sm font-medium text-gray-700">Last Modified</label>
-                  <p className="info-value text-sm text-gray-900 mt-1">{formatDate(event.lastModified)}</p>
+                  <p className="info-value text-sm text-gray-900 mt-1">{formatDate(event.updatedAt)}</p>
                 </div>
 
                 <div className="info-item">
@@ -250,14 +245,14 @@ Our expert facilitators will guide you through interactive sessions, case studie
               
               <div className="actions-content space-y-3">
                 <button
-                  onClick={handleEdit}
+                  onClick={()=> navigate(`/admin/edit-event/${event._id}`)}
                   className="action-btn w-full flex items-center space-x-2 px-4 py-2 text-blue-600 border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors duration-200"
                 >
                   <Edit className="w-4 h-4" />
                   <span>Edit Event</span>
                 </button>
                 
-                <a
+                {/* <a
                   href={`/events/${event.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -265,7 +260,7 @@ Our expert facilitators will guide you through interactive sessions, case studie
                 >
                   <Globe className="w-4 h-4" />
                   <span>View Live</span>
-                </a>
+                </a> */}
                 
                 <button
                   onClick={handleDelete}
