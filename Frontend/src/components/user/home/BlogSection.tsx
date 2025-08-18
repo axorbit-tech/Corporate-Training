@@ -1,28 +1,32 @@
+import { useEffect, useState } from "react";
+import { useGetBlogsQuery } from "../../../store/slices/userApiSlice"
+import { useNavigate } from "react-router-dom";
+import limitWords from "../../../utils/wordLimitor";
+
+interface Blogs {
+  _id: number;
+  title: string;
+  content: string;
+  image: string;
+  createdAt: string
+}
+
 const BlogSection = () => {
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Why Mental Health Support at Work Is No Longer Optional",
-      description:
-        "In today's fast-paced corporate world, stress, burnout, and emotional exhaustion are more than just buzzwords — they're real issues affecting productivity, morale, and retention.",
-      image:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      date: "March 15, 2024",
-    },
-    {
-      id: 2,
-      title: "Why Mental Health Support at Work Is No Longer Optional",
-      description:
-        "In today's fast-paced corporate world, stress, burnout, and emotional exhaustion are more than just buzzwords — they're real issues affecting productivity, morale, and retention.",
-      image:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
-      date: "March 12, 2024",
-    },
-  ]
+  
+  const navigate = useNavigate()
+  
+  const {data: blogs} = useGetBlogsQuery(undefined)
+
+  useEffect(()=> {
+    setBlogPosts(blogs?.data)
+  }, [blogs])
+
+  const [blogPosts, setBlogPosts] = useState<Blogs[]>([])
+
 
   return (
     <section className="blog-section bg-gray-50 py-16 lg:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="blog-main-heading text-3xl font-bold text-blue-600 mb-2">Our Blogs</h2>
@@ -39,9 +43,9 @@ const BlogSection = () => {
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {blogPosts.map((post) => (
+          {blogPosts?.slice(0,2).map((post) => (
             <article
-              key={post.id}
+              key={post._id}
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
             >
               <div className="flex flex-col sm:flex-row">
@@ -50,7 +54,7 @@ const BlogSection = () => {
                   <img
                     src={post.image || "/placeholder.svg"}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
 
@@ -59,7 +63,7 @@ const BlogSection = () => {
                   <h3 className="text-lg font-bold text-gray-900 mb-3 leading-tight group-hover:text-blue-600 transition-colors duration-300">
                     {post.title}
                   </h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{post.description}</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">{limitWords(post.content, 60)}</p>
                 </div>
               </div>
             </article>
@@ -68,7 +72,7 @@ const BlogSection = () => {
 
         {/* All Posts Button */}
         <div className="text-center">
-          <button className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+          <button onClick={()=> navigate('/blogs')} className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
             ALL POSTS
           </button>
         </div>
