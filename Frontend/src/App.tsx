@@ -31,6 +31,7 @@ import AdminLoginPage from "./pages/admin/auth/AdminLogin";
 import AdminEditBlogPage from "./pages/admin/blog/EditBlog";
 import AdminEditEventPage from "./pages/admin/event/EditEvent";
 
+
 function App() {
   return (
     <>
@@ -42,9 +43,9 @@ function App() {
           <Route path="/about" element={<About />} />
 
           {/* Userside Details Pages */}
-          <Route path="/blog-details/id" element={<BlogDetails />} />
           <Route path="/event-details/id" element={<EventDetails />} />
           <Route path="/services-details/:id" element={<ServiceDetails />} />
+          <Route path="/blog-details/:id" element={<BlogDetails />} />
           
 
           <Route path="/services" element={<Services />} />

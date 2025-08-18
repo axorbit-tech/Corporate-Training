@@ -104,10 +104,10 @@ const getServiceById = async (req: Request, res: Response) => {
     const service = await serviceModel.findById(id);
 
     if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
+      return res.status(HttpStatusCode.NOT_FOUND).json({ message: 'Service not found' });
     }
 
-    res.json(service);
+    res.status(HttpStatusCode.OK).json({message: 'sucess', data: service});
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
