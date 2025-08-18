@@ -126,6 +126,12 @@ export const apiSlices = createApi({
         body: data,
       }),
     }),
+    getUsers: builder.query({
+      query: ()=> ({
+        url: `/admin/client`,
+        method: HttpMethod.GET
+      })
+    })
   }),
 });
 
@@ -147,5 +153,6 @@ export const {
   useAddEventMutation,
   useGetEventsQuery,
   useGetEventDetailsQuery,
-  useEditEventMutation
+  useEditEventMutation,
+  useGetUsersQuery
 } = apiSlices;

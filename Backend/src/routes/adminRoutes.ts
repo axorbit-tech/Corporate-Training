@@ -9,6 +9,7 @@ import whyUsController from "../controllers/adminControllers/whyUsController";
 import testimonialController from "../controllers/adminControllers/testimonialController";
 import upload from "../config/multerConfig";
 import authMiddleware from "../middlewares/authMiddleware";
+import clientController from "../controllers/adminControllers/clientController";
 const router = express.Router();
 
 
@@ -68,5 +69,7 @@ router.delete('/why-us/:id', whyUsController.deleteWhyUs)
 router.post('/testimonials', testimonialController.addTestimonial)
 router.put('/testimonials/:id', testimonialController.editTestimonial)
 router.delete('/testimonials/:id', testimonialController.deleteTestimonial)
+
+router.get('/client', clientController.getAllClients)
 
 export default router;
