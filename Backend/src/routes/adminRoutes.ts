@@ -43,7 +43,13 @@ router.patch('/service/:id', serviceController.updateStatus);
 router.post('/event', upload.array('images'), eventController.addEvent)
 router.get('/event', eventController.getAllEvents)
 router.get('/event/:id', eventController.getEventDetails)
-router.put('/event/:id', eventController.editEvent)
+router.put('/event/:id', upload.fields([
+    { name: 'images[0]', maxCount: 1 },
+    { name: 'images[1]', maxCount: 1 },
+    { name: 'images[2]', maxCount: 1 },
+    { name: 'images[3]', maxCount: 1 },
+    { name: 'images[4]', maxCount: 1 }
+  ]), eventController.editEvent)
 router.delete('/event/:id', eventController.deleteEvent)
 
 // add, edit, delete blog routes

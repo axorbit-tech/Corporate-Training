@@ -6,23 +6,22 @@ import { eventSchema } from "../../validations/adminValidation/eventValidation";
 // ✅ Add Event
 const addEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-
-    console.log('add event contrlloer')
+    console.log("add event contrlloer");
     const { error } = eventSchema.validate(req.body);
-    
+
     if (error) {
-      console.log('error inside')
+      console.log("error inside");
       res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
         error: error.details[0].message,
       });
       return;
     }
-    console.log('no error')
+    console.log("no error");
 
     const { title, content, date } = req.body;
 
-    console.log('req.bodyyyy : ', req.body)
+    console.log("req.bodyyyy : ", req.body);
 
     const isEventExist = await eventModel.findOne({ title });
 
@@ -71,9 +70,10 @@ const addEvent = async (req: Request, res: Response): Promise<void> => {
 const editEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { title, content } = req.body;
+    console.log("req bodyyyy : ", req.body);
+    const { title, content, date } = req.body;
 
-    const { error } = eventSchema.validate({ title, content });
+    const { error } = eventSchema.validate({ title, content, date });
     if (error) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
@@ -82,13 +82,8 @@ const editEvent = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const updated = await eventModel.findByIdAndUpdate(
-      id,
-      { title, content },
-      { new: true }
-    );
-
-    if (!updated) {
+    const event = await eventModel.findById(id);
+    if (!event) {
       res.status(HttpStatusCode.NOT_FOUND).json({
         success: false,
         error: "Event not found",
@@ -96,10 +91,58 @@ const editEvent = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    // Start with existing images from DB
+    const updatedImages = [...(event.images || Array(5).fill(""))];
+
+    // Handle existing image URLs from frontend
+    for (let i = 0; i < 5; i++) {
+      const existingImage = req.body[`existingImages[${i}]`];
+
+      // If user explicitly provides an existing image (keep as is)
+      if (existingImage) {
+        updatedImages[i] = existingImage;
+      }
+
+      // If user uploaded a new image for this position
+      if (req.files && !Array.isArray(req.files)) {
+        const files = req.files as {
+          [fieldname: string]: Express.Multer.File[];
+        };
+        const fileKey = `images[${i}]`;
+        const fileArray = files[fileKey];
+        if (fileArray && fileArray.length > 0) {
+          updatedImages[i] = fileArray[0].path;
+        }
+      }
+
+      // If neither existing image nor new file → do nothing (keep old value)
+    }
+
+    // Handle newly uploaded files
+    if (req.files && !Array.isArray(req.files)) {
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+      for (let i = 0; i < 5; i++) {
+        const fileKey = `images[${i}]`;
+        const fileArray = files[fileKey];
+        if (fileArray && fileArray.length > 0) {
+          updatedImages[i] = fileArray[0].path;
+        }
+      }
+    }
+
+    // Update event details
+    event.title = title;
+    event.content = content;
+    event.date = new Date(date);
+    event.images = updatedImages;
+
+    const updatedEvent = await event.save();
+
     res.status(HttpStatusCode.OK).json({
       success: true,
       message: "Event updated successfully",
-      data: updated,
+      data: updatedEvent,
     });
   } catch (error) {
     console.error(error);
@@ -140,20 +183,19 @@ const getAllEvents = async (req: Request, res: Response): Promise<void> => {
   try {
     const events = await eventModel.find().sort({ createdAt: -1 });
 
-    console.log("events : ", events)
+    console.log("events : ", events);
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: events,
     });
-    
   } catch (error) {
     console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error Fetching Events",
     });
   }
-}
+};
 
 const getEventDetails = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -169,7 +211,7 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log('event : ', event)
+    console.log("event : ", event);
 
     res.status(HttpStatusCode.OK).json({
       success: true,
@@ -188,7 +230,7 @@ const EventController = {
   editEvent,
   deleteEvent,
   getAllEvents,
-  getEventDetails
+  getEventDetails,
 };
 
 export default EventController;

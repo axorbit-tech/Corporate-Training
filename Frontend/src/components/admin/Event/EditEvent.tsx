@@ -126,32 +126,33 @@ const EditEvent: React.FC<EditEventProps> = ({ eventId }) => {
   };
 
   const handleSave = async () => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+  const formDataToSend = new FormData();
 
-    const formDataToSend = new FormData();
+  formDataToSend.append("title", formData.title);
+  formDataToSend.append("content", formData.content);
+  formDataToSend.append("date", formData.date);
 
-    if (featuredImages && featuredImages.length > 0) {
-      featuredImages
-        .filter((file): file is File => file !== null)
-        .forEach((file) => {
-          formDataToSend.append("images", file);
-        });
+  // Add images with their positions
+  featuredImages.forEach((file, index) => {
+    if (file) {
+      // New image for this index
+      formDataToSend.append(`images[${index}]`, file);
+    } else if (existingImages[index]) {
+      // Keep the existing image URL
+      formDataToSend.append(`existingImages[${index}]`, existingImages[index]);
     }
+  });
 
-    formDataToSend.append("title", formData.title);
-    formDataToSend.append("content", formData.content);
-    formDataToSend.append("date", formData.date);
+  const res = await editEvent({id:eventId, data: formDataToSend}).unwrap();
 
-    const res = await editEvent(formDataToSend).unwrap();
+  if (res.success) {
+    successToast("Event updated successfully");
+    navigate("/admin/events");
+  } else {
+    errorToast("Event update failed");
+  }
+};
 
-    if (res.success) {
-      successToast("event added successfully");
-      navigate("/admin/events");
-    } else {
-      errorToast("event adding failed");
-    }
-  };
 
   if (isLoadingEvent) {
     return (
