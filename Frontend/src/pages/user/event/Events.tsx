@@ -22,8 +22,8 @@ export default function Events() {
 
   const errorMessage: string = responses.error
   ? 'status' in responses.error
-    ? `Error ${responses.error.status}` // for FetchBaseQueryError
-    : responses.error.message || 'Unknown error' // for SerializedError
+    ? `Error ${responses.error.status}`
+    : responses.error.message || 'Unknown error' 
   : '';
 
   return (
