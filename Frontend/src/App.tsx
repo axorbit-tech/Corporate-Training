@@ -12,6 +12,7 @@ import Blogs from "./pages/user/blog/Blogs";
 import Counsellors from "./pages/user/counsellors/Counsellors";
 import Booking from "./pages/user/booking/Booking";
 
+import ServiceDetails from "./pages/user/service/ServiceDetails"
 import BlogDetails from "./pages/user/blog/BlogDetails";
 import EventDetails from "./pages/user/event/EventDetails";
 import Contact from "./pages/user/contact/Contact";
@@ -40,8 +41,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
 
+          {/* Userside Details Pages */}
           <Route path="/blog-details/id" element={<BlogDetails />} />
           <Route path="/event-details/id" element={<EventDetails />} />
+          <Route path="/services-details/:id" element={<ServiceDetails />} />
+          
 
           <Route path="/services" element={<Services />} />
           <Route path="/events" element={<Events />} />

@@ -1,12 +1,19 @@
 import React, { useState } from 'react'
+import { useCreateEnquiryMutation } from '../../../store/slices/userApiSlice'
+import { toast } from 'react-toastify'
+import CustomModal from '../../admin/common/CustomeModal'
 
 const ContactFormSection: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: '',
   })
+
+  const [createEnquiry, { isLoading }] = useCreateEnquiryMutation();
+  const [open, setOpen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -16,22 +23,49 @@ const ContactFormSection: React.FC = () => {
     }))
   }
 
+
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Handle form submission logic here
+
+    setOpen(true)
   }
+
+  const confirmForm = async () => {
+    try {
+      const payload = {
+        ...formData,
+        phone: Number(formData.phone) // convert to number before sending
+      };
+
+      await createEnquiry(payload).unwrap();
+
+      toast.success("Enquiry submitted successfully");
+      setOpen(false);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: '',
+      })
+    } catch (error) {
+      toast.error("Failed to add service");
+      console.error("Error adding service:", error);
+      
+    }
+  };
 
 
   return (
     <section className="contact-form-section py-16 sm:py-20 lg:py-24 lg:px-10 lg:mt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden shadow-xl">
-          
+
           {/* Left Side - Text Content */}
           <div className="contact-text-section bg-green-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
             <div className="space-y-6 sm:space-y-8">
-              
+
               {/* Main Heading */}
               <h2 className="contact-form-heading text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">
                 Contact Us
@@ -47,7 +81,7 @@ const ContactFormSection: React.FC = () => {
           {/* Right Side - Contact Form */}
           <div className="contact-form-section bg-blue-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
             <form onSubmit={handleSubmit} className="space-y-6">
-              
+
               {/* Name and Email Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
@@ -64,7 +98,7 @@ const ContactFormSection: React.FC = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="email" className="form-label block text-sm font-medium text-gray-700 mb-2">
                     Email
@@ -81,6 +115,28 @@ const ContactFormSection: React.FC = () => {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="form-group">
+                  <label htmlFor="phone" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                    phone
+                  </label>
+                  <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, ""); // remove non-digits
+                      if (value.length <= 12) { // limit to 12 digits
+                        setFormData({ ...formData, phone: value });
+                      }
+                    }}
+                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    required
+                  />
+                </div>
+
+
                 <div className="form-group">
                   <label htmlFor="phone" className="form-label block text-sm font-medium text-gray-700 mb-2">
                     Subject
@@ -95,21 +151,23 @@ const ContactFormSection: React.FC = () => {
                     required
                   />
                 </div>
+              </div>
 
-                <div className="form-group">
-                  <label htmlFor="message" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={4}
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                    required
-                  />
-                </div>
+
+              <div className="form-group">
+                <label htmlFor="message" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows={4}
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  required
+                />
+              </div>
 
               {/* Submit Button */}
               <div className="pt-4 text-center">
@@ -124,6 +182,20 @@ const ContactFormSection: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <CustomModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Are You sure to confirm this action?"
+        // description={`This modal works with TypeScript. Service ID: ${selectedServiceId}`}
+        size={{ width: 300 }}
+        color="#f0f0f0"
+        buttonText="OK"
+        loading={isLoading}
+        onButtonClick={async () => {
+          await confirmForm()
+        }}
+      />
     </section>
   )
 }

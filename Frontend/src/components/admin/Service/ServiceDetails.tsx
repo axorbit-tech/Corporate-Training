@@ -12,16 +12,7 @@ interface Subservice {
   content: string
 }
 
-// interface ServiceData {
-//   _id: string
-//   title: string
-//   content: string
-//   image: string
-//   subServices: Subservice[]
-//   createdAt: string
-//   updatedAt: string
-//   status: "active" | "inactive"
-// }
+
 
 interface ServiceDetailsProps {
   serviceId?: string
