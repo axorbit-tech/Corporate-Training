@@ -30,6 +30,7 @@ import AdminEditServicePage from "./pages/admin/service/EditService";
 import AdminLoginPage from "./pages/admin/auth/AdminLogin";
 import AdminEditBlogPage from "./pages/admin/blog/EditBlog";
 import AdminEditEventPage from "./pages/admin/event/EditEvent";
+import AdminClientListingPage from "./pages/admin/client/ClientListing";
 
 function App() {
   return (
@@ -82,6 +83,9 @@ function App() {
             path="/admin/edit-service/:id"
             element={<AdminEditServicePage />}
           />
+
+
+          <Route path="/admin/clients" element={<AdminClientListingPage />} />
 
           <Route path="/admin/login" element={<AdminLoginPage />} />
 
