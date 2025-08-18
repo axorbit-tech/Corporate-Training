@@ -5,7 +5,9 @@ import EventListSection from '../../../components/user/events/EventListSection'
 import EventAllListSection from "../../../components/user/events/EventAllListSection"
 import { useGetEventsQuery } from "../../../store/slices/userApiSlice"
 
-export default function events() {
+export default function Events() {
+
+  
 
   const { data: eventData, isLoading, error } = useGetEventsQuery(undefined);
   console.log('eventsssss : ', eventData)
@@ -18,19 +20,25 @@ export default function events() {
     error
   }
 
+  const errorMessage: string = responses.error
+  ? 'status' in responses.error
+    ? `Error ${responses.error.status}` // for FetchBaseQueryError
+    : responses.error.message || 'Unknown error' // for SerializedError
+  : '';
+
   return (
     <div className='min-h-screen'>
       <Header />
       <EventsHeroSection />
       {upcomingEvents.length > 0 &&
-        <EventListSection title="Upcoming Events" events={upcomingEvents} responses={responses} />
+        <EventListSection title="Upcoming Events" events={upcomingEvents} responses={{ isLoading: responses.isLoading, error: errorMessage }} />
       }
       {recentEvents.length > 0 &&
-        <EventListSection title="Recent Events" events={recentEvents} responses={responses} />
+        <EventListSection title="Recent Events" events={recentEvents} responses={{ isLoading: responses.isLoading, error: errorMessage }} />
       }
 
       {allEvents.length > 0 &&
-        <EventAllListSection title="All Events" events={allEvents} responses={responses} />
+        <EventAllListSection title="All Events" events={allEvents} responses={{ isLoading: responses.isLoading, error: errorMessage }} />
       }
       <Footer />
     </div>

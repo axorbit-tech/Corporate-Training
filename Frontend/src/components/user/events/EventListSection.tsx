@@ -13,7 +13,7 @@ interface EventListSectionProps {
   }>
   responses: {
     isLoading: boolean
-    error: any
+    error: string
   }
 }
 
