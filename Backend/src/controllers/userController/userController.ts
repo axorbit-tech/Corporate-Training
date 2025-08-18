@@ -156,14 +156,14 @@ const getAllEvents = async (req: Request, res: Response): Promise<void> => {
 
         const upcomingEvents = await eventModel.find({ status: 'published', date: { $gt: today }, }).sort({ date: 1 });
 
-        const rescentEvents = await eventModel.find({ status: 'published', date: { $lt: today }, }).sort({ date: -1 }).limit(6);
+        const recentEvents = await eventModel.find({ status: 'published', date: { $lt: today }, }).sort({ date: -1 }).limit(6);
 
         res.status(HttpStatusCode.OK).json({
             success: true,
             data: {
                 allEvents,
                 upcomingEvents,
-                rescentEvents
+                recentEvents
             },
             pagination: {
                 total: totalEvents,

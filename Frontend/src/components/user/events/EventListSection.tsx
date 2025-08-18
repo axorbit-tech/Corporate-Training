@@ -1,67 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react'
 import EventCard from './EventCard'
 
-const UpcomingEventsSection: React.FC = () => {
+interface EventListSectionProps {
+  title: string
+  events: Array<{
+    date: string
+    month: string
+    title: string
+    content: string
+    images: string
+    link?: string
+  }>
+  responses: {
+    isLoading: boolean
+    error: any
+  }
+}
+
+
+const EventListSection: React.FC<EventListSectionProps> = ({ title, events, responses }) => {
+  const { isLoading, error } = responses
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-
-  const events = [
-    {
-      date: "15",
-      month: "DEC",
-      title: "Counselling Event at Techno Park Kochi",
-      description: "Join us for a comprehensive counselling session focused on workplace mental health and stress management techniques for modern professionals.",
-      image: "/assets/herosection.jpg",
-      link: "/events/counselling-techno-park"
-    },
-    {
-      date: "22",
-      month: "DEC",
-      title: "Corporate Leadership Workshop",
-      description: "An intensive workshop designed to enhance leadership skills and team management capabilities for corporate executives and managers.",
-      image: "/assets/herosection.jpg",
-      link: "/events/leadership-workshop"
-    },
-    {
-      date: "28",
-      month: "DEC",
-      title: "Stress Management Seminar",
-      description: "Learn effective stress management techniques and mindfulness practices to improve work-life balance and overall well-being.",
-      image: "/assets/herosection.jpg",
-      link: "/events/stress-management"
-    },
-    {
-      date: "05",
-      month: "JAN",
-      title: "Team Building Retreat",
-      description: "A comprehensive team building retreat focusing on communication, collaboration, and building stronger workplace relationships.",
-      image: "/assets/herosection.jpg",
-      link: "/events/team-building"
-    },
-    {
-      date: "12",
-      month: "JAN",
-      title: "Workplace Wellness Program",
-      description: "Discover strategies for creating a healthier workplace environment and promoting employee wellness and productivity.",
-      image: "/assets/herosection.jpg",
-      link: "/events/wellness-program"
-    }
-  ]
-
-  // Auto-scroll functionality
   useEffect(() => {
     if (!isHovered) {
       const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => 
+        setCurrentIndex((prevIndex) =>
           prevIndex >= events.length - 1 ? 0 : prevIndex + 1
         )
       }, 4000) // Auto-scroll every 4 seconds
-
+  
       return () => clearInterval(interval)
     }
   }, [isHovered, events.length])
-
+  
   // Scroll to current card
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -73,6 +46,35 @@ const UpcomingEventsSection: React.FC = () => {
       })
     }
   }, [currentIndex])
+
+  if (isLoading) {
+    return (
+      <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading {title} details...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !events) {
+    return (
+      <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Error loading {title} details</p>
+          <button
+            onClick={() => window.history.back()}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Auto-scroll functionality
 
   const handlePrevious = () => {
     setCurrentIndex(currentIndex === 0 ? events.length - 1 : currentIndex - 1)
@@ -86,12 +88,11 @@ const UpcomingEventsSection: React.FC = () => {
     <section className="upcoming-events-section bg-gray-50 pt-12 sm:pt-12 lg:pt-24 lg:px-10">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-          
+
           {/* Left Side - Section Title */}
           <div className="lg:col-span-3 xl:col-span-2">
             <h2 className="upcoming-events-heading text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight sticky top-8">
-              Upcoming<br />
-              Events
+              {title}
             </h2>
           </div>
 
@@ -99,7 +100,7 @@ const UpcomingEventsSection: React.FC = () => {
           <div className="lg:col-span-9 xl:col-span-10">
             <div className="relative">
               {/* Events Container */}
-              <div 
+              <div
                 ref={scrollContainerRef}
                 className="events-carousel-container flex gap-6 overflow-x-auto scrollbar-hide pb-4"
                 onMouseEnter={() => setIsHovered(true)}
@@ -110,10 +111,9 @@ const UpcomingEventsSection: React.FC = () => {
                   <EventCard
                     key={index}
                     date={event.date}
-                    month={event.month}
                     title={event.title}
-                    description={event.description}
-                    image={event.image}
+                    description={event.content}
+                    image={event.images?.[0] || "/placeholder.svg"}
                     link={event.link}
                   />
                 ))}
@@ -150,11 +150,10 @@ const UpcomingEventsSection: React.FC = () => {
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
-                    className={`dot-indicator w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentIndex 
-                        ? 'bg-blue-500 w-8' 
+                    className={`dot-indicator w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                        ? 'bg-blue-500 w-8'
                         : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
+                      }`}
                     aria-label={`Go to event ${index + 1}`}
                   />
                 ))}
@@ -167,4 +166,4 @@ const UpcomingEventsSection: React.FC = () => {
   )
 }
 
-export default UpcomingEventsSection
+export default EventListSection
