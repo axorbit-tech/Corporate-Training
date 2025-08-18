@@ -16,9 +16,25 @@ export const userApiSlices = createApi({
                 body: postData,
             }),
         }),
+
+        getServices: builder.query({
+            query: () => ({
+                url: "/service",
+                method: HttpMethod.GET,
+            }),
+        }),
+
+        getServiceDetails: builder.query({
+            query: (id) => ({
+                url: `/service/${id}`,
+                method: HttpMethod.GET,
+            }),
+        }),
     }),
 });
 
 export const {
-    useCreateEnquiryMutation
+    useCreateEnquiryMutation,
+    useGetServicesQuery,
+    useGetServiceDetailsQuery,
 } = userApiSlices;
