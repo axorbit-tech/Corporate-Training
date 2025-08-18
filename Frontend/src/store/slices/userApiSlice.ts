@@ -30,6 +30,34 @@ export const userApiSlices = createApi({
                 method: HttpMethod.GET,
             }),
         }),
+
+        getBlogs: builder.query({
+            query: () => ({
+                url: "/blog",
+                method: HttpMethod.GET,
+            }),
+        }),
+
+        getBlogDetails: builder.query({
+            query: (id) => ({
+                url: `/blog/${id}`,
+                method: HttpMethod.GET,
+            }),
+        }),
+        
+        getEvents: builder.query({
+            query: () => ({
+                url: "/event",
+                method: HttpMethod.GET,
+            }),
+        }),
+
+        getEventDetails: builder.query({
+            query: (id) => ({
+                url: `/event/${id}`,
+                method: HttpMethod.GET,
+            }),
+        }),
     }),
 });
 
@@ -37,4 +65,8 @@ export const {
     useCreateEnquiryMutation,
     useGetServicesQuery,
     useGetServiceDetailsQuery,
+    useGetBlogsQuery,
+    useGetBlogDetailsQuery,
+    useGetEventsQuery,
+    useGetEventDetailsQuery
 } = userApiSlices;

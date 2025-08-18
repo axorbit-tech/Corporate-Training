@@ -1,45 +1,45 @@
 import React from "react";
+import { useState } from "react";
 import BlogPostCard from "./BlogPostCard";
+import { useGetBlogsQuery } from '../../../store/slices/userApiSlice'
+
+interface BlogPost {
+  _id: number
+  title: string
+  content: string
+  image: string
+  status: "active" | "inactive"
+  date: string
+  createdDate: string
+  lastModified: string
+  link: string
+}
 
 const BlogPostsSection: React.FC = () => {
-  const blogPosts = [
-    {
-      author: "Admin",
-      date: "Mar 23, 2025",
-      title: "Miracle no-knead bread",
-      excerpt:
-        "Create a blog post subtitle that summarizes your post in a few short, punchy sentences and entices your audience to continue reading, Create a blog post subtitle that summarizes your post in a few short, punchy sentences and entices your audience to continue reading....",
-      image: "/assets/blog-hero-image.jpg",
-      link: "/blog/miracle-no-knead-bread",
-    },
-    {
-      author: "Admin",
-      date: "Mar 20, 2025",
-      title: "Corporate Wellness Strategies",
-      excerpt:
-        "Discover effective strategies for implementing comprehensive wellness programs in your organization that boost employee satisfaction and productivity....",
-      image: "/assets/blog-hero-image.jpg",
-      link: "/blog/corporate-wellness-strategies",
-    },
-    {
-      author: "Admin",
-      date: "Mar 18, 2025",
-      title: "Leadership in Remote Teams",
-      excerpt:
-        "Learn how to effectively lead and manage remote teams with proven techniques that enhance communication and maintain team cohesion....",
-      image: "/assets/blog-hero-image.jpg",
-      link: "/blog/leadership-remote-teams",
-    },
-    {
-      author: "Admin",
-      date: "Mar 15, 2025",
-      title: "Stress Management Techniques",
-      excerpt:
-        "Explore practical stress management techniques that can be easily implemented in busy work environments to improve mental health and performance....",
-      image: "/assets/blog-hero-image.jpg",
-      link: "/blog/stress-management-techniques",
-    },
-  ];
+
+  const { data: getBlog, isLoading, isError } = useGetBlogsQuery(undefined)
+  const blogPosts = getBlog?.data
+
+  // state to track whether to show all services or not
+  const [showAll, setShowAll] = useState(false)
+
+  if (isLoading) {
+    return (
+      <section className="py-16 text-center">
+        <p>Loading Blogs...</p>
+      </section>
+    )
+  }
+
+  if (isError) {
+    return (
+      <section className="py-16 text-center text-red-600">
+        <p>Failed to load services. Please try again later.</p>
+      </section>
+    )
+  }
+
+  const visibleServices = showAll ? blogPosts : blogPosts.slice(0, 4)
 
   return (
     <section className="blog-posts-section bg-gray-50 py-16 sm:py-20 lg:px-10 lg:py-24">
@@ -57,14 +57,15 @@ const BlogPostsSection: React.FC = () => {
 
         {/* Blog Posts Grid */}
         <div className="space-y-8 sm:space-y-10 lg:space-y-12">
-          {blogPosts.map((post, index) => (
+          {visibleServices?.map((post: BlogPost, index: number) => (
             <BlogPostCard
-              key={index}
-              index={index}
-              author={post.author}
+              key={post._id}
+              Index={index}
+              id={post._id}
+              author={"Admin"}
               date={post.date}
               title={post.title}
-              excerpt={post.excerpt}
+              description={post.content}
               image={post.image}
               link={post.link}
             />
@@ -72,11 +73,16 @@ const BlogPostsSection: React.FC = () => {
         </div>
 
         {/* Load More Button */}
-        <div className="text-center my-10">
-          <button className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-            ALL POSTS
-          </button>
-        </div>
+        {blogPosts.length > 4 && !showAll && (
+          <div className="text-center p-10">
+            <button
+              onClick={() => setShowAll(true)}
+              className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-14 py-3 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

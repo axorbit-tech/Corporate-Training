@@ -6,8 +6,11 @@ import { enquirySchema } from "../../validations/userValidation/enquiryValidatio
 import { userSchema } from "../../validations/userValidation/userValidation";
 import { sendEmail } from "../../utils/mailService";
 import serviceModel from "../../models/adminModels/serviceModel";
+import blogModel from "../../models/adminModels/blogModel";
+import eventModel from "../../models/adminModels/eventModel";
 
 
+const today = new Date();
 
 const createEnquiry = async (req: Request, res: Response) => {
     try {
@@ -65,7 +68,7 @@ const getAllServices = async (req: Request, res: Response): Promise<void> => {
     try {
         const services = await serviceModel.find().where('status').equals('active').sort({ createdAt: -1 });
 
-        console.log("servicessss : ", services)
+        // console.log("servicessss : ", services)
 
         res.status(HttpStatusCode.OK).json({
             success: true,
@@ -80,20 +83,137 @@ const getAllServices = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getServiceById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const service = await serviceModel.findById(id).where('status').equals('active');
+    try {
+        const { id } = req.params;
+        const service = await serviceModel.findById(id).where('status').equals('active');
 
-    if (!service) {
-      return res.status(404).json({ message: 'Service not found' });
+        if (!service) {
+            return res.status(404).json({ message: 'Service not found' });
+        }
+
+        res.json(service);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error });
     }
-
-    res.json(service);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
 };
 
-const userController = { createEnquiry, getAllServices, getServiceById };
+const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const blogs = await blogModel.find({ status: 'active' }).sort({ createdAt: -1 }).limit(9);
+
+        res.status(HttpStatusCode.OK).json({
+            success: true,
+            data: blogs,
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+            error: "Error fetching blog",
+        });
+    }
+}
+
+const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        const blog = await blogModel.findOne({ _id: id, status: 'active' });
+
+        if (!blog) {
+            res.status(HttpStatusCode.NOT_FOUND).json({
+                success: false,
+                error: "Blog not found",
+            });
+            return;
+        }
+
+        res.status(HttpStatusCode.OK).json({
+            success: true,
+            blog,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+            error: "Error fetching blog details",
+        });
+    }
+};
+
+const getAllEvents = async (req: Request, res: Response): Promise<void> => {
+    try {
+
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+
+        // calculate how many to skip
+        const skip = (page - 1) * limit;
+
+        const allEvents = await eventModel.find({ status: 'published' }).sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+        // get total count (for frontend pagination UI)
+        const totalEvents = await eventModel.countDocuments({ status: 'published' });
+
+        const upcomingEvents = await eventModel.find({ status: 'published', date: { $gt: today }, }).sort({ date: 1 });
+
+        const rescentEvents = await eventModel.find({ status: 'published', date: { $lt: today }, }).sort({ date: -1 }).limit(6);
+
+        res.status(HttpStatusCode.OK).json({
+            success: true,
+            data: {
+                allEvents,
+                upcomingEvents,
+                rescentEvents
+            },
+            pagination: {
+                total: totalEvents,
+                page,
+                pages: Math.ceil(totalEvents / limit),
+            },
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+            error: "Error fetching Events",
+        });
+    }
+}
+
+const getEventDetails = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+
+        const event = await eventModel.findOne({ _id: id, status: 'published' });
+
+        if (!event) {
+            res.status(HttpStatusCode.NOT_FOUND).json({
+                success: false,
+                error: "Blog not found",
+            });
+            return;
+        }
+
+        res.status(HttpStatusCode.OK).json({
+            success: true,
+            event,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+            error: "Error fetching event details",
+        });
+    }
+};
+
+const userController = {
+    createEnquiry,
+    getAllServices,
+    getServiceById,
+    getAllBlogs,
+    getBlogDetails,
+    getAllEvents,
+    getEventDetails
+};
 
 export default userController;
