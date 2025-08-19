@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi, { date } from "joi";
 
 export const bookingSchema = Joi.object({
     service: Joi.string().required(),
@@ -14,4 +14,5 @@ export const bookingSchema = Joi.object({
             "string.pattern.base": "Email domain must be one of: email.com, gmail.com, outlook.com, yahoo.com, apple.com",
         }),
     name: Joi.string().required(),
+    date: Joi.string().required(),
 });

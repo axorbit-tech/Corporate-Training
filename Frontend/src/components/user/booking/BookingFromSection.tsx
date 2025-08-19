@@ -19,7 +19,8 @@ const BookingFormSection: React.FC = () => {
     age: '',
     service: '',
     country: '',
-    state: ''
+    state: '',
+    date: ""
   })
 
   useEffect(() => {
@@ -96,7 +97,8 @@ const BookingFormSection: React.FC = () => {
         age: '',
         service: '',
         country: '',
-        state: ''
+        state: '',
+        date: ""
       })
     } catch (error) {
       if (error) {
@@ -237,6 +239,26 @@ const BookingFormSection: React.FC = () => {
                 </div>
 
                 <div className="form-group">
+                  <label htmlFor="date" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                    Appointment Date
+                  </label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleInputChange}
+                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    required
+                  />
+                </div>
+
+
+              </div>
+
+              {/* State Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="form-group">
                   <label htmlFor="country" className="form-label block text-sm font-medium text-gray-700 mb-2">
                     Country
                   </label>
@@ -256,29 +278,29 @@ const BookingFormSection: React.FC = () => {
                     ))}
                   </select>
                 </div>
+
+                <div className="form-group">
+                  <label htmlFor="state" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                    State
+                  </label>
+                  <select
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleCountryInputChange}
+                    className="form-select w-full px-4 py-3 border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
+                    required
+                  >
+                    <option value="">Select State</option>
+                    {states.map((state, index) => (
+                      <option key={index} value={state.name}>
+                        {state.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              {/* State Row */}
-              <div className="form-group">
-                <label htmlFor="state" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                  State
-                </label>
-                <select
-                  id="state"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleCountryInputChange}
-                  className="form-select w-full px-4 py-3 border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
-                  required
-                >
-                  <option value="">Select State</option>
-                  {states.map((state, index) => (
-                    <option key={index} value={state.name}>
-                      {state.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
 
               {/* Submit Button */}
               <div className="pt-4 text-center">

@@ -225,7 +225,7 @@ const createBooking = async (req: Request, res: Response) => {
             user = await userModel.create({ email, name, phone, age});
         }
 
-        await bookingModel.create({ userId: user._id, service: req.body.service, date: today, country: req.body.country, state: req.body.state });
+        await bookingModel.create({ userId: user._id, service: req.body.service, date: req.body.date, country: req.body.country, state: req.body.state });
 
 
         res.status(HttpStatusCode.CREATED).json({
