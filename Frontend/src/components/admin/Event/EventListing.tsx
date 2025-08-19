@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import { useEffect, useState } from "react";
 import {
@@ -307,7 +305,7 @@ const EventListing: React.FC = () => {
                     </td>
                     <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
+                        className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full cursor-pointer ${getStatusColor(
                           event.status
                         )}`}
                         onClick={() => handleFunctionTypes(event._id, "status")}

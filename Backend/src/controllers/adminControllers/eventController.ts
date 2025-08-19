@@ -6,22 +6,22 @@ import { eventSchema } from "../../validations/adminValidation/eventValidation";
 // ✅ Add Event
 const addEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("add event contrlloer");
+
     const { error } = eventSchema.validate(req.body);
 
     if (error) {
-      console.log("error inside");
+
       res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
         error: error.details[0].message,
       });
       return;
     }
-    console.log("no error");
+
 
     const { title, content, date } = req.body;
 
-    console.log("req.bodyyyy : ", req.body);
+
 
     const isEventExist = await eventModel.findOne({ title });
 
@@ -70,7 +70,7 @@ const addEvent = async (req: Request, res: Response): Promise<void> => {
 const editEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    console.log("req bodyyyy : ", req.body);
+
     const { title, content, date } = req.body;
 
     const { error } = eventSchema.validate({ title, content, date });
@@ -183,7 +183,7 @@ const getAllEvents = async (req: Request, res: Response): Promise<void> => {
   try {
     const events = await eventModel.find().sort({ createdAt: -1 });
 
-    console.log("events : ", events);
+
 
     res.status(HttpStatusCode.OK).json({
       success: true,
@@ -211,7 +211,7 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log("event : ", event);
+
 
     res.status(HttpStatusCode.OK).json({
       success: true,

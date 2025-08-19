@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { LayoutDashboard, Users, Calendar, FileText, MessageSquare, UserCheck, ChevronDown, ChevronRight, LogOut, X } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import CustomModal from './CustomeModal'
+
 
 interface AdminSidebarProps {
   isOpen: boolean
@@ -10,13 +12,18 @@ interface AdminSidebarProps {
 const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
   const navigate = useNavigate()
   const [expandedMenus, setExpandedMenus] = useState<string[]>([])
+  const [open, setOpen] = useState(false);
 
   const toggleSubmenu = (menuId: string) => {
-    setExpandedMenus(prev => 
-      prev.includes(menuId) 
+    setExpandedMenus(prev =>
+      prev.includes(menuId)
         ? prev.filter(id => id !== menuId)
         : [...prev, menuId]
     )
+  }
+
+  const handleLogout = () => {
+    setOpen(true)
   }
 
   const menuItems = [
@@ -94,7 +101,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
           onClick={onToggle}
         />
@@ -107,7 +114,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         lg:translate-x-0
       `}>
-        
+
         {/* Sidebar Header - Fixed at top */}
         <div className="sidebar-header flex items-center justify-between p-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center space-x-3">
@@ -123,7 +130,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
               </p>
             </div>
           </div>
-          
+
           {/* Mobile Close Button */}
           <button
             onClick={onToggle}
@@ -145,8 +152,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
                       onClick={() => toggleSubmenu(item.id)}
                       className={`
                         nav-item w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                        ${expandedMenus.includes(item.id) 
-                          ? 'bg-blue-50 text-blue-700' 
+                        ${expandedMenus.includes(item.id)
+                          ? 'bg-blue-50 text-blue-700'
                           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                         }
                       `}
@@ -161,14 +168,14 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
                         <ChevronRight className="w-4 h-4" />
                       )}
                     </button>
-                    
+
                     {/* Submenu */}
                     {expandedMenus.includes(item.id) && (
                       <ul className="mt-2 ml-8 space-y-1">
                         {item.submenu.map((subItem, index) => (
                           <li key={index}>
                             <a
-                              onClick={()=> navigate(subItem.href)}
+                              onClick={() => navigate(subItem.href)}
                               className="submenu-item flex items-center justify-between px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
                             >
                               <span>{subItem.label}</span>
@@ -189,8 +196,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
                     href={item.href}
                     className={`
                       nav-item flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
-                      ${item.active 
-                        ? 'bg-blue-500 text-white shadow-md' 
+                      ${item.active
+                        ? 'bg-blue-500 text-white shadow-md'
                         : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }
                     `}
@@ -202,8 +209,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
                     {item.badge && (
                       <span className={`
                         badge text-xs px-2 py-1 rounded-full font-medium
-                        ${item.active 
-                          ? 'bg-white/20 text-white' 
+                        ${item.active
+                          ? 'bg-white/20 text-white'
                           : 'bg-red-100 text-red-600'
                         }
                       `}>
@@ -219,11 +226,21 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
 
         {/* Sidebar Footer - Fixed at bottom */}
         <div className="sidebar-footer border-t border-gray-200 p-4 flex-shrink-0">
-          <button className="logout-btn w-full flex items-center space-x-3 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200">
+          <button onClick={handleLogout} className="logout-btn w-full flex items-center space-x-3 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200">
             <LogOut className="w-5 h-5" />
-            <span>Logout</span>
+            <span >Logout</span>
           </button>
         </div>
+
+
+        <CustomModal
+          open={open}
+          onClose={() => setOpen(false)}
+          title="Logout"
+          description="Are you sure you want to logout?"
+          buttonText="Logout"
+          onButtonClick={() => navigate('/admin/logout')}
+        />
       </aside>
     </>
   )

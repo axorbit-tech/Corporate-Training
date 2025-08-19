@@ -21,57 +21,121 @@ router.post('/login', adminController.login)
 // Protected routes (auth applies to everything below this line)
 router.use(authMiddleware);
 
+// ========================================= Language =========================================
 
-// add, edit, delete languages routes
-router.post('/language', languageController.addLanguage)
-router.put('/language/:id', languageController.editLanguage)
-router.delete('/language/:id', languageController.deleteLanguage)
+// /language (create + get all)
+router
+  .route('/language')
+  .post(languageController.addLanguage)
 
-// add, edit, delete locations routes
-router.post('/location', locationController.addLocation)
-router.put('/location/:id', locationController.editLocation)
-router.delete('/location/:id', locationController.deleteLocation)
+// /language/:id (get details + update + delete)
+router
+  .route('/language/:id')
+  .put(languageController.editLanguage)
+  .delete(languageController.deleteLanguage)
 
-// add, edit, delete services routes
-router.post('/service', upload.single('image'), serviceController.addService)
-router.put('/service/:id', upload.single('image'), serviceController.editService)
-router.delete('/service/:id', serviceController.deleteService)
-router.get('/service', serviceController.getAllServices)
-router.get('/service/:id', serviceController.getServiceById);
-router.patch('/service/:id', serviceController.updateStatus);
 
-// add, edit, delete event routes
-router.post('/event', upload.array('images'), eventController.addEvent)
-router.get('/event', eventController.getAllEvents)
-router.get('/event/:id', eventController.getEventDetails)
-router.put('/event/:id', upload.fields([
-    { name: 'images[0]', maxCount: 1 },
-    { name: 'images[1]', maxCount: 1 },
-    { name: 'images[2]', maxCount: 1 },
-    { name: 'images[3]', maxCount: 1 },
-    { name: 'images[4]', maxCount: 1 }
-  ]), eventController.editEvent)
-router.delete('/event/:id', eventController.deleteEvent)
-router.patch('/event/:id', eventController.updateStatus);
+// ========================================= Location =========================================
 
-// add, edit, delete blog routes
-router.post('/blog', upload.single('image'), blogController.addBlog)
-router.get('/blog', blogController.getAllBlogs)
-router.get('/blog/:id', blogController.getBlogDetails);
-router.put('/blog/:id', upload.single('image'), blogController.editBlog)
-router.delete('/blog/:id', blogController.deleteBlog)
-router.patch('/blog/:id', blogController.updateStatus)
+// /location (create + get all)
+router
+  .route('/location')
+  .post(locationController.addLocation)
 
-// add, edit, delete whyUs routes
-router.post('/why-us', whyUsController.addWhyUs)
-router.put('/why-us/:id', whyUsController.editWhyUs)
-router.delete('/why-us/:id', whyUsController.deleteWhyUs)
+// /location/:id (get details + update + delete)
+router
+  .route('/location/:id')
+  .put(locationController.editLocation)
+  .delete(locationController.deleteLocation)
 
-// add, edit, delete testimonials routes
-router.post('/testimonials', testimonialController.addTestimonial)
-router.put('/testimonials/:id', testimonialController.editTestimonial)
-router.delete('/testimonials/:id', testimonialController.deleteTestimonial)
 
+// ========================================= Service =========================================
+
+// /service (create + get all)
+router
+  .route("/service")
+  .post(upload.single("image"), serviceController.addService)
+  .get(serviceController.getAllServices);
+
+// /service/:id (get details + update + delete + status)
+router
+  .route("/service/:id")
+  .get(serviceController.getServiceById)
+  .put(upload.single("image"), serviceController.editService)
+  .delete(serviceController.deleteService)
+  .patch(serviceController.updateStatus);
+
+
+// ========================================= Event =========================================
+
+// /event (create + get all)
+router
+  .route("/event")
+  .post(upload.array("images"), eventController.addEvent)
+  .get(eventController.getAllEvents);
+
+// /event/:id (get details + update + delete + status)
+router
+  .route("/event/:id")
+  .get(eventController.getEventDetails)
+  .put(
+    upload.fields([
+      { name: "images[0]", maxCount: 1 },
+      { name: "images[1]", maxCount: 1 },
+      { name: "images[2]", maxCount: 1 },
+      { name: "images[3]", maxCount: 1 },
+      { name: "images[4]", maxCount: 1 },
+    ]),
+    eventController.editEvent
+  )
+  .delete(eventController.deleteEvent)
+  .patch(eventController.updateStatus);
+
+// ========================================= Blog =========================================  
+
+// /blog (create + get all)
+router
+  .route("/blog")
+  .post(upload.single("image"), blogController.addBlog)
+  .get(blogController.getAllBlogs);
+
+// /blog/:id (get details + update + delete + status)
+router
+  .route("/blog/:id")
+  .get(blogController.getBlogDetails)
+  .put(upload.single("image"), blogController.editBlog)
+  .delete(blogController.deleteBlog)
+  .patch(blogController.updateStatus);
+
+
+// ========================================= Why Us =========================================
+
+// /why-us (create)
+router
+  .route("/why-us")
+  .post(whyUsController.addWhyUs);
+
+// /why-us/:id (update + delete)
+router
+  .route("/why-us/:id")
+  .put(whyUsController.editWhyUs)
+  .delete(whyUsController.deleteWhyUs);
+
+// ========================================= Testimonials =========================================
+
+// /testimonials (create)
+router
+  .route("/testimonials")
+  .post(testimonialController.addTestimonial);
+
+// /testimonials/:id (update + delete)
+router
+  .route("/testimonials/:id")
+  .put(testimonialController.editTestimonial)
+  .delete(testimonialController.deleteTestimonial);
+
+
+// ========================================= Client ==============================================
 router.get('/client', clientController.getAllClients)
 
 export default router;

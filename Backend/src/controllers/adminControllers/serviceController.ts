@@ -23,7 +23,7 @@ const addService = async (req: Request, res: Response): Promise<void> => {
 
     const { error } = serviceValidationSchema.validate({title, content});
 
-    console.log("eroororor : ", error)
+    console.log("error: ", error)
 
     if (error) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
@@ -34,7 +34,7 @@ const addService = async (req: Request, res: Response): Promise<void> => {
     }
 
 
-    console.log(subservices,"subServicesssss")
+    
 
     if (!req.file) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
@@ -44,7 +44,7 @@ const addService = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log('finee')
+    
 
     const isServiceExist = await serviceModel.findOne({ title });
 
@@ -84,7 +84,7 @@ const getAllServices = async (req: Request, res: Response): Promise<void> => {
   try {
     const services = await serviceModel.find().sort({ createdAt: -1 });
 
-    console.log("servicessss : ", services)
+   
 
     res.status(HttpStatusCode.OK).json({
       success: true,

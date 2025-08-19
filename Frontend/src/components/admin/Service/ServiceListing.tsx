@@ -73,15 +73,28 @@ const ServiceListing: React.FC = () => {
   const handleServiceAction = async (serviceId: number, actionType: "status" | "delete") => {
     try {
       if (actionType === "status") {
-        await changeServiceStatus(serviceId).unwrap();
+        const res = await changeServiceStatus(serviceId).unwrap();
+        if(res.success) {
+          setServices(prevServices =>
+            prevServices.map(service =>
+              service._id === serviceId
+                ? { ...service, status: service.status === "active" ? "inactive" : "active" }
+                : service
+            )
+          );
+        }
         console.log(`Service ${serviceId} status changed successfully`);
       }
       else if (actionType === "delete") {
-        await deleteService(serviceId).unwrap();
+        const res = await deleteService(serviceId).unwrap();
+
+        if (res.success) {
+          // remove deleted service from API
+          setServices(prevServices => prevServices.filter(service => service._id !== serviceId));
+        }
         console.log(`Service ${serviceId} deleted successfully`);
       }
 
-      refetch();     // Refresh service list
       setOpen(false); // Close modal
       toast.success(`Service ${actionType === "status" ? "status changed" : "deleted"} successfully`);
     }

@@ -79,16 +79,16 @@ const editBlog = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const updatedData: { 
-      title: string; 
-      content: string; 
+    const updatedData: {
+      title: string;
+      content: string;
       image?: string;
     } = {
       title: title,
       content: content,
     };
 
-    if(req.file) {
+    if (req.file) {
       updatedData.image = req.file.path
     }
 
@@ -149,13 +149,13 @@ const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
   try {
     const blogs = await blogModel.find().sort({ createdAt: -1 });
 
-    console.log("servicessss : ", blogs)
+
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: blogs,
     });
-    
+
   } catch (error) {
     console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -168,7 +168,7 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
-    console.log('iddd: ', id)
+
 
     const blog = await blogModel.findById(id);
 
@@ -180,7 +180,6 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log('blog : ', blog)
 
     res.status(HttpStatusCode.OK).json({
       success: true,
