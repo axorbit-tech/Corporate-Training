@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useGetServicesQuery } from "../../../store/slices/userApiSlice";
+import {
+  useGetServicesQuery,
+  useTrainerRegisterMutation,
+} from "../../../store/slices/userApiSlice";
 import type { IService, ISubService } from "../../../types/types";
 import { Country, State } from "country-state-city";
+import { successToast } from "../../../utils/toast";
 
 const TrainerRegister: React.FC = () => {
+  const [trainerRegistration] = useTrainerRegisterMutation();
   const [countries, setCountries] = useState<
     { name: string; isoCode: string }[]
   >([]);
@@ -17,8 +22,8 @@ const TrainerRegister: React.FC = () => {
     language: "",
     experience: 0,
     company: "",
-    selectedServices: [] as string[], // Array of selected service IDs
-    selectedSubServices: [] as string[], // Array of selected subservice titles
+    selectedServices: [] as string[],
+    selectedSubServices: [] as string[],
     country: "",
     state: "",
   });
@@ -31,6 +36,14 @@ const TrainerRegister: React.FC = () => {
     }));
     setCountries(allCountries);
   }, []);
+
+  const { data: serviceResponse } = useGetServicesQuery(undefined);
+
+  const [services, setServices] = useState<IService[]>([]);
+
+  useEffect(() => {
+    setServices(serviceResponse?.data || []);
+  }, [serviceResponse]);
 
   const handleCountryInputChange = (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -68,19 +81,18 @@ const TrainerRegister: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Handle form submission logic here
+    try {
+      const res = await trainerRegistration(formData).unwrap();
+
+      if (res.success) {
+        successToast("submitted successfully");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  const { data: serviceResponse } = useGetServicesQuery(undefined);
-
-  const [services, setServices] = useState<IService[]>([]);
-
-  useEffect(() => {
-    setServices(serviceResponse?.data || []);
-  }, [serviceResponse]);
 
   // Get available subservices based on selected services
   const getAvailableSubServices = () => {

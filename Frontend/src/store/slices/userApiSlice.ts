@@ -59,6 +59,7 @@ export const userApiSlices = createApi({
             }),
         }),
 
+
          createBooking: builder.mutation({
             query: (postData) => ({
                 url: "/booking",
@@ -66,6 +67,15 @@ export const userApiSlices = createApi({
                 body: postData,
             }),
         }),
+
+        trainerRegister : builder.mutation({
+            query: (postData) => ({
+                url: '/trainer-registration',
+                method: HttpMethod.POST,
+                body: postData
+            })
+        })
+
     }),
 });
 
@@ -77,5 +87,8 @@ export const {
     useGetBlogDetailsQuery,
     useGetEventsQuery,
     useGetEventDetailsQuery,
-    useCreateBookingMutation
+
+    useCreateBookingMutation,
+
+    useTrainerRegisterMutation
 } = userApiSlices;
