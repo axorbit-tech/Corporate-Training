@@ -58,6 +58,13 @@ export const userApiSlices = createApi({
                 method: HttpMethod.GET,
             }),
         }),
+        trainerRegister : builder.mutation({
+            query: (postData) => ({
+                url: '/trainer-registration',
+                method: HttpMethod.POST,
+                body: postData
+            })
+        })
     }),
 });
 
@@ -68,5 +75,6 @@ export const {
     useGetBlogsQuery,
     useGetBlogDetailsQuery,
     useGetEventsQuery,
-    useGetEventDetailsQuery
+    useGetEventDetailsQuery,
+    useTrainerRegisterMutation
 } = userApiSlices;

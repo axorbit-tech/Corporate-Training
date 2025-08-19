@@ -13,3 +13,11 @@ export interface IService {
   createdDate: string
   lastModified: string
 }
+
+export interface IBlog {
+  _id: number
+  title: string
+  content: string
+  image: string
+  status: "active" | "inactive"
+}

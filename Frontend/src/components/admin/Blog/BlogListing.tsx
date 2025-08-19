@@ -17,7 +17,7 @@ interface BlogPost {
 const BlogListing: React.FC = () => {
 
   const navigate = useNavigate()
-  const { data: getBlogs, isLoading, isError, refetch } = useGetBlogsQuery(undefined)
+  const { data: getBlogs, isLoading, isError } = useGetBlogsQuery(undefined)
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation()
   const [changeBlogStatus, { isLoading: isUpdating }] = useUpdateBlogStatusMutation();
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
@@ -135,7 +135,7 @@ const BlogListing: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Blog Posts</h1>
           <p className="text-gray-600 mt-1">Manage your blog content</p>
         </div>
-        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2">
+        <button onClick={()=> navigate('/admin/add-blog')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2">
           <Plus className="w-4 h-4" />
           <span>Add New Post</span>
         </button>

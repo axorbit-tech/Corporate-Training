@@ -2,6 +2,8 @@ import type React from "react";
 import { ArrowLeft, Edit } from "lucide-react";
 import { useGetBlogDetailsQuery } from "../../../store/slices/apiSlice";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import type { IBlog } from "../../../types/types";
 
 type BlogDetailsParams = {
   id: string;
@@ -14,9 +16,13 @@ const BlogDetails: React.FC = () => {
 
   const navigate = useNavigate();
   // Mock blog post data
-  const { data: blog } = useGetBlogDetailsQuery(id);
+  const { data: blogResponse } = useGetBlogDetailsQuery(id);
 
-  console.log(blog,"blogposttttt")
+  const [blog, setBlog] = useState<IBlog>()
+
+  useEffect(()=> {
+    setBlog(blogResponse?.blog)
+  }, [blogResponse])
 
 
   const handleEdit = () => {
@@ -26,7 +32,7 @@ const BlogDetails: React.FC = () => {
   const renderMarkdown = (content: string) => {
     // Simple markdown rendering
     return content
-      .replace(
+      ?.replace(
         /^# (.*$)/gm,
         '<h1 class="text-3xl font-bold text-gray-900 mb-4 mt-8">$1</h1>'
       )
@@ -85,11 +91,11 @@ const BlogDetails: React.FC = () => {
       <div className="admin-blog-content max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="admin-content-container bg-white rounded-lg border border-gray-200 overflow-hidden">
           {/* Featured Image */}
-          {blog.data.image && (
+          {blog?.image && (
             <div className="admin-featured-image-container">
               <img
-                src={blog.data.image || "/placeholder.svg"}
-                alt={blog.data.title}
+                src={blog?.image || "/placeholder.svg"}
+                alt={blog?.title}
                 className="admin-featured-image w-full h-64 sm:h-80 lg:h-96 object-cover"
               />
             </div>
@@ -100,7 +106,7 @@ const BlogDetails: React.FC = () => {
             {/* Title */}
             <div className="admin-content-header mb-8">
               <h1 className="admin-content-title text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
-                {blog?.data?.title}
+                {blogResponse?.blog?.title}
               </h1>
             </div>
 
@@ -108,7 +114,7 @@ const BlogDetails: React.FC = () => {
             <div
               className="admin-article-content prose prose-lg max-w-none text-gray-800 leading-relaxed"
               dangerouslySetInnerHTML={{
-                __html: renderMarkdown(blog.data.content),
+                __html: renderMarkdown(blogResponse?.blog?.content),
               }}
             />
           </div>
