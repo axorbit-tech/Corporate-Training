@@ -1,12 +1,12 @@
 export interface ISubService {
   title: string
-  description: string
+  content: string
 }
 
 export interface IService {
   _id: number
   title: string
-  description: string
+  content: string
   image: string
   subServices: ISubService[]
   status: "active" | "inactive"

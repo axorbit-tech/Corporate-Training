@@ -19,7 +19,7 @@ const ServiceListing: React.FC = () => {
  
 
 
-  const { data: serviceResponse, refetch } = useGetServicesQuery(undefined)
+  const { data: serviceResponse } = useGetServicesQuery(undefined)
   const [changeServiceStatus, { isLoading }] = useUpdateServiceStatusMutation();
   const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation();
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);

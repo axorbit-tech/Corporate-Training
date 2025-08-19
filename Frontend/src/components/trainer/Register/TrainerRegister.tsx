@@ -1,74 +1,93 @@
-import React, { useState } from 'react'
-// import { useGetServicesQuery } from '../../../store/slices/userApiSlice'
+import React, { useEffect, useState } from "react";
+import { useGetServicesQuery } from "../../../store/slices/userApiSlice";
+import type { IService, ISubService } from "../../../types/types";
 
 const TrainerRegister: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    designation: '',
+    name: "",
+    email: "",
+    phone: "",
+    designation: "",
     website: "",
-    language: '',
-    category: '',
-    country: '',
-    state: ''
-  })
+    language: "",
+    selectedServices: [] as string[], // Array of selected service IDs
+    selectedSubServices: [] as string[], // Array of selected subservice titles
+    country: "",
+    state: "",
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
+    e.preventDefault();
+    console.log("Form submitted:", formData);
     // Handle form submission logic here
-  }
+  };
 
-//   const {data: services } = useGetServicesQuery(undefined);
+  const { data: serviceResponse } = useGetServicesQuery(undefined);
 
-//   const [services, setServices] = useState<>
+  const [services, setServices] = useState<IService[]>([]);
 
-  const categories = [
-    'Individual Counseling',
-    'Corporate Training',
-    'Group Therapy',
-    'Family Counseling',
-    'Stress Management',
-    'Career Counseling'
-  ]
+  useEffect(() => {
+    setServices(serviceResponse?.data || []);
+  }, [serviceResponse]);
+
+  // Get available subservices based on selected services
+  const getAvailableSubServices = () => {
+    if (!formData.selectedServices.length || !services.length) return [];
+
+    const subServices: ISubService[] = [];
+
+    formData.selectedServices.forEach((serviceId) => {
+      const service = services.find((s) => s._id?.toString() === serviceId);
+      if (service && service.subServices) {
+        subServices.push(...service.subServices);
+      }
+    });
+
+    // Remove duplicates based on title
+    return subServices.filter(
+      (subService, index, self) =>
+        index === self.findIndex((s) => s.title === subService.title)
+    );
+  };
+
+  const availableSubServices = getAvailableSubServices();
 
   const countries = [
-    'India',
-    'United States',
-    'United Kingdom',
-    'Canada',
-    'Australia',
-    'Other'
-  ]
+    "India",
+    "United States",
+    "United Kingdom",
+    "Canada",
+    "Australia",
+    "Other",
+  ];
 
   const states = [
-    'Kerala',
-    'Karnataka',
-    'Tamil Nadu',
-    'Maharashtra',
-    'Delhi',
-    'Gujarat',
-    'Other'
-  ]
+    "Kerala",
+    "Karnataka",
+    "Tamil Nadu",
+    "Maharashtra",
+    "Delhi",
+    "Gujarat",
+    "Other",
+  ];
 
   return (
     <section className="contact-form-section py-16 sm:py-20 lg:py-24 lg:px-10 lg:mt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden shadow-xl">
-          
           {/* Left Side - Text Content */}
           <div className="contact-text-section bg-green-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
             <div className="space-y-6 sm:space-y-8">
-              
               {/* Main Heading */}
               <h2 className="contact-form-heading text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">
                 Start Your Journey to Clarity and Well-being
@@ -76,7 +95,12 @@ const TrainerRegister: React.FC = () => {
 
               {/* Description Text */}
               <p className="contact-form-description text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
-                Please fill out the form below to help us understand your needs and match you with the right counselor. All information is kept confidential and is used solely to provide you with the best support possible. Whether you're facing personal, professional, or career-related challenges, we're here to help you take the first step toward a better tomorrow.
+                Please fill out the form below to help us understand your needs
+                and match you with the right counselor. All information is kept
+                confidential and is used solely to provide you with the best
+                support possible. Whether you're facing personal, professional,
+                or career-related challenges, we're here to help you take the
+                first step toward a better tomorrow.
               </p>
             </div>
           </div>
@@ -84,11 +108,13 @@ const TrainerRegister: React.FC = () => {
           {/* Right Side - Contact Form */}
           <div className="contact-form-section bg-blue-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
             <form onSubmit={handleSubmit} className="space-y-6">
-              
               {/* Name and Email Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="name" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="name"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Name
                   </label>
                   <input
@@ -97,13 +123,16 @@ const TrainerRegister: React.FC = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="email" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="email"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Email
                   </label>
                   <input
@@ -112,16 +141,19 @@ const TrainerRegister: React.FC = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
               </div>
 
-              {/* Phone and Age Row */}
+              {/* Phone and Designation Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="phone" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="phone"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Phone
                   </label>
                   <input
@@ -130,13 +162,16 @@ const TrainerRegister: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="designation" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="designation"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Designation
                   </label>
                   <input
@@ -145,31 +180,36 @@ const TrainerRegister: React.FC = () => {
                     name="designation"
                     value={formData.designation}
                     onChange={handleInputChange}
-                    min="1"
-                    max="120"
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
               </div>
 
+              {/* Website and Language Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="website" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    website (optional)
+                  <label
+                    htmlFor="website"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Website (optional)
                   </label>
                   <input
-                    type="link"
+                    type="url"
                     id="website"
                     name="website"
                     value={formData.website}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                   />
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="language" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="language"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Language
                   </label>
                   <input
@@ -178,39 +218,236 @@ const TrainerRegister: React.FC = () => {
                     name="language"
                     value={formData.language}
                     onChange={handleInputChange}
-                    min="1"
-                    max="120"
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
               </div>
 
-              {/* Category and Country Row */}
+              {/* Services Multi-Select with Custom UI */}
+              <div className="form-group">
+                <label className="form-label block text-xs font-medium text-gray-700 mb-3">
+                  Services <span className="text-red-500">*</span>
+                </label>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-48 overflow-y-auto p-2 rounded-lg backdrop-blur-sm">
+                    {services?.map((service) => (
+                      <div
+                        key={service._id}
+                        className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
+                          formData.selectedServices.includes(
+                            service._id?.toString() || ""
+                          )
+                            ? "border-blue-500 bg-blue-50 shadow-md transform scale-105"
+                            : "border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-25"
+                        }`}
+                        onClick={() => {
+                          const serviceId = service._id?.toString() || "";
+                          const isSelected =
+                            formData.selectedServices.includes(serviceId);
+
+                          if (isSelected) {
+                            setFormData((prev) => ({
+                              ...prev,
+                              selectedServices: prev.selectedServices.filter(
+                                (id) => id !== serviceId
+                              ),
+                              selectedSubServices: [], // Reset subservices when removing a service
+                            }));
+                          } else {
+                            setFormData((prev) => ({
+                              ...prev,
+                              selectedServices: [
+                                ...prev.selectedServices,
+                                serviceId,
+                              ],
+                              selectedSubServices: [], // Reset subservices when adding a service
+                            }));
+                          }
+                        }}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div
+                            className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                              formData.selectedServices.includes(
+                                service._id?.toString() || ""
+                              )
+                                ? "border-blue-500 bg-blue-500"
+                                : "border-gray-300"
+                            }`}
+                          >
+                            {formData.selectedServices.includes(
+                              service._id?.toString() || ""
+                            ) && (
+                              <svg
+                                className="w-3 h-3 text-white"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="font-sm text-xs text-gray-900">
+                              {service.title}
+                            </h4>
+                            {/* <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                              {service.content}
+                            </p> */}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-gray-500">
+                    <span>
+                      Selected: {formData.selectedServices.length} service(s)
+                    </span>
+                    <span>Click to select/deselect services</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* SubServices Multi-Select - Only show if services are selected */}
+              {formData.selectedServices.length > 0 &&
+                availableSubServices.length > 0 && (
+                  <div className="form-group">
+                    <label className="form-label block text-sm font-semibold text-slate-800 mb-4">
+                      Choose Sub Services
+                    </label>
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2 max-h-64 overflow-y-auto rounded-xl">
+                        {availableSubServices.map((subService, index) => (
+                          <div
+                            key={`${subService.title}-${index}`}
+                            className={`group relative p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out ${
+                              formData.selectedSubServices.includes(
+                                subService.title
+                              )
+                                ? "border-blue-500 bg-blue-50 shadow-lg shadow-blue-100/50 ring-2 ring-blue-100"
+                                : "border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-25 hover:shadow-md hover:-translate-y-0.5"
+                            }`}
+                            onClick={() => {
+                              const isSelected =
+                                formData.selectedSubServices.includes(
+                                  subService.title
+                                );
+
+                              if (isSelected) {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  selectedSubServices:
+                                    prev.selectedSubServices.filter(
+                                      (title) => title !== subService.title
+                                    ),
+                                }));
+                              } else {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  selectedSubServices: [
+                                    ...prev.selectedSubServices,
+                                    subService.title,
+                                  ],
+                                }));
+                              }
+                            }}
+                          >
+                            <div className="flex items-start space-x-3">
+                              <div
+                                className={`relative flex-shrink-0 w-5 h-5 rounded-md border-2 transition-all duration-200 ${
+                                  formData.selectedSubServices.includes(
+                                    subService.title
+                                  )
+                                    ? "border-blue-500 bg-blue-500 shadow-sm"
+                                    : "border-slate-300 bg-white group-hover:border-blue-400"
+                                }`}
+                              >
+                                {formData.selectedSubServices.includes(
+                                  subService.title
+                                ) && (
+                                  <svg
+                                    className="w-3 h-3 text-white absolute top-0.5 left-0.5 transition-all duration-200"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4
+                                  className={`font-semibold text-xs leading-tight transition-colors duration-200 ${
+                                    formData.selectedSubServices.includes(
+                                      subService.title
+                                    )
+                                      ? "text-blue-900"
+                                      : "text-slate-900 group-hover:text-blue-800"
+                                  }`}
+                                >
+                                  {subService.title}
+                                </h4>
+                                {/* <p
+                                  className={`text-xs mt-1.5 line-clamp-2 leading-relaxed transition-colors duration-200 ${
+                                    formData.selectedSubServices.includes(
+                                      subService.title
+                                    )
+                                      ? "text-blue-700"
+                                      : "text-slate-600 group-hover:text-slate-700"
+                                  }`}
+                                >
+                                </p> */}
+                              </div>
+                            </div>
+
+                            {/* Selection indicator */}
+                            {formData.selectedSubServices.includes(
+                              subService.title
+                            ) && (
+                              <div className="absolute top-2 right-2">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center justify-between px-1">
+                        <div className="flex items-center space-x-2">
+                          <div
+                            className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                              formData.selectedSubServices.length > 0
+                                ? "bg-blue-500"
+                                : "bg-slate-300"
+                            }`}
+                          ></div>
+                          <span className="text-sm font-medium text-slate-700">
+                            {formData.selectedSubServices.length} selected
+                          </span>
+                        </div>
+                        <span className="text-xs text-slate-500 font-medium">
+                          From your chosen services
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+              {/* Country and State Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="category" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    Category
-                  </label>
-                  <select
-                    id="category"
-                    name="category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    className="form-select w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
-                    required
+                  <label
+                    htmlFor="country"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    <option value="">Select Category</option>
-                    {categories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="country" className="form-label block text-sm font-medium text-gray-700 mb-2">
                     Country
                   </label>
                   <select
@@ -218,7 +455,7 @@ const TrainerRegister: React.FC = () => {
                     name="country"
                     value={formData.country}
                     onChange={handleInputChange}
-                    className="form-select w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
+                    className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
                     required
                   >
                     <option value="">Select Country</option>
@@ -229,28 +466,30 @@ const TrainerRegister: React.FC = () => {
                     ))}
                   </select>
                 </div>
-              </div>
 
-              {/* State Row */}
-              <div className="form-group">
-                <label htmlFor="state" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                  State
-                </label>
-                <select
-                  id="state"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  className="form-select w-full px-4 py-3 border border-gray-300 rounded-md bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
-                  required
-                >
-                  <option value="">Select State</option>
-                  {states.map((state, index) => (
-                    <option key={index} value={state}>
-                      {state}
-                    </option>
-                  ))}
-                </select>
+                <div className="form-group">
+                  <label
+                    htmlFor="state"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    State
+                  </label>
+                  <select
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
+                    required
+                  >
+                    <option value="">Select State</option>
+                    {states.map((state, index) => (
+                      <option key={index} value={state}>
+                        {state}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Submit Button */}
@@ -267,7 +506,7 @@ const TrainerRegister: React.FC = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default TrainerRegister
+export default TrainerRegister;
