@@ -24,15 +24,15 @@ const trainerSchema = new mongoose.Schema({
     required: true
   },
   phone: {
-    Number,
+    type: Number,
     required: true
   },
   designation: {
-    String,
+    type: String,
     required: true
   },
   website: {
-    String,
+    type: String,
     required: false
   },
   language: {

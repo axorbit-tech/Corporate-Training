@@ -1,5 +1,6 @@
 import express from "express";
 import userController from "../controllers/userController/userController";
+import trainerController from "../controllers/userController/registerController";
 
 
 const router = express.Router();
@@ -22,5 +23,10 @@ router.get('/blog/:id', userController.getBlogDetails);
 
 router.get('/event', userController.getAllEvents);
 router.get('/event/:id', userController.getEventDetails);
+
+
+// ========================================= Trainer Registration ===========================================
+
+router.post('/trainer-registration', trainerController.trainerRegistration);
 
 export default router;
