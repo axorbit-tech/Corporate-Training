@@ -19,7 +19,7 @@ const BlogListing: React.FC = () => {
   const navigate = useNavigate()
   const { data: getBlogs, isLoading, isError, refetch } = useGetBlogsQuery(undefined)
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation()
-  const [changeServiceStatus, { isLoading: isUpdating }] = useUpdateBlogStatusMutation();
+  const [changeBlogStatus, { isLoading: isUpdating }] = useUpdateBlogStatusMutation();
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -96,7 +96,7 @@ const BlogListing: React.FC = () => {
   const handleBlogAction = async (postId: string, actionType: "status" | "delete") => {
     try {
       if (actionType === "status") {
-        await changeServiceStatus(postId).unwrap()
+        await changeBlogStatus(postId).unwrap()
         console.log(`blog ${postId} status changed successfully`);
       }
       else if (actionType === "delete") {
@@ -109,8 +109,8 @@ const BlogListing: React.FC = () => {
       toast.success(`Blog ${actionType === "status" ? "status changed" : "deleted"} successfully`);
     }
     catch (error) {
-      toast.error(`Unable to ${actionType === "status" ? "change status" : "delete service"}`);
-      console.error(`Error performing ${actionType} for service ${postId}:`, error);
+      toast.error(`Unable to ${actionType === "status" ? "change status" : "delete blog"}`);
+      console.error(`Error performing ${actionType} for blog ${postId}:`, error);
     }
   };
 

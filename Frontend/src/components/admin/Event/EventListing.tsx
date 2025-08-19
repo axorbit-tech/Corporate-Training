@@ -13,7 +13,9 @@ import {
   Calendar,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useGetEventsQuery } from "../../../store/slices/apiSlice";
+import { useGetEventsQuery, useUpdateEventStatusMutation, useDeleteEventMutation } from "../../../store/slices/apiSlice";
+import { toast } from 'react-toastify'
+import CustomModal from '../common/CustomeModal'
 
 interface Event {
   _id: number;
@@ -29,17 +31,22 @@ const EventListing: React.FC = () => {
 
   const { data: eventData } = useGetEventsQuery(undefined);
 
-  console.log('eventsssss : ', eventData)
 
-  useEffect(()=> {
+
+  useEffect(() => {
     setEvents(eventData?.data)
-  },[eventData])
+  }, [eventData])
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedEvents, setSelectedEvents] = useState<number[]>([]);
   const [events, setEvents] = useState<Event[]>([])
+
+  const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation()
+  const [changeEventStatus, { isLoading: isUpdating }] = useUpdateEventStatusMutation();
+  const [modalAction, setModalAction] = useState<(() => void) | null>(null);
+  const [open, setOpen] = useState(false);
 
   const eventsPerPage = 10;
   const totalPages = Math.ceil(events?.length / eventsPerPage);
@@ -85,9 +92,45 @@ const EventListing: React.FC = () => {
     }
   };
 
-  const handleDeleteEvent = (eventId: number) => {
-    if (confirm("Are you sure you want to delete this event?")) {
-      console.log("Delete event:", eventId);
+  const handleFunctionTypes = (eventId: number, type: "status" | "delete") => {
+    setModalAction(() => () => handleEventAction(eventId, type));
+    setOpen(true);
+  }
+
+  const handleEventAction = async (eventId: number, actionType: "status" | "delete") => {
+    try {
+      if (actionType === "status") {
+        const res = await changeEventStatus(eventId).unwrap();
+
+        if (res.success) {
+          setEvents(prevEvents =>
+            prevEvents.map(event =>
+              event._id === eventId
+                ? { ...event, status: event.status === "published" ? "draft" : "published" }
+                : event
+            )
+          );
+        }
+
+        console.log(`Event ${eventId} status changed successfully`);
+      } else if (actionType === "delete") {
+        const res = await deleteEvent(eventId).unwrap();
+
+        if (res.success) {
+          // remove deleted event from API
+          setEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
+        }
+        // remove deleted event from UI
+        setEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
+
+        console.log(`Event ${eventId} deleted successfully`);
+      }
+
+      setOpen(false); // Close modal
+      toast.success(`Event ${actionType === "status" ? "status changed" : "deleted"} successfully`);
+    } catch (error) {
+      toast.error(`Unable to ${actionType === "status" ? "change status" : "delete Event"}`);
+      console.error(`Error performing ${actionType} for event ${eventId}:`, error);
     }
   };
 
@@ -267,6 +310,7 @@ const EventListing: React.FC = () => {
                         className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
                           event.status
                         )}`}
+                        onClick={() => handleFunctionTypes(event._id, "status")}
                       >
                         {event.status}
                       </span>
@@ -288,7 +332,7 @@ const EventListing: React.FC = () => {
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
-                          onClick={() => handleDeleteEvent(event._id)}
+                          onClick={() => handleFunctionTypes(event._id, "delete")}
                           className="admin-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
                           title="Delete Event"
                         >
@@ -353,6 +397,8 @@ const EventListing: React.FC = () => {
                     className={`admin-mobile-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(
                       event.status
                     )}`}
+
+                    onClick={() => handleFunctionTypes(event._id, "status")}
                   >
                     {event.status}
                   </span>
@@ -373,7 +419,7 @@ const EventListing: React.FC = () => {
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => handleDeleteEvent(event._id)}
+                      onClick={() => handleFunctionTypes(event._id, "delete")}
                       className="admin-mobile-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
                       title="Delete Event"
                     >
@@ -411,11 +457,10 @@ const EventListing: React.FC = () => {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${
-                        currentPage === page
-                          ? "bg-blue-500 text-white"
-                          : "text-gray-700 hover:bg-gray-100"
-                      }`}
+                      className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${currentPage === page
+                        ? "bg-blue-500 text-white"
+                        : "text-gray-700 hover:bg-gray-100"
+                        }`}
                     >
                       {page}
                     </button>
@@ -433,6 +478,24 @@ const EventListing: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <CustomModal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Are You sure to confirm this action?"
+        size={{ width: 300 }}
+        color="#f0f0f0"
+        buttonText="OK"
+        loading={isDeleting || isUpdating}
+        onButtonClick={() => {
+          if (modalAction) {
+            modalAction();
+          } else {
+            toast.error("Something went wrong");
+          }
+        }}
+      />
+
     </div>
   );
 };

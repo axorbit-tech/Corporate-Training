@@ -134,11 +134,13 @@ export const apiSlices = createApi({
         body: data,
       }),
     }),
-    getUsers: builder.query({
-      query: () => ({
-        url: `/admin/client`,
-        method: HttpMethod.GET
-      })
+   
+
+    deleteEvent: builder.mutation({
+      query: (id) => ({
+        url: `/admin/event/${id}`,
+        method: HttpMethod.DELETE,
+      }),
     }),
 
     updateEventStatus: builder.mutation({
@@ -146,6 +148,13 @@ export const apiSlices = createApi({
         url: `/admin/event/${id}`,
         method: HttpMethod.PATCH,
       }),
+    }),
+
+     getUsers: builder.query({
+      query: () => ({
+        url: `/admin/client`,
+        method: HttpMethod.GET
+      })
     }),
   }),
 });
@@ -170,6 +179,7 @@ export const {
   useGetEventsQuery,
   useGetEventDetailsQuery,
   useEditEventMutation,
+  useDeleteEventMutation,
   useUpdateEventStatusMutation,
   useGetUsersQuery
 } = apiSlices;
