@@ -195,12 +195,41 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
 };
 
 
+const updateStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const blog = await blogModel.findById(id)
+
+    if (!blog) {
+      res.status(404).json({ success: false, message: "Blog not found" });
+      return;
+    }
+
+    blog.status = blog.status == "active" ? "inactive" : "active"
+
+    await blog.save()
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Blog status Updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error Updating Status",
+    });
+  }
+};
+
+
 const blogController = {
   addBlog,
   editBlog,
   deleteBlog,
   getAllBlogs,
-  getBlogDetails
+  getBlogDetails,
+  updateStatus
 };
 
 export default blogController;

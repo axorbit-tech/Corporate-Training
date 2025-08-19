@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { HttpMethod } from "../../constants/index";
-import  baseQueryWithAuthCheck from "../baseQueryWithAuthCheck"
+import baseQueryWithAuthCheck from "../baseQueryWithAuthCheck"
 
 export const apiSlices = createApi({
   reducerPath: "api",
@@ -47,7 +47,7 @@ export const apiSlices = createApi({
       }),
     }),
     editService: builder.mutation({
-      query: ({id, data}) => ({
+      query: ({ id, data }) => ({
         url: `/admin/service/${id}`,
         method: HttpMethod.PUT,
         body: data
@@ -100,6 +100,14 @@ export const apiSlices = createApi({
         body: data,
       }),
     }),
+
+    updateBlogStatus: builder.mutation({
+      query: (id) => ({
+        url: `/admin/blog/${id}`,
+        method: HttpMethod.PATCH,
+      }),
+    }),
+
     addEvent: builder.mutation({
       query: (postData) => ({
         url: "/admin/event",
@@ -108,13 +116,13 @@ export const apiSlices = createApi({
       }),
     }),
     getEvents: builder.query({
-      query: ()=> ({
+      query: () => ({
         url: "/admin/event",
         method: HttpMethod.GET,
       })
     }),
     getEventDetails: builder.query({
-      query: (id)=> ({
+      query: (id) => ({
         url: `/admin/event/${id}`,
         method: HttpMethod.GET,
       })
@@ -127,11 +135,18 @@ export const apiSlices = createApi({
       }),
     }),
     getUsers: builder.query({
-      query: ()=> ({
+      query: () => ({
         url: `/admin/client`,
         method: HttpMethod.GET
       })
-    })
+    }),
+
+    updateEventStatus: builder.mutation({
+      query: (id) => ({
+        url: `/admin/event/${id}`,
+        method: HttpMethod.PATCH,
+      }),
+    }),
   }),
 });
 
@@ -150,9 +165,11 @@ export const {
   useGetBlogDetailsQuery,
   useDeleteBlogMutation,
   useEditBlogMutation,
+  useUpdateBlogStatusMutation,
   useAddEventMutation,
   useGetEventsQuery,
   useGetEventDetailsQuery,
   useEditEventMutation,
+  useUpdateEventStatusMutation,
   useGetUsersQuery
 } = apiSlices;

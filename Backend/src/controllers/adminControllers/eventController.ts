@@ -225,12 +225,41 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const updateStatus = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    const event = await eventModel.findById(id)
+
+    if (!event) {
+      res.status(404).json({ success: false, message: "Event not found" });
+      return;
+    }
+
+    event.status = event.status === "draft" ? "published" : "draft";
+
+
+    await event.save()
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Evennt Status Updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error Updating Status",
+    });
+  }
+};
+
 const EventController = {
   addEvent,
   editEvent,
   deleteEvent,
   getAllEvents,
   getEventDetails,
+  updateStatus,
 };
 
 export default EventController;
