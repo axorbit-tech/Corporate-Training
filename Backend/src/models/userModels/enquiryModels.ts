@@ -1,4 +1,3 @@
-import { number } from "joi";
 import mongoose, { Document } from "mongoose";
 
 export interface IEnquiry extends Document {
