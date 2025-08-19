@@ -5,13 +5,10 @@ import EventDetailsMainSection from '../../../components/user/events/EventDetail
 
 export default function home() {
     return (
-        <>
-            <div className='min-h-screen'>
-                <Header />
-                <EventDetailsMainSection />
-                <Footer />
-            </div>
-
-        </>
+        <div className='min-h-screen'>
+            <Header />
+            <EventDetailsMainSection />
+            <Footer />
+        </div>
     )
 }

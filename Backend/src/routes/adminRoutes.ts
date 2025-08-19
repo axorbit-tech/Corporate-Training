@@ -52,6 +52,7 @@ router.put('/event/:id', upload.fields([
     { name: 'images[4]', maxCount: 1 }
   ]), eventController.editEvent)
 router.delete('/event/:id', eventController.deleteEvent)
+router.patch('/event/:id', eventController.updateStatus);
 
 // add, edit, delete blog routes
 router.post('/blog', upload.single('image'), blogController.addBlog)
@@ -59,6 +60,7 @@ router.get('/blog', blogController.getAllBlogs)
 router.get('/blog/:id', blogController.getBlogDetails);
 router.put('/blog/:id', upload.single('image'), blogController.editBlog)
 router.delete('/blog/:id', blogController.deleteBlog)
+router.patch('/blog/:id', blogController.updateStatus)
 
 // add, edit, delete whyUs routes
 router.post('/why-us', whyUsController.addWhyUs)

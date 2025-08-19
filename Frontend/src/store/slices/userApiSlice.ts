@@ -44,10 +44,10 @@ export const userApiSlices = createApi({
                 method: HttpMethod.GET,
             }),
         }),
-        
+
         getEvents: builder.query({
-            query: () => ({
-                url: "/event",
+            query: ({ page, limit }: { page: number; limit: number }) => ({
+                url: `/event?page=${page}&limit=${limit}`,
                 method: HttpMethod.GET,
             }),
         }),

@@ -31,7 +31,7 @@ const ServiceListing: React.FC = () => {
   const [selectedServices, setSelectedServices] = useState<number[]>([])
   const [hoveredService, setHoveredService] = useState<number | null>(null)
   const [open, setOpen] = useState(false);
-  const [selectedServiceId, setSelectedServiceId] = useState<number | null>(null);
+ 
 
 
   const { data: getService, refetch } = useGetServicesQuery(undefined)
@@ -72,15 +72,10 @@ const ServiceListing: React.FC = () => {
     }
   }
 
-  const handleViewService = (serviceId: number) => {
-    navigate(`/admin/edit-service/${serviceId}`)
-  }
-
 
 
   // Populate Modal & Trigger Function based on type
   const handleFunctionTypes = (serviceId: number, type: "status" | "delete") => {
-    setSelectedServiceId(serviceId);
     setModalAction(() => () => handleServiceAction(serviceId, type));
     setOpen(true);
   };

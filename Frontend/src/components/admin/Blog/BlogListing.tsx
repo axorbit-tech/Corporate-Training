@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Eye, Edit, Trash2, Plus, Search } from 'lucide-react'
-import { useGetBlogsQuery, useDeleteBlogMutation } from '../../../store/slices/apiSlice'
+import { useGetBlogsQuery, useDeleteBlogMutation, useUpdateBlogStatusMutation } from '../../../store/slices/apiSlice'
 import { useNavigate } from 'react-router-dom'
 import CustomModal from '../common/CustomeModal'
 import { toast } from 'react-toastify'
 
+
 interface BlogPost {
   _id: string
   title: string
+  status: string
   content: string
   createdAt: string
 }
@@ -17,6 +19,8 @@ const BlogListing: React.FC = () => {
   const navigate = useNavigate()
   const { data: getBlogs, isLoading, isError, refetch } = useGetBlogsQuery(undefined)
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation()
+  const [changeServiceStatus, { isLoading: isUpdating }] = useUpdateBlogStatusMutation();
+  const [modalAction, setModalAction] = useState<(() => void) | null>(null);
   const [open, setOpen] = useState(false);
 
   const [blogs, setBlogs] = useState<BlogPost[]>([])
@@ -24,7 +28,7 @@ const BlogListing: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedPosts, setSelectedPosts] = useState<string[]>([])
-  const [selectedBlogId, setSelectedBlogId] = useState<string | null>(null)
+
 
   const postsPerPage = 10
 
@@ -84,22 +88,31 @@ const BlogListing: React.FC = () => {
   }
 
 
-  const handleDeletePost = (postId: string) => {
-    setSelectedBlogId(postId)
-    setOpen(true)
+  const handleFunctionTypes = (postId: string, type: "status" | "delete") => {
+    setModalAction(() => () => handleBlogAction(postId, type));
+    setOpen(true);
   }
 
-  const handleConfirmDelete = async (selectedBlogId: string) => {
+  const handleBlogAction = async (postId: string, actionType: "status" | "delete") => {
     try {
-      await deleteBlog(selectedBlogId).unwrap()
-      refetch()
-      toast.success('Blog deleted successfully')
-      setOpen(false)
-    } catch (error) {
-      toast.error('Failed to delete blog')
-      console.error('Error deleting blog:', error)
+      if (actionType === "status") {
+        await changeServiceStatus(postId).unwrap()
+        console.log(`blog ${postId} status changed successfully`);
+      }
+      else if (actionType === "delete") {
+        await deleteBlog(postId).unwrap()
+        console.log(`blog ${postId} deleted successfully`);
+      }
+
+      refetch();     // Refresh service list
+      setOpen(false); // Close modal
+      toast.success(`Blog ${actionType === "status" ? "status changed" : "deleted"} successfully`);
     }
-  }
+    catch (error) {
+      toast.error(`Unable to ${actionType === "status" ? "change status" : "delete service"}`);
+      console.error(`Error performing ${actionType} for service ${postId}:`, error);
+    }
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -173,16 +186,17 @@ const BlogListing: React.FC = () => {
                 <td className="px-6 py-4">{post.title}</td>
                 <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                   <span
-                    className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor("active")}`}
+                    className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor(post.status)}`}
+                    onClick={() => handleFunctionTypes(post._id, "status")}
                   >
-                    {'posted'}
+                    {post.status}
                   </span>
                 </td>
                 <td className="px-6 py-4">{new Date(post.createdAt).toLocaleDateString()}</td>
                 <td className="px-6 py-4 flex space-x-2">
                   <button onClick={() => handleViewPost(post._id)} className="text-blue-600"><Eye size={16} /></button>
                   <button onClick={() => handleEditPost(post._id)} className="text-gray-600"><Edit size={16} /></button>
-                  <button onClick={() => handleDeletePost(post._id)} className="text-red-600"><Trash2 size={16} /></button>
+                  <button onClick={() => handleFunctionTypes(post._id, "delete")} className="text-red-600"><Trash2 size={16} /></button>
                 </td>
               </tr>
             ))}
@@ -234,14 +248,13 @@ const BlogListing: React.FC = () => {
         open={open}
         onClose={() => setOpen(false)}
         title="Are You sure to confirm this action?"
-        // description={`This modal works with TypeScript. Service ID: ${selectedServiceId}`}
         size={{ width: 300 }}
         color="#f0f0f0"
         buttonText="OK"
-        loading={isDeleting}
+        loading={isDeleting || isUpdating}
         onButtonClick={() => {
-          if (selectedBlogId) {
-            handleConfirmDelete(selectedBlogId);
+          if (modalAction) {
+            modalAction();
           } else {
             toast.error("Something went wrong");
           }

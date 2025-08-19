@@ -1,8 +1,10 @@
 import EventCard from './EventCard'
+import Pagination from '../../pagination';
 
 interface EventAllListSectionProps {
     title: string
     events: Array<{
+        _id: string
         date: string
         month: string
         title: string
@@ -13,11 +15,17 @@ interface EventAllListSectionProps {
     responses: {
         isLoading: boolean
         error: string
-    }
+    };
+    pagination?: {
+        total: number;
+        page: number;
+        pages: number;
+    };
+    onPageChange?: (page: number) => void;
 }
 
 
-const EventAllListSection: React.FC<EventAllListSectionProps> = ({ title, events, responses }) => {
+const EventAllListSection: React.FC<EventAllListSectionProps> = ({ title, events, responses, pagination, onPageChange }) => {
     const { isLoading, error } = responses
 
 
@@ -66,6 +74,7 @@ const EventAllListSection: React.FC<EventAllListSectionProps> = ({ title, events
                             {events.map((event, index) => (
                                 <EventCard
                                     key={index}
+                                    id={event._id}
                                     date={event.date}
                                     title={event.title}
                                     description={event.content}
@@ -74,6 +83,11 @@ const EventAllListSection: React.FC<EventAllListSectionProps> = ({ title, events
                                 />
                             ))}
                         </div>
+
+                        {/* Pagination */}
+                        {pagination && onPageChange && (
+                            <Pagination currentPage={pagination.page} totalPages={pagination.pages} onPageChange={onPageChange} />
+                        )}
                     </div>
                 </div>
             </div>

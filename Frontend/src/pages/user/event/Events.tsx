@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Header from "../../../components/user/common/Header"
 import Footer from "../../../components/user/common/Footer"
 import EventsHeroSection from "../../../components/user/events/EventHeroSection"
@@ -7,13 +8,16 @@ import { useGetEventsQuery } from "../../../store/slices/userApiSlice"
 
 export default function Events() {
 
-  
+  const [page, setPage] = useState(1);
+  const limit = 10;
 
-  const { data: eventData, isLoading, error } = useGetEventsQuery(undefined);
-  console.log('eventsssss : ', eventData)
+
+
+  const { data: eventData, isLoading, error } = useGetEventsQuery({ page, limit });
   const allEvents = eventData?.data?.allEvents || []
   const upcomingEvents = eventData?.data?.upcomingEvents || []
   const recentEvents = eventData?.data?.recentEvents || []
+  const pagination = eventData?.pagination;
 
   const responses = {
     isLoading,
@@ -21,10 +25,10 @@ export default function Events() {
   }
 
   const errorMessage: string = responses.error
-  ? 'status' in responses.error
-    ? `Error ${responses.error.status}`
-    : responses.error.message || 'Unknown error' 
-  : '';
+    ? 'status' in responses.error
+      ? `Error ${responses.error.status}`
+      : responses.error.message || 'Unknown error'
+    : '';
 
   return (
     <div className='min-h-screen'>
@@ -38,7 +42,13 @@ export default function Events() {
       }
 
       {allEvents.length > 0 &&
-        <EventAllListSection title="All Events" events={allEvents} responses={{ isLoading: responses.isLoading, error: errorMessage }} />
+        <EventAllListSection
+          title="All Events"
+          events={allEvents}
+          responses={{ isLoading: responses.isLoading, error: errorMessage }}
+          pagination={pagination}
+          onPageChange={setPage}
+        />
       }
       <Footer />
     </div>
