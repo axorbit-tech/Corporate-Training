@@ -31,6 +31,7 @@ import AdminLoginPage from "./pages/admin/auth/AdminLogin";
 import AdminEditBlogPage from "./pages/admin/blog/EditBlog";
 import AdminEditEventPage from "./pages/admin/event/EditEvent";
 import AdminClientListingPage from "./pages/admin/client/ClientListing";
+import TrainerRegisterPage from "./pages/trainers/register/TrainerRegister";
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
           <Route path="/counsellors" element={<Counsellors />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/trainer-registration" element={<TrainerRegisterPage />} />
 
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/admin/blogs" element={<AdminBlogListingPage />} />

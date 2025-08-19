@@ -28,6 +28,8 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
   const navigate = useNavigate()
   // Updated hook name from useGetServiceByIdQuery to useGetServiceQuery
   const { data: serviceResponse, refetch, isLoading, error } = useGetServiceDetailsQuery(serviceId)
+
+  console.log(serviceResponse, )
   const [updateService, { isLoading: isUpdating }] = useEditServiceMutation()
 
   const [formData, setFormData] = useState<ServiceFormData>({
@@ -44,7 +46,7 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
   useEffect(() => {
     // Updated to use serviceResponse.data since API returns {success, data} structure
     if (serviceResponse) {
-      const service = serviceResponse
+      const service = serviceResponse.data
       setFormData({
         title: service.title || "",
         content: service.content || "",
