@@ -7,22 +7,6 @@ import CustomModal from "../common/CustomeModal"
 import { toast } from "react-toastify"
 import type { IService } from "../../../types/types"
 
-interface SubService {
-  title: string
-  description: string
-}
-
-interface Service {
-  _id: number
-  title: string
-  description: string
-  image: string
-  subServices: SubService[]
-  status: "active" | "inactive"
-  createdDate: string
-  lastModified: string
-}
-
 const ServiceListing: React.FC = () => {
 
   const navigate = useNavigate()
@@ -71,7 +55,7 @@ const ServiceListing: React.FC = () => {
     if (selectedServices?.length === services?.length) {
       setSelectedServices([])
     } else {
-      setSelectedServices(services.map((service: Service) => service._id))
+      setSelectedServices(services.map((service: IService) => service._id))
     }
   }
 
@@ -231,7 +215,7 @@ const ServiceListing: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="admin-table-body bg-white divide-y divide-gray-200">
-                {services?.map((service: Service) => (
+                {services?.map((service: IService) => (
                   <tr key={service._id} className="admin-table-row hover:bg-gray-50 transition-colors duration-200">
                     <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
                       <input
@@ -257,7 +241,7 @@ const ServiceListing: React.FC = () => {
                             {service.title}
                           </div>
                           <div className="admin-service-description text-xs text-gray-500 line-clamp-1 mt-1">
-                            {service.description}
+                            {service.content}
                           </div>
                         </div>
                       </div>
@@ -283,7 +267,7 @@ const ServiceListing: React.FC = () => {
                                   className="text-xs text-gray-600 py-1 border-b border-gray-100 last:border-b-0"
                                 >
                                   <div className="font-medium">{subService.title}</div>
-                                  <div className="text-gray-500 line-clamp-1">{subService.description}</div>
+                                  <div className="text-gray-500 line-clamp-1">{subService.content}</div>
                                 </div>
                               ))}
                             </div>
@@ -332,7 +316,7 @@ const ServiceListing: React.FC = () => {
 
           {/* Mobile Cards */}
           <div className="lg:hidden space-y-4 p-4">
-            {services?.map((service: Service) => (
+            {services?.map((service: IService) => (
               <div
                 key={service._id}
                 className="admin-mobile-card bg-white border border-gray-200 rounded-lg p-4 space-y-3"
@@ -357,7 +341,7 @@ const ServiceListing: React.FC = () => {
                         {service.title}
                       </h3>
                       <p className="admin-mobile-service-description text-xs text-gray-500 line-clamp-1 mt-1">
-                        {service.description}
+                        {service.content}
                       </p>
                     </div>
                   </div>
