@@ -1,15 +1,13 @@
 import mongoose, { Document } from 'mongoose';
 
 export interface ITrainer extends Document {
-  email: string;
   name: string;
+  email: string;
   phone: number;
   website: string;
   location: string;
   language: string;
   experience: string;
-  IdCardNo: string;
-  password: string;
 }
 
 const trainerSchema = new mongoose.Schema({
@@ -27,10 +25,18 @@ const trainerSchema = new mongoose.Schema({
   },
   website: {
     String,
-    required: true
+    required: false
   },
   location: {
     String,
+    required: true
+  },
+  language: {
+    type: String,
+    required: true
+  },
+  experience: {
+    type: Number,
     required: true
   }
 });
