@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import userModel from "../../models/userModels/userModel";
 import EnquiryModel from "../../models/userModels/enquiryModels";
-import { enquirySchema } from "../../validations/userValidation/enquiryValidation";
 import { userSchema } from "../../validations/userValidation/userValidation";
+import { bookingSchema } from "../../validations/userValidation/bookingValidations";    
 import { sendEmail } from "../../utils/mailService";
 import serviceModel from "../../models/adminModels/serviceModel";
 import blogModel from "../../models/adminModels/blogModel";
 import eventModel from "../../models/adminModels/eventModel";
+import bookingModel from "../../models/userModels/bookingModel";
 
 
 const today = new Date();
@@ -22,7 +23,6 @@ const createEnquiry = async (req: Request, res: Response) => {
         }
 
         
-
         const { email, name, phone, age, sex } = value;
         let user = await userModel.findOne({ email });
         if (!user) {
@@ -207,6 +207,37 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+
+const createBooking = async (req: Request, res: Response) => {
+    try {
+        const today = new Date();   
+        const { error, value } = bookingSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            console.log(error);
+            res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, error: error.details.map(err => err.message) });
+            return;
+        }
+
+        
+        const { email, name, phone, age } = value;
+        let user = await userModel.findOne({ email });
+        if (!user) {
+            user = await userModel.create({ email, name, phone, age});
+        }
+
+        await bookingModel.create({ userId: user._id, service: req.body.service, date: today, country: req.body.country, state: req.body.state });
+
+
+        res.status(HttpStatusCode.CREATED).json({
+            success: true,
+            message: "Details added successfully", data: user
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ success: false, error: "Error creating user" });
+    }
+};
+
 const userController = {
     createEnquiry,
     getAllServices,
@@ -214,7 +245,8 @@ const userController = {
     getAllBlogs,
     getBlogDetails,
     getAllEvents,
-    getEventDetails
+    getEventDetails,
+    createBooking
 };
 
 export default userController;

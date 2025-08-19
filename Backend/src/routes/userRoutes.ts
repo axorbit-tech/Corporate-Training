@@ -23,4 +23,8 @@ router.get('/blog/:id', userController.getBlogDetails);
 router.get('/event', userController.getAllEvents);
 router.get('/event/:id', userController.getEventDetails);
 
+// ========================================= Booking ===========================================
+
+router.post('/booking', userController.createBooking);
+
 export default router;

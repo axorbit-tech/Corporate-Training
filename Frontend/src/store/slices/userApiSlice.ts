@@ -58,6 +58,14 @@ export const userApiSlices = createApi({
                 method: HttpMethod.GET,
             }),
         }),
+
+         createBooking: builder.mutation({
+            query: (postData) => ({
+                url: "/booking",
+                method: HttpMethod.POST,
+                body: postData,
+            }),
+        }),
     }),
 });
 
@@ -68,5 +76,6 @@ export const {
     useGetBlogsQuery,
     useGetBlogDetailsQuery,
     useGetEventsQuery,
-    useGetEventDetailsQuery
+    useGetEventDetailsQuery,
+    useCreateBookingMutation
 } = userApiSlices;

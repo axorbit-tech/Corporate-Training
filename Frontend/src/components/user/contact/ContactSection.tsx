@@ -24,7 +24,6 @@ const ContactFormSection: React.FC = () => {
   }
 
 
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
