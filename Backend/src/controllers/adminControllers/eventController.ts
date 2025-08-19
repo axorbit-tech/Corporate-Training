@@ -59,7 +59,7 @@ const addEvent = async (req: Request, res: Response): Promise<void> => {
       data: newEvent,
     });
   } catch (error) {
-
+    console.error(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ error: "Error adding Event" });
@@ -145,7 +145,7 @@ const editEvent = async (req: Request, res: Response): Promise<void> => {
       data: updatedEvent,
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error updating Event",
     });
@@ -172,7 +172,7 @@ const deleteEvent = async (req: Request, res: Response): Promise<void> => {
       message: "Event deleted successfully",
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error deleting Event",
     });
@@ -190,7 +190,7 @@ const getAllEvents = async (req: Request, res: Response): Promise<void> => {
       data: events,
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error Fetching Events",
     });
@@ -218,7 +218,7 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
       event,
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error fetching event details",
     });
@@ -246,7 +246,7 @@ const updateStatus = async (req: Request, res: Response): Promise<void> => {
       message: "Evennt Status Updated successfully",
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error Updating Status",
     });

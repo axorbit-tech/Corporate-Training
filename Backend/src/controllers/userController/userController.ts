@@ -16,13 +16,12 @@ const createEnquiry = async (req: Request, res: Response) => {
     try {
         const { error, value } = userSchema.validate(req.body, { abortEarly: false });
         if (error) {
-
-            console.log("erororror : ", error)
+            console.log(error);
             res.status(HttpStatusCode.BAD_REQUEST).json({ success: false, error: error.details.map(err => err.message) });
             return;
         }
 
-        console.log("reqbodddddy : ", req.body)
+        
 
         const { email, name, phone, age, sex } = value;
         let user = await userModel.findOne({ email });
@@ -58,7 +57,7 @@ const createEnquiry = async (req: Request, res: Response) => {
             message: "Details added successfully", data: user
         });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ success: false, error: "Error creating user" });
     }
 };
@@ -67,8 +66,6 @@ const createEnquiry = async (req: Request, res: Response) => {
 const getAllServices = async (req: Request, res: Response): Promise<void> => {
     try {
         const services = await serviceModel.find().where('status').equals('active').sort({ createdAt: -1 });
-
-        // console.log("servicessss : ", services)
 
         res.status(HttpStatusCode.OK).json({
             success: true,
@@ -88,6 +85,7 @@ const getServiceById = async (req: Request, res: Response) => {
         const service = await serviceModel.findById(id).where('status').equals('active');
 
         if (!service) {
+            console.log('Service not found');
             return res.status(404).json({ message: 'Service not found' });
         }
 
@@ -121,7 +119,9 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
         const blog = await blogModel.findOne({ _id: id, status: 'active' });
 
         if (!blog) {
+            console.error('Blog not found');
             res.status(HttpStatusCode.NOT_FOUND).json({
+                
                 success: false,
                 error: "Blog not found",
             });
@@ -187,6 +187,7 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
         const event = await eventModel.findOne({ _id: id, status: 'published' });
 
         if (!event) {
+            console.error('Event not found');
             res.status(HttpStatusCode.NOT_FOUND).json({
                 success: false,
                 error: "Blog not found",

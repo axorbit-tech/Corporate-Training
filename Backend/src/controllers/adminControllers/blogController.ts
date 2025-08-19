@@ -56,7 +56,7 @@ const addBlog = async (req: Request, res: Response): Promise<void> => {
       data: newBlog,
     });
   } catch (error) {
-
+    console.error(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ error: "Error adding Blog" });
@@ -111,7 +111,7 @@ const editBlog = async (req: Request, res: Response): Promise<void> => {
       data: updated,
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error updating Blog",
     });
@@ -138,7 +138,7 @@ const deleteBlog = async (req: Request, res: Response): Promise<void> => {
       message: "blog deleted successfully",
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error deleting Event",
     });
@@ -157,7 +157,7 @@ const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
     });
 
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error deleting Event",
     });
@@ -186,7 +186,7 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
       blog,
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error fetching blog details",
     });
@@ -214,7 +214,7 @@ const updateStatus = async (req: Request, res: Response): Promise<void> => {
       message: "Blog status Updated successfully",
     });
   } catch (error) {
-
+    console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error Updating Status",
     });

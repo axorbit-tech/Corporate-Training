@@ -4,11 +4,22 @@ import userController from "../controllers/userController/userController";
 
 const router = express.Router();
 
+// ========================================= Enquiry =========================================
+
 router.post('/enquiry', userController.createEnquiry);
+
+// ========================================= Services =========================================
+
 router.get('/service', userController.getAllServices);
 router.get('/service/:id', userController.getServiceById);
+
+// ========================================= Blogs ===========================================
+
 router.get('/blog', userController.getAllBlogs);
 router.get('/blog/:id', userController.getBlogDetails);
+
+// ========================================= Events ===========================================
+
 router.get('/event', userController.getAllEvents);
 router.get('/event/:id', userController.getEventDetails);
 
