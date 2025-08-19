@@ -4,32 +4,36 @@ export interface ITrainer extends Document {
   name: string;
   email: string;
   phone: number;
-  website: string;
-  location: string;
+  designation: string;
+  website?: string;
   language: string;
   experience: string;
+  company: string;
+  services: string[];
+  subServices: string[];
+  country: string;
 }
 
 const trainerSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true
-  },
   name: {
     type: String,
     required: true,
+  },
+  email: {
+    type: String,
+    required: true
   },
   phone: {
     Number,
     required: true
   },
+  designation: {
+    String,
+    required: true
+  },
   website: {
     String,
     required: false
-  },
-  location: {
-    String,
-    required: true
   },
   language: {
     type: String,
@@ -37,6 +41,26 @@ const trainerSchema = new mongoose.Schema({
   },
   experience: {
     type: Number,
+    required: true
+  },
+  company: {
+    type: String,
+    required: true
+  },
+  services: {
+    type: [String],
+    required: true
+  },
+  subServices: {
+    type: [String],
+    required: true
+  },
+  country: {
+    type: String,
+    required: true
+  },
+  state: {
+    type: String,
     required: true
   }
 });
