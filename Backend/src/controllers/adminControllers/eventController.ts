@@ -6,22 +6,22 @@ import { eventSchema } from "../../validations/adminValidation/eventValidation";
 // ✅ Add Event
 const addEvent = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log("add event contrlloer");
+
     const { error } = eventSchema.validate(req.body);
 
     if (error) {
-      console.log("error inside");
+
       res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
         error: error.details[0].message,
       });
       return;
     }
-    console.log("no error");
+
 
     const { title, content, date } = req.body;
 
-    console.log("req.bodyyyy : ", req.body);
+
 
     const isEventExist = await eventModel.findOne({ title });
 
@@ -59,7 +59,7 @@ const addEvent = async (req: Request, res: Response): Promise<void> => {
       data: newEvent,
     });
   } catch (error) {
-    console.error(error);
+
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ error: "Error adding Event" });
@@ -70,7 +70,7 @@ const addEvent = async (req: Request, res: Response): Promise<void> => {
 const editEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    console.log("req bodyyyy : ", req.body);
+
     const { title, content, date } = req.body;
 
     const { error } = eventSchema.validate({ title, content, date });
@@ -145,7 +145,7 @@ const editEvent = async (req: Request, res: Response): Promise<void> => {
       data: updatedEvent,
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error updating Event",
     });
@@ -172,7 +172,7 @@ const deleteEvent = async (req: Request, res: Response): Promise<void> => {
       message: "Event deleted successfully",
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error deleting Event",
     });
@@ -183,14 +183,14 @@ const getAllEvents = async (req: Request, res: Response): Promise<void> => {
   try {
     const events = await eventModel.find().sort({ createdAt: -1 });
 
-    console.log("events : ", events);
+
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: events,
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error Fetching Events",
     });
@@ -211,14 +211,14 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log("event : ", event);
+
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       event,
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error fetching event details",
     });
@@ -246,7 +246,7 @@ const updateStatus = async (req: Request, res: Response): Promise<void> => {
       message: "Evennt Status Updated successfully",
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error Updating Status",
     });

@@ -56,7 +56,7 @@ const addBlog = async (req: Request, res: Response): Promise<void> => {
       data: newBlog,
     });
   } catch (error) {
-    console.error(error);
+
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ error: "Error adding Blog" });
@@ -79,16 +79,16 @@ const editBlog = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const updatedData: { 
-      title: string; 
-      content: string; 
+    const updatedData: {
+      title: string;
+      content: string;
       image?: string;
     } = {
       title: title,
       content: content,
     };
 
-    if(req.file) {
+    if (req.file) {
       updatedData.image = req.file.path
     }
 
@@ -111,7 +111,7 @@ const editBlog = async (req: Request, res: Response): Promise<void> => {
       data: updated,
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error updating Blog",
     });
@@ -138,7 +138,7 @@ const deleteBlog = async (req: Request, res: Response): Promise<void> => {
       message: "blog deleted successfully",
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error deleting Event",
     });
@@ -149,15 +149,15 @@ const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
   try {
     const blogs = await blogModel.find().sort({ createdAt: -1 });
 
-    console.log("servicessss : ", blogs)
+
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: blogs,
     });
-    
+
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error deleting Event",
     });
@@ -168,7 +168,7 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
 
-    console.log('iddd: ', id)
+
 
     const blog = await blogModel.findById(id);
 
@@ -180,14 +180,13 @@ const getBlogDetails = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    console.log('blog : ', blog)
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       blog,
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error fetching blog details",
     });
@@ -215,7 +214,7 @@ const updateStatus = async (req: Request, res: Response): Promise<void> => {
       message: "Blog status Updated successfully",
     });
   } catch (error) {
-    console.error(error);
+
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       error: "Error Updating Status",
     });
