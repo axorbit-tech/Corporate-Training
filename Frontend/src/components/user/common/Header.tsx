@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,79 +29,100 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a
-              href="/"
+            <NavLink
+              to="/"
               className="text-xl lg:text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors"
               style={{ fontFamily: "Montserrat, sans-serif" }}
             >
               LOGO
-            </a>
+            </NavLink>
           </div>
 
           {/* Desktop Navigation - Center */}
           <nav className="hidden lg:flex items-center justify-center flex-1 mx-8">
             <div className="flex items-center space-x-6 xl:space-x-11">
-              <a
-                href="/"
-                className="text-blue-600 font-medium text-sm tracking-wide hover:text-blue-700 transition-colors py-2"
+              <NavLink
+                to="/"
+                className={({ isActive }) =>
+                  `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 HOME
-              </a>
-              <a
-                href="/about"
-                className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
+              </NavLink>
+              <NavLink
+                to="/about"
+                className={({ isActive }) =>
+                  `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 ABOUT US
-              </a>
-              <a
-                href="/services"
-                className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
+              </NavLink>
+              <NavLink
+                to="/services"
+                className={({ isActive }) =>
+                  `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 SERVICES
-              </a>
-              <a
-                href="/events"
-                className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
+              </NavLink>
+              <NavLink
+                to="/events"
+                className={({ isActive }) =>
+                  `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 EVENTS
-              </a>
-              <a
-                href="/blogs"
-                className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
+              </NavLink>
+              <NavLink
+                to="/blogs"
+                className={({ isActive }) =>
+                  `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 BLOG
-              </a>
-              <a
-                href="/contact"
-                className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
+              </NavLink>
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 CONTACT US
-              </a>
-              <a
-                href="/counsellors"
-                className="text-gray-700 font-medium text-sm tracking-wide hover:text-blue-600 transition-colors py-2"
+              </NavLink>
+              <NavLink
+                to="/counsellors"
+                className={({ isActive }) =>
+                  `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 COUNSELLORS
-              </a>
+              </NavLink>
             </div>
           </nav>
 
           {/* Desktop Book Appointment Button - Right */}
           <div className="hidden lg:block flex-shrink-0">
-            <a
-              href="/book-appointment"
+            <NavLink
+              to="/booking"
               className=" hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 cursor-pointer px-8 py-4 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
               style={{ fontFamily: "Montserrat, sans-serif" }}
             >
               BOOK APPOINTMENT
-            </a>
+            </NavLink>
           </div>
 
           {/* Mobile Menu Button */}
@@ -140,65 +162,87 @@ const Header: React.FC = () => {
             }}
           >
             <div className="pt-2 pb-3 space-y-1">
-              <a
-                href="/"
-                className="block px-3 py-2 text-blue-600 font-medium text-sm tracking-wide hover:bg-blue-50 rounded-md transition-colors"
+              <NavLink
+                to="/"
+                
+                className={({ isActive }) =>
+                  `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 HOME
-              </a>
-              <a
-                href="/about"
-                className="block px-3 py-2 text-gray-700 font-medium text-sm tracking-wide hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+              </NavLink>
+              <NavLink
+                to="/about"
+                className={({ isActive }) =>
+                  `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 ABOUT US
-              </a>
-              <a
-                href="/services"
-                className="block px-3 py-2 text-gray-700 font-medium text-sm tracking-wide hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+              </NavLink>
+              <NavLink
+                to="/services"
+                className={({ isActive }) =>
+                  `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 SERVICES
-              </a>
-              <a
-                href="/events"
-                className="block px-3 py-2 text-gray-700 font-medium text-sm tracking-wide hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+              </NavLink>
+              <NavLink
+                to="/events"
+                className={({ isActive }) =>
+                  `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 EVENTS
-              </a>
-              <a
-                href="/blog"
-                className="block px-3 py-2 text-gray-700 font-medium text-sm tracking-wide hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+              </NavLink>
+              <NavLink
+                to="/blogs"
+                className={({ isActive }) =>
+                  `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 BLOG
-              </a>
-              <a
-                href="/contact"
-                className="block px-3 py-2 text-gray-700 font-medium text-sm tracking-wide hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+              </NavLink>
+              <NavLink
+                to="/contact"
+                className={({ isActive }) =>
+                  `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
                 CONTACT US
-              </a>
-              <a
-                href="/therapist"
-                className="block px-3 py-2 text-gray-700 font-medium text-sm tracking-wide hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+              </NavLink>
+              <NavLink
+                to="/counsellors"
+                className={({ isActive }) =>
+                  `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
+                  }`
+                }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
-                THERAPIST
-              </a>
+                COUNSELLORS
+              </NavLink>
 
               {/* Mobile Book Appointment Button */}
               <div className="pt-2 px-3">
-                <a
-                  href="/book-appointment"
+                <NavLink
+                  to="/booking"
                   className="block w-full text-center hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 px-4 py-3 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm"
                   style={{ fontFamily: "Montserrat, sans-serif" }}
                 >
                   BOOK APPOINTMENT
-                </a>
+                </NavLink>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import React from 'react'
 
 const BlogHeroSection: React.FC = () => {
   return (
-    <section className="blog-hero-section bg-white py-16 sm:py-20 lg:py-24 lg:px-16 lg:mt-12">
+    <section className="blog-hero-section bg-white px-4 py-16 sm:py-20 lg:py-24 lg:px-16 lg:mt-12">
       <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center">
           
