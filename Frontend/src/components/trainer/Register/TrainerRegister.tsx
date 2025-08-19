@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useGetServicesQuery } from "../../../store/slices/userApiSlice";
 import type { IService, ISubService } from "../../../types/types";
+import { Country, State } from "country-state-city";
 
 const TrainerRegister: React.FC = () => {
+  const [countries, setCountries] = useState<
+    { name: string; isoCode: string }[]
+  >([]);
+  const [states, setStates] = useState<{ name: string; isoCode: string }[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,6 +22,41 @@ const TrainerRegister: React.FC = () => {
     country: "",
     state: "",
   });
+
+  useEffect(() => {
+    // Load all countries
+    const allCountries = Country.getAllCountries().map((c) => ({
+      name: c.name,
+      isoCode: c.isoCode,
+    }));
+    setCountries(allCountries);
+  }, []);
+
+  const handleCountryInputChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "country") {
+      // Reset state when country changes
+      setFormData((prev) => ({ ...prev, state: "" }));
+
+      // Find country code
+      const selectedCountry = countries.find((c) => c.name === value);
+      if (selectedCountry) {
+        const statesOfCountry = State.getStatesOfCountry(
+          selectedCountry.isoCode
+        ).map((s) => ({
+          name: s.name,
+          isoCode: s.isoCode,
+        }));
+        setStates(statesOfCountry);
+      } else {
+        setStates([]);
+      }
+    }
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -63,25 +103,6 @@ const TrainerRegister: React.FC = () => {
   };
 
   const availableSubServices = getAvailableSubServices();
-
-  const countries = [
-    "India",
-    "United States",
-    "United Kingdom",
-    "Canada",
-    "Australia",
-    "Other",
-  ];
-
-  const states = [
-    "Kerala",
-    "Karnataka",
-    "Tamil Nadu",
-    "Maharashtra",
-    "Delhi",
-    "Gujarat",
-    "Other",
-  ];
 
   return (
     <section className="contact-form-section py-16 sm:py-20 lg:py-24 lg:px-10 lg:mt-12">
@@ -480,14 +501,14 @@ const TrainerRegister: React.FC = () => {
                     id="country"
                     name="country"
                     value={formData.country}
-                    onChange={handleInputChange}
+                    onChange={handleCountryInputChange}
                     className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
                     required
                   >
                     <option value="">Select Country</option>
                     {countries.map((country, index) => (
-                      <option key={index} value={country}>
-                        {country}
+                      <option key={index} value={country.name}>
+                        {country.name}
                       </option>
                     ))}
                   </select>
@@ -504,14 +525,15 @@ const TrainerRegister: React.FC = () => {
                     id="state"
                     name="state"
                     value={formData.state}
-                    onChange={handleInputChange}
+                    onChange={handleCountryInputChange}
                     className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
                     required
+                    disabled={!states.length}
                   >
                     <option value="">Select State</option>
                     {states.map((state, index) => (
-                      <option key={index} value={state}>
-                        {state}
+                      <option key={index} value={state.name}>
+                        {state.name}
                       </option>
                     ))}
                   </select>
