@@ -1,10 +1,11 @@
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Eye, Edit, Trash2, Plus, Search, Filter, MoreVertical, Calendar, Tag } from "lucide-react"
 import { useGetServicesQuery, useUpdateServiceStatusMutation, useDeleteServiceMutation } from "../../../store/slices/apiSlice"
 import { useNavigate } from "react-router-dom"
 import CustomModal from "../common/CustomeModal"
 import { toast } from "react-toastify"
+import type { IService } from "../../../types/types"
 
 interface SubService {
   title: string
@@ -34,13 +35,15 @@ const ServiceListing: React.FC = () => {
  
 
 
-  const { data: getService, refetch } = useGetServicesQuery(undefined)
+  const { data: serviceResponse, refetch } = useGetServicesQuery(undefined)
   const [changeServiceStatus, { isLoading }] = useUpdateServiceStatusMutation();
   const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation();
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
+  const [services, setServices] = useState<IService[]>([])
 
-  const services = getService?.data
-
+  useEffect(()=> {
+    setServices(serviceResponse?.data)
+  }, [serviceResponse])
 
   const servicesPerPage = 10
   const totalPages = Math.ceil(services?.length / servicesPerPage)
