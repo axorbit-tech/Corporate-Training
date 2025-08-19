@@ -4,6 +4,7 @@ import EventCard from './EventCard'
 interface EventListSectionProps {
   title: string
   events: Array<{
+    _id: string
     date: string
     month: string
     title: string
@@ -110,6 +111,7 @@ const EventListSection: React.FC<EventListSectionProps> = ({ title, events, resp
                 {events.map((event, index) => (
                   <EventCard
                     key={index}
+                    id={event._id}
                     date={event.date}
                     title={event.title}
                     description={event.content}

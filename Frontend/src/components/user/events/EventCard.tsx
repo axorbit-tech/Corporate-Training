@@ -1,8 +1,10 @@
 import React from 'react'
 import { formatDateTimeWithSuffix } from '../../../utils/fomatDate'
 import limitWords from '../../../utils/wordLimitor'
+import { useNavigate } from 'react-router-dom'
 
 interface EventCardProps {
+  id: string
   date: string
   title: string
   description: string
@@ -11,6 +13,7 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ 
+  id,
   date, 
   title, 
   description, 
@@ -19,6 +22,7 @@ const EventCard: React.FC<EventCardProps> = ({
 }) => {
 
   const { readableDate, time} = formatDateTimeWithSuffix(date)
+  const navigate = useNavigate();
   return (
     <div className="event-card hover:shadow-md transition-shadow duration-300 overflow-hidden flex-shrink-0 w-72 sm:w-80 lg:w-96">
       {/* Event Image */}
@@ -57,8 +61,9 @@ const EventCard: React.FC<EventCardProps> = ({
           {/* Read More Link */}
           <div className="pt-2">
             <a 
-              href={link}
+           
               className="event-card-link text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors duration-300"
+              onClick={() =>navigate(`/event-details/${id}`)}
             >
               Read More →
             </a>

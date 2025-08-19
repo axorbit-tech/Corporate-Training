@@ -4,6 +4,7 @@ import Pagination from '../../pagination';
 interface EventAllListSectionProps {
     title: string
     events: Array<{
+        _id: string
         date: string
         month: string
         title: string
@@ -73,6 +74,7 @@ const EventAllListSection: React.FC<EventAllListSectionProps> = ({ title, events
                             {events.map((event, index) => (
                                 <EventCard
                                     key={index}
+                                    id={event._id}
                                     date={event.date}
                                     title={event.title}
                                     description={event.content}
