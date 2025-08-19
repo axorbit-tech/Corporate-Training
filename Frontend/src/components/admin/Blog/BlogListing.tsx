@@ -96,15 +96,28 @@ const BlogListing: React.FC = () => {
   const handleBlogAction = async (postId: string, actionType: "status" | "delete") => {
     try {
       if (actionType === "status") {
-        await changeBlogStatus(postId).unwrap()
+        const res = await changeBlogStatus(postId).unwrap()
+        if (res.success) {
+          setBlogs(prev =>
+            prev.map(blog =>
+              blog._id === postId
+                ? { ...blog, status: blog.status === "active" ? "inactive" : "active" }
+                : blog
+            )
+          );
+        }
         console.log(`blog ${postId} status changed successfully`);
       }
       else if (actionType === "delete") {
-        await deleteBlog(postId).unwrap()
+
+        const res = await deleteBlog(postId).unwrap()
+
+        if (res.success) {
+          // remove deleted blog from API
+          setBlogs(prev => prev.filter(blog => blog._id !== postId));
+        }
         console.log(`blog ${postId} deleted successfully`);
       }
-
-      refetch();     // Refresh service list
       setOpen(false); // Close modal
       toast.success(`Blog ${actionType === "status" ? "status changed" : "deleted"} successfully`);
     }
