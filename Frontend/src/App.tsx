@@ -1,5 +1,6 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./routers/ProtectedRoutes";
@@ -35,6 +36,19 @@ import TrainerRegisterPage from "./pages/trainers/register/TrainerRegister";
 
 
 function App() {
+
+  
+
+  function AdminLogout() {
+    const navigate = useNavigate();
+    useEffect(() => {
+      localStorage.clear();
+      navigate("/admin/login", { replace: true });
+    }, [navigate]);
+
+    return null;
+  }
+
   return (
     <>
       <ToastContainer position="top-center" autoClose={2000} />
@@ -43,12 +57,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/admin/logout" element={<AdminLogout />} />
 
           {/* Userside Details Pages */}
           <Route path="/event-details/:id" element={<EventDetails />} />
           <Route path="/services-details/:id" element={<ServiceDetails />} />
           <Route path="/blog-details/:id" element={<BlogDetails />} />
-          
+
 
           <Route path="/services" element={<Services />} />
           <Route path="/events" element={<Events />} />
