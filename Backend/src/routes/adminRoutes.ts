@@ -10,7 +10,7 @@ import testimonialController from "../controllers/adminControllers/testimonialCo
 import upload from "../config/multerConfig";
 import authMiddleware from "../middlewares/authMiddleware";
 import clientController from "../controllers/adminControllers/clientController";
-import trainerController from "../controllers/trainerController.ts/tainerController";
+import trainerController from "../controllers/adminControllers/tainerController";
 const router = express.Router();
 
 
