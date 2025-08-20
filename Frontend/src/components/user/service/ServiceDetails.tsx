@@ -22,7 +22,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
     const [service, setService] = useState<IService>()
 
     useEffect(()=> {
-        setService(serviceData)
+        setService(serviceData?.data)
     }, [serviceData])
 
     if (isLoading) {

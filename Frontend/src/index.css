@@ -1166,3 +1166,30 @@
 .edit-event .animate-spin {
   animation: spin 1s linear infinite;
 }
+
+.admin-trainer-details .admin-trainer-page-title,
+.admin-trainer-details .admin-trainer-name,
+.admin-trainer-details .admin-section-title,
+.admin-trainer-details .admin-service-name,
+.admin-trainer-details .admin-card-title {
+  font-family: "Lusitana", serif;
+}
+
+.admin-trainer-details .admin-trainer-designation,
+.admin-trainer-details .admin-contact-label,
+.admin-trainer-details .admin-contact-value,
+.admin-trainer-details .admin-professional-label,
+.admin-trainer-details .admin-professional-value,
+.admin-trainer-details .admin-info-label,
+.admin-trainer-details .admin-info-value,
+.admin-trainer-details .admin-action-btn,
+.admin-trainer-details .admin-action-item {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .admin-trainer-details .admin-trainer-name {
+    font-size: 1.5rem;
+  }
+}

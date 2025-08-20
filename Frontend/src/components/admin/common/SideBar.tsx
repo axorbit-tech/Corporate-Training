@@ -39,7 +39,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
       label: 'Clients',
       icon: Users,
       href: '/admin/clients',
-      badge: '24'
     },
     {
       id: 'appointments',
@@ -69,14 +68,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
       ]
     },
     {
-      id: 'communications',
-      label: 'Communications',
+      id: 'requests',
+      label: 'Requests',
       icon: MessageSquare,
-      submenu: [
-        { label: 'Messages', href: '/admin/messages', badge: '12' },
-        { label: 'Email Templates', href: '/admin/email-templates' },
-        { label: 'Notifications', href: '/admin/notifications' }
-      ]
+      badge: '24'
     },
     // {
     //   id: 'analytics',
@@ -179,11 +174,6 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
                               className="submenu-item flex items-center justify-between px-4 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
                             >
                               <span>{subItem.label}</span>
-                              {subItem.badge && (
-                                <span className="badge bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full font-medium">
-                                  {subItem.badge}
-                                </span>
-                              )}
                             </a>
                           </li>
                         ))}

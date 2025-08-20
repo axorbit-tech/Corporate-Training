@@ -2,17 +2,12 @@ import type React from "react"
 import { ArrowLeft, Eye, Edit, MoreHorizontal, ImageIcon } from "lucide-react"
 import { useGetServiceDetailsQuery } from "../../../store/slices/apiSlice"
 import { useParams } from "react-router-dom";
+import type { IService, ISubService } from "../../../types/types";
+import { useEffect, useState } from "react";
 
 type ServiceDetailsParams = {
   id: string;
 };
-
-interface Subservice {
-  title: string
-  content: string
-}
-
-
 
 interface ServiceDetailsProps {
   serviceId?: string
@@ -22,7 +17,13 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
 
   const { id } = useParams<ServiceDetailsParams>();
 
-  const { data: service, isLoading, error } = useGetServiceDetailsQuery(id)
+  const { data: serviceResponse, isLoading, error } = useGetServiceDetailsQuery(id);
+
+  const [service, setService] = useState<IService>()
+
+  useEffect(()=> {
+    setService(serviceResponse?.data)
+  }, [serviceResponse])
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -149,7 +150,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
 
               {service.subServices && service.subServices.length > 0 ? (
                 <div className="space-y-6">
-                  {service.subServices.map((subservice: Subservice, index: number) => (
+                  {service.subServices.map((subservice: ISubService, index: number) => (
                     <div key={index} className="admin-subservice-card border border-gray-200 rounded-lg p-6">
                       <h4 className="admin-subservice-title text-xl font-semibold text-gray-900 mb-3">
                         {index + 1}. {subservice.title}
@@ -186,13 +187,13 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
                   <div className="admin-info-item">
                     <span className="admin-info-label text-sm font-medium text-gray-600">Created</span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {formatDate(service.createdAt)}
+                      {formatDate(service.createdAt?? "not found")}
                     </span>
                   </div>
                   <div className="admin-info-item">
                     <span className="admin-info-label text-sm font-medium text-gray-600">Last Modified</span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {formatDate(service.updatedAt)}
+                      {formatDate(service.updatedAt?? "not found")}
                     </span>
                   </div>
                   <div className="admin-info-item">

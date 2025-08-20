@@ -20,4 +20,5 @@ export const trainerSchema = Joi.object({
   selectedSubServices: Joi.array().required(),
   country: Joi.string().required(),
   state: Joi.string().required(),
+  description: Joi.string().required()
 });

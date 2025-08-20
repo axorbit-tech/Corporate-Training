@@ -33,6 +33,8 @@ import AdminEditBlogPage from "./pages/admin/blog/EditBlog";
 import AdminEditEventPage from "./pages/admin/event/EditEvent";
 import AdminClientListingPage from "./pages/admin/client/ClientListing";
 import TrainerRegisterPage from "./pages/trainers/register/TrainerRegister";
+import AdminTrainerListingPage from "./pages/admin/tainer/TrainerListing";
+import AdminTrainerDetailsPage from "./pages/admin/tainer/TrainerDetails";
 
 
 function App() {
@@ -104,6 +106,8 @@ function App() {
 
 
           <Route path="/admin/clients" element={<AdminClientListingPage />} />
+          <Route path="/admin/trainers" element={<AdminTrainerListingPage />} />
+          <Route path="/admin/trainer-details/:id" element={<AdminTrainerDetailsPage />} />
 
           <Route path="/admin/login" element={<AdminLoginPage />} />
 

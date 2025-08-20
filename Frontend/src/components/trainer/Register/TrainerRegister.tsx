@@ -26,6 +26,7 @@ const TrainerRegister: React.FC = () => {
     selectedSubServices: [] as string[],
     country: "",
     state: "",
+    description: ""
   });
 
   useEffect(() => {
@@ -72,7 +73,7 @@ const TrainerRegister: React.FC = () => {
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -549,6 +550,25 @@ const TrainerRegister: React.FC = () => {
                       </option>
                     ))}
                   </select>
+                </div>
+              </div>
+              <div>
+                <div className="form-group">
+                  <label
+                    htmlFor="description"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows={3}
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    required
+                  />
                 </div>
               </div>
 
