@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 import CustomModal from '../common/CustomeModal'
 import Loader from "../../common/Loader";
 import SomethingWentWrong from "../../common/error";
+import { formatDate } from "../../../utils/fomatDate";
 
 interface Event {
   _id: number;
@@ -64,18 +65,7 @@ const EventListing: React.FC = () => {
     }
   };
 
-  const formatDateTime = (isoString: string) => {
-    const date = new Date(isoString);
-    return date.toLocaleString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
+ 
   const handleSelectEvent = (eventId: number) => {
     setSelectedEvents((prev) =>
       prev.includes(eventId)
@@ -305,7 +295,7 @@ const EventListing: React.FC = () => {
                       <div className="flex items-center space-x-2">
                         <Calendar className="w-4 h-4 text-gray-400" />
                         <span className="text-sm text-gray-900">
-                          {formatDateTime(event.date)}
+                          {formatDate(event.date)}
                         </span>
                       </div>
                     </td>
@@ -352,6 +342,7 @@ const EventListing: React.FC = () => {
 
           {/* Mobile Cards */}
           <div className="lg:hidden space-y-4 p-4">
+            
             {events?.map((event: Event) => (
               <div
                 key={event._id}
@@ -392,7 +383,7 @@ const EventListing: React.FC = () => {
                 <div className="admin-mobile-meta grid grid-cols-1 gap-2 text-xs text-gray-600">
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-3 h-3" />
-                    <span>{formatDateTime(event.date)}</span>
+                    <span>{formatDate(event.date)}</span>
                   </div>
                 </div>
 

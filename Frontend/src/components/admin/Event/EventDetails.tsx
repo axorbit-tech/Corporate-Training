@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useGetEventDetailsQuery } from '../../../store/slices/apiSlice'
 import Loader from "../../common/Loader";
 import SomethingWentWrong from "../../common/error";
+import { formatDate } from '../../../utils/fomatDate';
 
 interface Event {
   _id: number
@@ -54,15 +55,7 @@ const EventDetails: React.FC = () => {
     }
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
+  
 
   if (isLoading) return <Loader />
   if (isError) return <SomethingWentWrong />
