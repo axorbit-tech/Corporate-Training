@@ -156,6 +156,12 @@ export const apiSlices = createApi({
         method: HttpMethod.GET
       })
     }),
+     getTrainers: builder.query({
+      query: () => ({
+        url: `/admin/trainer`,
+        method: HttpMethod.GET
+      })
+    }),
   }),
 });
 
@@ -181,5 +187,6 @@ export const {
   useEditEventMutation,
   useDeleteEventMutation,
   useUpdateEventStatusMutation,
-  useGetUsersQuery
+  useGetUsersQuery,
+  useGetTrainersQuery
 } = apiSlices;

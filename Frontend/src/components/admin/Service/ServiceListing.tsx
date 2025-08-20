@@ -351,13 +351,9 @@ const ServiceListing: React.FC = () => {
 
           <div className="lg:hidden space-y-4 p-4">
             {services?.length === 0 ? (
-              <tr>
-                <td colSpan={3} className="text-center py-8">
-                  <div className="flex justify-center items-center text-gray-500">
-                    No services found
-                  </div>
-                </td>
-              </tr>
+              <div className="text-center py-8 border border-gray-200 rounded-lg bg-white">
+                <p className="text-gray-500">No services found</p>
+              </div>
             ) : (
               services?.map((service: IService) => (
                 <div

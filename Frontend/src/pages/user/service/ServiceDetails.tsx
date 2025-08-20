@@ -7,7 +7,7 @@ export default function services() {
   return (
     <>
       <div className="min-h-screen">
-        {/* <Header /> */}
+        <Header />
         <ServiceDetails />
         <Footer />
       </div>

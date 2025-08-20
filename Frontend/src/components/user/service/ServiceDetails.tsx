@@ -2,17 +2,12 @@ import type React from "react"
 import { ArrowLeft } from "lucide-react"
 import { useGetServiceDetailsQuery } from "../../../store/slices/userApiSlice"
 import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import type { IService, ISubService } from "../../../types/types";
 
 type ServiceDetailsParams = {
     id: string;
 };
-
-interface Subservice {
-    title: string
-    content: string
-}
-
-
 
 interface ServiceDetailsProps {
     serviceId?: string
@@ -23,7 +18,12 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
     const { id } = useParams<ServiceDetailsParams>();
 
     const { data: serviceData, isLoading, error } = useGetServiceDetailsQuery(id)
-    const service = serviceData?.data
+    console.log(serviceData, "service data")
+    const [service, setService] = useState<IService>()
+
+    useEffect(()=> {
+        setService(serviceData?.data)
+    }, [serviceData])
 
     if (isLoading) {
         return (
@@ -89,7 +89,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
                     {/* Service Header Info */}
                     <div className="bg-white rounded-lg border border-gray-200 p-6">
                         <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                            {service.title}
+                            {service?.title}
                         </h2>
                     </div>
 
@@ -121,7 +121,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
 
                         {service.subServices && service.subServices.length > 0 ? (
                             <div className="space-y-6">
-                                {service.subServices.map((subservice: Subservice, index: number) => (
+                                {service.subServices.map((subservice: ISubService, index: number) => (
                                     <div key={index} className="border border-gray-200 rounded-lg p-6">
                                         <h4 className="text-xl font-semibold text-gray-900 mb-3">
                                             {index + 1}. {subservice.title}

@@ -33,7 +33,12 @@ import AdminEditBlogPage from "./pages/admin/blog/EditBlog";
 import AdminEditEventPage from "./pages/admin/event/EditEvent";
 import AdminClientListingPage from "./pages/admin/client/ClientListing";
 import TrainerRegisterPage from "./pages/trainers/register/TrainerRegister";
+
 import PageNotFound from "./components/common/PageNotFound";
+
+import AdminTrainerListingPage from "./pages/admin/tainer/TrainerListing";
+import AdminTrainerDetailsPage from "./pages/admin/tainer/TrainerDetails";
+
 
 
 function App() {
@@ -62,7 +67,7 @@ function App() {
 
           {/* Userside Details Pages */}
           <Route path="/event-details/:id" element={<EventDetails />} />
-          <Route path="/services-details/:id" element={<ServiceDetails />} />
+          <Route path="/service-details/:id" element={<ServiceDetails />} />
           <Route path="/blog-details/:id" element={<BlogDetails />} />
 
 
@@ -105,6 +110,8 @@ function App() {
 
 
           <Route path="/admin/clients" element={<AdminClientListingPage />} />
+          <Route path="/admin/trainers" element={<AdminTrainerListingPage />} />
+          <Route path="/admin/trainer-details/:id" element={<AdminTrainerDetailsPage />} />
 
           <Route path="/admin/login" element={<AdminLoginPage />} />
 
