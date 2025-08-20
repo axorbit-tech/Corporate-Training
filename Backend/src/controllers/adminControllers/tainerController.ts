@@ -87,10 +87,9 @@ const trainerRegistration = async (req: Request, res: Response) => {
 const getTrainers = async (req: Request, res: Response) => {
   try {
     const trainers = await TrainerModel.aggregate([
-      { $match: { isApproved: "approved" } },
-      { $addFields: { randomSort: { $rand: {} } } },
-      { $sort: { randomSort: 1 } },
-    ]);
+  { $match: { isApproved: "approved" } },
+  { $sort: { createdAt: -1 } }
+]);
     console.log(trainers, "trainersssss");
 
     if (!trainers) {

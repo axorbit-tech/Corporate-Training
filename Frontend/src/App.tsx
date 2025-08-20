@@ -114,6 +114,7 @@ function App() {
           <Route path="/admin/trainers" element={<AdminTrainerListingPage />} />
           <Route path="/admin/trainer-details/:id" element={<AdminTrainerDetailsPage />} />
           <Route path="/admin/requests" element={<AdminRequestListingPage />} />
+          <Route path="/admin/bookings" element={<AdminRequestListingPage />} />
 
           <Route path="/admin/login" element={<AdminLoginPage />} />
 

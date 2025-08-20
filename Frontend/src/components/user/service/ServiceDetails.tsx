@@ -55,7 +55,7 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
     return (
         <div className="admin-service-details min-h-screen bg-gray-50  flex flex-col">
             {/* Header */}
-            <div className="admin-service-header bg-white border-b border-gray-200 sticky top-0 z-30">
+            <div className="admin-service-header bg-white border-b border-gray-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-3 items-center h-16">
 
