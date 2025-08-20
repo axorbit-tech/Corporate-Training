@@ -12,7 +12,7 @@ export interface ITrainer extends Document {
   services: string[];
   subServices: string[];
   country: string;
-  status: "active" | "inactive";
+  status: string;
   isApproved: string;
   createdAt?: Date;
   updatedAt?: Date;
