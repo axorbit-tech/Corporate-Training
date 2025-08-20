@@ -34,7 +34,7 @@ const trainerRegistration = async (req: Request, res: Response) => {
     } = req.body;
 
     let trainer = await TrainerModel.findOne({ email });
-    
+
     if (!trainer) {
       trainer = await TrainerModel.create({
         email,
@@ -74,6 +74,7 @@ const trainerRegistration = async (req: Request, res: Response) => {
 const getTrainers = async (req: Request, res: Response) => {
   try {
     const trainers = await TrainerModel.aggregate([
+      { $match: { isApproved: "approved" } },
       { $addFields: { randomSort: { $rand: {} } } },
       { $sort: { randomSort: 1 } },
     ]);
