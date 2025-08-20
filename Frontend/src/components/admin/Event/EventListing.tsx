@@ -65,7 +65,7 @@ const EventListing: React.FC = () => {
     }
   };
 
- 
+
   const handleSelectEvent = (eventId: number) => {
     setSelectedEvents((prev) =>
       prev.includes(eventId)
@@ -254,7 +254,13 @@ const EventListing: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="admin-table-body bg-white divide-y divide-gray-200">
-                {events?.map((event: Event) => (
+                {events?.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="admin-table-cell px-6 py-4">
+                      No events found.
+                    </td>
+                  </tr>
+                ) : (events?.map((event: Event) => (
                   <tr
                     key={event._id}
                     className="admin-table-row hover:bg-gray-50 transition-colors duration-200"
@@ -335,15 +341,19 @@ const EventListing: React.FC = () => {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))
+                )}
               </tbody>
             </table>
           </div>
 
           {/* Mobile Cards */}
           <div className="lg:hidden space-y-4 p-4">
-            
-            {events?.map((event: Event) => (
+            {events?.length === 0 ? (
+              <div className="text-center py-8 border border-gray-200 rounded-lg bg-white">
+                <p className="text-gray-500">No services found</p>
+              </div>
+            ) : (events?.map((event: Event) => (
               <div
                 key={event._id}
                 className="admin-mobile-card bg-white border border-gray-200 rounded-lg p-4 space-y-3"
@@ -423,7 +433,8 @@ const EventListing: React.FC = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))
+            )}
           </div>
         </div>
 
