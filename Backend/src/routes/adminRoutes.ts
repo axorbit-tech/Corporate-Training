@@ -11,6 +11,7 @@ import upload from "../config/multerConfig";
 import authMiddleware from "../middlewares/authMiddleware";
 import clientController from "../controllers/adminControllers/clientController";
 import trainerController from "../controllers/adminControllers/tainerController";
+import bookingController from "../controllers/adminControllers/bookingController";
 const router = express.Router();
 
 
@@ -148,5 +149,7 @@ router.get('/trainer', trainerController.getTrainers)
 router.get('/requests', trainerController.getRequests)
 
 router.get('/trainer/:id', trainerController.getTrainerDetails)
+
+router.get('/bookings', bookingController.getBookings)
 
 export default router;
