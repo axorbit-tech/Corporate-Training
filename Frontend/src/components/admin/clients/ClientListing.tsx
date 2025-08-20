@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from "react";
 import {
   Search,
-  Plus,
   Eye,
   Trash2,
   Users,
@@ -99,10 +98,6 @@ const ClientListing: React.FC = () => {
                 </p>
               </div>
             </div>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
-              <Plus className="w-4 h-4" />
-              <span className="hidden sm:inline">Add User</span>
-            </button>
           </div>
         </div>
       </div>
