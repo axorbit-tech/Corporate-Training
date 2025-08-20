@@ -32,7 +32,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
         {/* More Link */}
         <div className="text-center">
-          <button onClick={() => navigate(`/services-details/${id}`)} className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-10 py-2 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+          <button onClick={() => navigate(`/service-details/${id}`)} className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-10 py-2 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
             More
           </button>
         </div>

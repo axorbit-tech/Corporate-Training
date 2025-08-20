@@ -53,10 +53,10 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
       ]
     },
     {
-      id: 'therapists',
-      label: 'Therapists',
+      id: 'trainers',
+      label: 'Trainers',
       icon: UserCheck,
-      href: '/admin/counsellors'
+      href: '/admin/trainers'
     },
     {
       id: 'content',

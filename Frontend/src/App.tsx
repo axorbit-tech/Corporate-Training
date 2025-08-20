@@ -61,7 +61,7 @@ function App() {
 
           {/* Userside Details Pages */}
           <Route path="/event-details/:id" element={<EventDetails />} />
-          <Route path="/services-details/:id" element={<ServiceDetails />} />
+          <Route path="/service-details/:id" element={<ServiceDetails />} />
           <Route path="/blog-details/:id" element={<BlogDetails />} />
 
 

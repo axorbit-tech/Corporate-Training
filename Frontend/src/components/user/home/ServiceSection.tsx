@@ -1,6 +1,9 @@
 import ServiceCard from "../cards/ServiceCard"
+import { useNavigate } from "react-router-dom"
 
 const ServiceSection = () => {
+
+  const navigate = useNavigate()
   // Sample service data - you can modify this as needed
   const services = [
     {
@@ -76,7 +79,7 @@ const ServiceSection = () => {
         </div>
 
           <div className="text-center">
-          <button className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+          <button onClick={()=> navigate('/services')} className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
             ALL SERVICES
           </button>
         </div>
