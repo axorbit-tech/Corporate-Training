@@ -143,4 +143,10 @@ router.get('/client', clientController.getAllClients)
 // ========================================= Trainer ==============================================
 router.get('/trainer', trainerController.getTrainers)
 
+
+// ========================================= Trainer ==============================================
+router.get('/requests', trainerController.getRequests)
+
+router.get('/trainer/:id', trainerController.getTrainerDetails)
+
 export default router;

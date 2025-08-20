@@ -33,25 +33,10 @@ const trainerRegistration = async (req: Request, res: Response) => {
       description,
     } = req.body;
 
+    // Check if trainer already exists
     let trainer = await TrainerModel.findOne({ email });
 
-    if (!trainer) {
-      trainer = await TrainerModel.create({
-        email,
-        name,
-        phone,
-        designation,
-        website,
-        language,
-        experience,
-        company,
-        services: selectedServices,
-        subServices: selectedSubServices,
-        country,
-        state,
-        description,
-      });
-    } else {
+    if (trainer) {
       res.status(HttpStatusCode.CONFLICT).json({
         success: false,
         error: "Trainer already exists!",
@@ -59,9 +44,37 @@ const trainerRegistration = async (req: Request, res: Response) => {
       return;
     }
 
+    // Transform selectedServices array of strings to array of objects
+    const servicesArray = selectedServices?.map((serviceTitle: string) => ({
+      title: serviceTitle
+    })) || [];
+
+    // Transform selectedSubServices array of strings to array of objects
+    const subServicesArray = selectedSubServices?.map((subServiceTitle: string) => ({
+      title: subServiceTitle
+    })) || [];
+
+    // Create new trainer
+    trainer = await TrainerModel.create({
+      email,
+      name,
+      phone,
+      designation,
+      website,
+      language,
+      experience,
+      company,
+      services: servicesArray, // Now properly formatted
+      subServices: subServicesArray, // Now properly formatted
+      country,
+      state,
+      description, // Now included
+    });
+
     res.status(HttpStatusCode.CREATED).json({
       success: true,
       message: "Trainer created successfully",
+      data: trainer, // Optional: return the created trainer
     });
   } catch (error) {
     console.log(error);
@@ -100,9 +113,50 @@ const getTrainers = async (req: Request, res: Response) => {
   }
 };
 
+const getRequests = async (req: Request, res: Response) => {
+  try {
+    const requests = await TrainerModel.find({ isApproved: "pending" }).sort({
+      createdAt: -1,
+    });
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: requests,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: "Error creating Trainer" });
+  }
+};
+
+const getTrainerDetails = async(req: Request, res: Response) => {
+  try {
+    const {id} = req.params
+
+    const details = await TrainerModel.findById(id)
+
+    console.log(details,"detaillsss trainerrr")
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: details,
+    });
+    
+  } catch (error) {
+    console.log(error);
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: "Error creating Trainer" });
+  }
+}
+
 const trainerController = {
   trainerRegistration,
   getTrainers,
+  getRequests,
+  getTrainerDetails
 };
 
 export default trainerController;

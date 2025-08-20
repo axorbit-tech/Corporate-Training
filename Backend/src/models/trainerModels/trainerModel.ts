@@ -1,5 +1,15 @@
 import mongoose, { Document } from "mongoose";
 
+interface IService {
+  title: string;
+  content?: string;
+}
+
+interface ISubService {
+  title: string;
+  content?: string;
+}
+
 export interface ITrainer extends Document {
   name: string;
   email: string;
@@ -7,11 +17,13 @@ export interface ITrainer extends Document {
   designation: string;
   website?: string;
   language: string;
-  experience: string;
+  experience: number;
   company: string;
-  services: string[];
-  subServices: string[];
+  services: IService[];
+  subServices: ISubService[];
   country: string;
+  state: string;
+  description: string;
   status: string;
   isApproved: string;
   createdAt?: Date;
@@ -27,6 +39,7 @@ const trainerSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
+      unique: true, // Added unique constraint
     },
     phone: {
       type: Number,
@@ -52,14 +65,18 @@ const trainerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    services: {
-      type: [String],
-      required: true,
-    },
-    subServices: {
-      type: [String],
-      required: true,
-    },
+    services: [
+      {
+        title: { type: String, required: true },
+        _id: false // Prevent MongoDB from creating _id for subdocuments
+      },
+    ],
+    subServices: [
+      {
+        title: { type: String, required: true },
+        _id: false // Prevent MongoDB from creating _id for subdocuments
+      },
+    ],
     country: {
       type: String,
       required: true,
@@ -68,16 +85,20 @@ const trainerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       enum: ["active", "inactive"],
-      default: 'inactive'
+      default: "inactive",
     },
     isApproved: {
-      type : String,
-      enum: ['pending', 'approved', 'rejected'] ,
-      default: 'pending'
-    }
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );

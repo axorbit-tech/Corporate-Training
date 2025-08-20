@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { HttpMethod } from "../../constants/index";
-import baseQueryWithAuthCheck from "../baseQueryWithAuthCheck"
+import baseQueryWithAuthCheck from "../baseQueryWithAuthCheck";
 
 export const apiSlices = createApi({
   reducerPath: "api",
@@ -50,7 +50,7 @@ export const apiSlices = createApi({
       query: ({ id, data }) => ({
         url: `/admin/service/${id}`,
         method: HttpMethod.PUT,
-        body: data
+        body: data,
       }),
     }),
     updateServiceStatus: builder.mutation({
@@ -119,13 +119,13 @@ export const apiSlices = createApi({
       query: () => ({
         url: "/admin/event",
         method: HttpMethod.GET,
-      })
+      }),
     }),
     getEventDetails: builder.query({
       query: (id) => ({
         url: `/admin/event/${id}`,
         method: HttpMethod.GET,
-      })
+      }),
     }),
     editEvent: builder.mutation({
       query: ({ id, data }) => ({
@@ -134,7 +134,6 @@ export const apiSlices = createApi({
         body: data,
       }),
     }),
-   
 
     deleteEvent: builder.mutation({
       query: (id) => ({
@@ -150,18 +149,31 @@ export const apiSlices = createApi({
       }),
     }),
 
-     getUsers: builder.query({
+    getUsers: builder.query({
       query: () => ({
         url: `/admin/client`,
-        method: HttpMethod.GET
-      })
+        method: HttpMethod.GET,
+      }),
     }),
-     getTrainers: builder.query({
+    getTrainers: builder.query({
       query: () => ({
         url: `/admin/trainer`,
-        method: HttpMethod.GET
-      })
+        method: HttpMethod.GET,
+      }),
     }),
+    getRequestes: builder.query({
+      query: () => ({
+        url: `/admin/requests`,
+        method: HttpMethod.GET,
+      }),
+    }),
+    getTrainerDetails: builder.query({
+      query: (id) => ({
+        url: `/admin/trainer/${id}`,
+        method: HttpMethod.GET,
+      }),
+    }),
+    
   }),
 });
 
@@ -188,5 +200,7 @@ export const {
   useDeleteEventMutation,
   useUpdateEventStatusMutation,
   useGetUsersQuery,
-  useGetTrainersQuery
+  useGetTrainersQuery,
+  useGetRequestesQuery,
+  useGetTrainerDetailsQuery
 } = apiSlices;
