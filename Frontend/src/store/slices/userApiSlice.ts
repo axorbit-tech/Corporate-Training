@@ -87,8 +87,6 @@ export const {
     useGetBlogDetailsQuery,
     useGetEventsQuery,
     useGetEventDetailsQuery,
-
     useCreateBookingMutation,
-
     useTrainerRegisterMutation
 } = userApiSlices;

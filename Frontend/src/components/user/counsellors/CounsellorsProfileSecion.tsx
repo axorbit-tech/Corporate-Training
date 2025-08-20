@@ -1,5 +1,6 @@
 import React from 'react'
 import CounsellorCard from './CounsellorCard'
+import Loader from '../../common/Loader'
 
 const CounsellorProfileSection: React.FC = () => {
   const counsellors = [
@@ -7,36 +8,28 @@ const CounsellorProfileSection: React.FC = () => {
       name: "SHABAD MK",
       profession: "Clinical Psychologist",
       email: "smk@gmail.com",
-      website: "www.smk.com",
-      phone: "+91 8547412614",
       aboutText: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
       image: "/assets/therpist-hero-image.jpg",
-      appointmentLink: "/book-appointment/shabad-mk"
+
     },
     {
       name: "DR. SARAH JOHNSON",
       profession: "Licensed Therapist",
       email: "sarah@example.com",
-      website: "www.sarahtherapy.com",
-      phone: "+91 9876543210",
       aboutText: "Experienced therapist specializing in cognitive behavioral therapy and stress management. Dedicated to helping individuals achieve mental wellness and personal growth through evidence-based practices.",
       image: "/assets/therpist-hero-image.jpg",
-      appointmentLink: "/book-appointment/sarah-johnson"
     },
     {
       name: "MICHAEL CHEN",
       profession: "Corporate Counselor",
       email: "michael@example.com",
-      website: "www.corporatecounseling.com",
-      phone: "+91 8765432109",
       aboutText: "Specializing in workplace mental health and corporate wellness programs. Helping organizations create healthier work environments and supporting employees in managing work-related stress.",
       image: "/assets/therpist-hero-image.jpg",
-      appointmentLink: "/book-appointment/michael-chen"
     }
   ]
 
   return (
-    <section className="counsellor-profile-section bg-gray-50 py-16 sm:py-20 lg:py-24 lg:px-10">
+    <section className="counsellor-profile-section bg-gray-50 py-10 sm:py-20 lg:py-24 lg:px-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -50,18 +43,15 @@ const CounsellorProfileSection: React.FC = () => {
         </div>
 
         {/* Therapists Grid */}
-        <div className="space-y-8 sm:space-y-10 lg:space-y-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
           {counsellors.map((counsellor, index) => (
             <CounsellorCard
               key={index}
               name={counsellor.name}
               profession={counsellor.profession}
               email={counsellor.email}
-              website={counsellor.website}
-              phone={counsellor.phone}
               aboutText={counsellor.aboutText}
               image={counsellor.image}
-              appointmentLink={counsellor.appointmentLink}
             />
           ))}
         </div>

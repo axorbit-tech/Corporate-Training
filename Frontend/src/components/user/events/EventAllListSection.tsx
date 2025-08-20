@@ -1,5 +1,6 @@
 import EventCard from './EventCard'
 import Pagination from '../../pagination';
+import Loader from '../../common/Loader';
 
 interface EventAllListSectionProps {
     title: string
@@ -29,16 +30,7 @@ const EventAllListSection: React.FC<EventAllListSectionProps> = ({ title, events
     const { isLoading, error } = responses
 
 
-    if (isLoading) {
-        return (
-            <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading {title} details...</p>
-                </div>
-            </div>
-        )
-    }
+    if (isLoading) return <Loader />
 
     if (error || !events) {
         return (

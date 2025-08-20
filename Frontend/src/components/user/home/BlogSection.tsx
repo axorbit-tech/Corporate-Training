@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useGetBlogsQuery } from "../../../store/slices/userApiSlice"
 import { useNavigate } from "react-router-dom";
 import limitWords from "../../../utils/wordLimitor";
+import Loader from "../../common/Loader";
 
 interface Blogs {
   _id: number;
@@ -15,13 +16,15 @@ const BlogSection = () => {
   
   const navigate = useNavigate()
   
-  const {data: blogs} = useGetBlogsQuery(undefined)
+  const {data: blogs, isLoading} = useGetBlogsQuery(undefined)
 
   useEffect(()=> {
     setBlogPosts(blogs?.data)
   }, [blogs])
 
   const [blogPosts, setBlogPosts] = useState<Blogs[]>([])
+
+  if (isLoading) return <Loader />
 
 
   return (

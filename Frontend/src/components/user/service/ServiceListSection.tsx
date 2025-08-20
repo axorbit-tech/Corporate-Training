@@ -2,6 +2,7 @@ import { useState  } from 'react'
 import React from 'react'
 import ServiceCard from './ServicePageCard'
 import { useGetServicesQuery } from '../../../store/slices/userApiSlice'
+import Loader from '../../common/Loader'
 
 
 
@@ -35,13 +36,7 @@ const ServiceListSection: React.FC = () => {
 
  
 
-  if (isLoading) {
-    return (
-      <section className="py-16 text-center">
-        <p>Loading services...</p>
-      </section>
-    )
-  }
+  if (isLoading) return <Loader />
 
   if (isError) {
     return (

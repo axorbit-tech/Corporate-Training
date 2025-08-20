@@ -9,7 +9,9 @@ import SolutionsSection from '../../../components/user/home/SolutionsSection'
 import BenefitsSection from '../../../components/user/home/BenefitSection'
 import MindsetCTASection from '../../../components/user/home/MindsetCTASection'
 
+
 export default function home() {
+
   return (
     <>
     <div className='min-h-screen'>
