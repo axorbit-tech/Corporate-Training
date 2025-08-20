@@ -34,7 +34,7 @@ const RequestListing: React.FC = () => {
   };
 
   // Filter requests
-  const filteredRequests = requests.filter((request: ITrainer) => {
+  const filteredRequests = requests?.filter((request: ITrainer) => {
     const matchesSearch =
       request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
