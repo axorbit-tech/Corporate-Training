@@ -74,7 +74,14 @@ export const userApiSlices = createApi({
                 method: HttpMethod.POST,
                 body: postData
             })
-        })
+        }),
+
+        getTrainers: builder.query({
+             query: ({ page, limit }: { page: number; limit: number }) => ({
+                url: `trainers?page=${page}&limit=${limit}`,
+                method: HttpMethod.GET,
+            }),
+        }),
 
     }),
 });
@@ -88,5 +95,6 @@ export const {
     useGetEventsQuery,
     useGetEventDetailsQuery,
     useCreateBookingMutation,
-    useTrainerRegisterMutation
+    useTrainerRegisterMutation,
+    useGetTrainersQuery
 } = userApiSlices;

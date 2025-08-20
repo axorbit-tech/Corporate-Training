@@ -9,6 +9,7 @@ import serviceModel from "../../models/adminModels/serviceModel";
 import blogModel from "../../models/adminModels/blogModel";
 import eventModel from "../../models/adminModels/eventModel";
 import bookingModel from "../../models/userModels/bookingModel";
+import trainerModel from "../../models/trainerModels/trainerModel";
 
 const today = new Date();
 
@@ -228,6 +229,7 @@ const getEventDetails = async (req: Request, res: Response): Promise<void> => {
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: event,
+
     });
   } catch (error) {
     console.error(error);
@@ -280,6 +282,52 @@ const createBooking = async (req: Request, res: Response) => {
   }
 };
 
+const getTrainers = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 3;
+
+    // calculate how many to skip
+    const skip = (page - 1) * limit;
+
+    const trainers = await trainerModel.find({
+      isApproved: "approved",
+      status: "active",
+    })
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    const totalTrainers = await trainerModel.countDocuments({
+      isApproved: "approved",
+      status: "active",
+    });
+
+    if (!trainers) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Trainers not found",
+      });
+      return;
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: trainers,
+      pagination: {
+        total: totalTrainers,
+        page,
+        pages: Math.ceil(totalTrainers / limit),
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: "Error creating Trainer" });
+  }
+};
+
 const userController = {
   createEnquiry,
   getAllServices,
@@ -289,6 +337,7 @@ const userController = {
   getAllEvents,
   getEventDetails,
   createBooking,
+  getTrainers,
 };
 
 export default userController;

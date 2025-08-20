@@ -30,9 +30,10 @@ router.get('/event/:id', userController.getEventDetails);
 router.post('/booking', userController.createBooking);
 
 
-// ========================================= Trainer Registration ===========================================
+// ========================================= Trainers ===========================================
 
 router.post('/trainer-registration', trainerController.trainerRegistration);
+router.get('/trainers', userController.getTrainers);
 
 
 export default router;
