@@ -22,7 +22,7 @@ const TrainerRegister: React.FC = () => {
     language: "",
     experience: 0,
     company: "",
-    selectedServices: [] as string[],
+    selectedServices: [] as string[], // Now stores service titles instead of IDs
     selectedSubServices: [] as string[],
     country: "",
     state: "",
@@ -95,14 +95,14 @@ const TrainerRegister: React.FC = () => {
     }
   };
 
-  // Get available subservices based on selected services
+  // Get available subservices based on selected service titles
   const getAvailableSubServices = () => {
     if (!formData.selectedServices.length || !services.length) return [];
 
     const subServices: ISubService[] = [];
 
-    formData.selectedServices.forEach((serviceId) => {
-      const service = services.find((s) => s._id?.toString() === serviceId);
+    formData.selectedServices.forEach((serviceTitle) => {
+      const service = services.find((s) => s.title === serviceTitle);
       if (service && service.subServices) {
         subServices.push(...service.subServices);
       }
@@ -232,7 +232,7 @@ const TrainerRegister: React.FC = () => {
                     Website (optional)
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     id="website"
                     name="website"
                     value={formData.website}
@@ -308,33 +308,33 @@ const TrainerRegister: React.FC = () => {
                       <div
                         key={service._id}
                         className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                          formData.selectedServices.includes(
-                            service._id?.toString() || ""
-                          )
+                          formData.selectedServices.includes(service.title)
                             ? "border-blue-500 bg-blue-50 shadow-md transform scale-105"
                             : "border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-25"
                         }`}
                         onClick={() => {
-                          const serviceId = service._id?.toString() || "";
-                          const isSelected =
-                            formData.selectedServices.includes(serviceId);
+                          const serviceTitle = service.title;
+                          const isSelected = formData.selectedServices.includes(serviceTitle);
 
                           if (isSelected) {
                             setFormData((prev) => ({
                               ...prev,
                               selectedServices: prev.selectedServices.filter(
-                                (id) => id !== serviceId
+                                (title) => title !== serviceTitle
                               ),
-                              selectedSubServices: [], // Reset subservices when removing a service
+                              selectedSubServices: prev.selectedSubServices.filter(
+                                (subServiceTitle) => {
+                                  // Remove subservices that belong to this service
+                                  return !service.subServices?.some(
+                                    (sub) => sub.title === subServiceTitle
+                                  );
+                                }
+                              ),
                             }));
                           } else {
                             setFormData((prev) => ({
                               ...prev,
-                              selectedServices: [
-                                ...prev.selectedServices,
-                                serviceId,
-                              ],
-                              selectedSubServices: [], // Reset subservices when adding a service
+                              selectedServices: [...prev.selectedServices, serviceTitle],
                             }));
                           }
                         }}
@@ -342,16 +342,12 @@ const TrainerRegister: React.FC = () => {
                         <div className="flex items-center space-x-3">
                           <div
                             className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                              formData.selectedServices.includes(
-                                service._id?.toString() || ""
-                              )
+                              formData.selectedServices.includes(service.title)
                                 ? "border-blue-500 bg-blue-500"
                                 : "border-gray-300"
                             }`}
                           >
-                            {formData.selectedServices.includes(
-                              service._id?.toString() || ""
-                            ) && (
+                            {formData.selectedServices.includes(service.title) && (
                               <svg
                                 className="w-3 h-3 text-white"
                                 fill="currentColor"

@@ -24,6 +24,14 @@ export interface IBlog {
   status: "active" | "inactive"
 }
 
+export interface ITrainerService {
+  title: string
+}
+
+export interface ITrainerSubService {
+  title: string
+}
+
 export interface ITrainer {
   _id: number
   name: string;
@@ -34,9 +42,10 @@ export interface ITrainer {
   language: string;
   experience: string;
   company: string;
-  services: string[];
-  subServices: string[];
+  services: ITrainerService[];
+  subServices: ITrainerSubService[];
   country: string;
+  state: string;
   status: "active" | "inactive";
   isApproved: string;
   createdAt?: string;

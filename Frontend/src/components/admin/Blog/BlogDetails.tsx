@@ -61,7 +61,7 @@ const BlogDetails: React.FC = () => {
   return (
     <div className="admin-blog-details min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="admin-blog-header bg-white border-b border-gray-200 sticky top-0 z-30">
+      <div className="admin-blog-header bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Left Section */}

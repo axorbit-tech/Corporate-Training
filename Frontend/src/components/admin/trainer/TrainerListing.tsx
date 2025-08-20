@@ -4,8 +4,11 @@ import { Search, Filter, Trash2, Eye, Plus, ChevronLeft, ChevronRight } from "lu
 import type { ITrainer } from "../../../types/types"
 import { generateAvatar } from "../../../utils/generateAvatar"
 import { useGetTrainersQuery } from "../../../store/slices/apiSlice"
+import { useNavigate } from "react-router-dom"
 
 const TrainerListing: React.FC = () => {
+
+  const navigate = useNavigate()
 
   const {data: trainersResponse} = useGetTrainersQuery(undefined)
 
@@ -64,7 +67,7 @@ const TrainerListing: React.FC = () => {
   return (
     <div className="admin-trainer-listing min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="admin-trainer-header bg-white border-b border-gray-200 sticky top-0 z-30">
+      <div className="admin-trainer-header bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div>
@@ -213,7 +216,7 @@ const TrainerListing: React.FC = () => {
                       </td>
                       <td className="admin-table-cell px-6 py-4 text-right">
                         <div className="admin-trainer-actions flex items-center justify-end space-x-2">
-                          <button className="admin-action-btn admin-view-btn p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200">
+                          <button onClick={()=> navigate(`/admin/trainer-details/${trainer._id}`)} className="admin-action-btn admin-view-btn p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors duration-200">
                             <Eye className="w-4 h-4" />
                           </button>
                           <button className="admin-action-btn admin-delete-btn p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200">
@@ -267,7 +270,7 @@ const TrainerListing: React.FC = () => {
                 </div>
 
                 <div className="flex space-x-2">
-                  <button className="admin-view-btn flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center space-x-1">
+                  <button onClick={()=> navigate(`/admin/trainer-details/${trainer._id}`)} className="admin-view-btn flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center space-x-1">
                     <Eye className="w-4 h-4" />
                     <span>View</span>
                   </button>

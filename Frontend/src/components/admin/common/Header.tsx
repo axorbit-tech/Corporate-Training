@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Menu, Search, Bell, Mail, Settings, ChevronDown, LogOut, UserCircle, Shield } from 'lucide-react'
+import { Menu, Mail, Settings, ChevronDown, LogOut, UserCircle } from 'lucide-react'
 
 interface AdminHeaderProps {
   onSidebarToggle: () => void

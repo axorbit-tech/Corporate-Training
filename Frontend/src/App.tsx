@@ -39,6 +39,7 @@ import PageNotFound from "./components/common/PageNotFound";
 import AdminTrainerListingPage from "./pages/admin/tainer/TrainerListing";
 import AdminTrainerDetailsPage from "./pages/admin/tainer/TrainerDetails";
 import AdminRequestListingPage from "./pages/admin/requests/Requests";
+import AdminBookingListingPage from "./pages/admin/booking/BookingListing";
 
 
 
@@ -114,6 +115,7 @@ function App() {
           <Route path="/admin/trainers" element={<AdminTrainerListingPage />} />
           <Route path="/admin/trainer-details/:id" element={<AdminTrainerDetailsPage />} />
           <Route path="/admin/requests" element={<AdminRequestListingPage />} />
+          <Route path="/admin/bookings" element={<AdminBookingListingPage />} />
 
           <Route path="/admin/login" element={<AdminLoginPage />} />
 
