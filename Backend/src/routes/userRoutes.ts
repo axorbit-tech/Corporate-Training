@@ -1,6 +1,6 @@
 import express from "express";
 import userController from "../controllers/userController/userController";
-import trainerController from "../controllers/trainerController.ts/tainerController";
+import trainerController from "../controllers/adminControllers/tainerController";
 
 
 const router = express.Router();
