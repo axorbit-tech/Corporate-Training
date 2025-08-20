@@ -4,6 +4,9 @@ import { useGetBlogDetailsQuery } from "../../../store/slices/apiSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { IBlog } from "../../../types/types";
+import Loader from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
+
 
 type BlogDetailsParams = {
   id: string;
@@ -12,15 +15,15 @@ type BlogDetailsParams = {
 const BlogDetails: React.FC = () => {
   const { id } = useParams<BlogDetailsParams>();
 
-  console.log(id,"idddddd")
+  console.log(id, "idddddd")
 
   const navigate = useNavigate();
   // Mock blog post data
-  const { data: blogResponse } = useGetBlogDetailsQuery(id);
+  const { data: blogResponse, isLoading, isError } = useGetBlogDetailsQuery(id);
 
   const [blog, setBlog] = useState<IBlog>()
 
-  useEffect(()=> {
+  useEffect(() => {
     setBlog(blogResponse?.blog)
   }, [blogResponse])
 
@@ -51,6 +54,10 @@ const BlogDetails: React.FC = () => {
       .replace(/^(?!<[h|l])/gm, '<p class="mb-4">');
   };
 
+  if (isLoading) return <Loader />
+  if (isError) return <SomethingWentWrong />
+
+  
   return (
     <div className="admin-blog-details min-h-screen bg-gray-50">
       {/* Header */}

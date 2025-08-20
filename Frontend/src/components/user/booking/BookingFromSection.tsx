@@ -38,6 +38,8 @@ const BookingFormSection: React.FC = () => {
   const { data: servicesData } = useGetServicesQuery(undefined)
   const services = servicesData?.data
 
+  const minDate = new Date().toISOString().split("T")[0];
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -246,6 +248,7 @@ const BookingFormSection: React.FC = () => {
                     type="date"
                     id="date"
                     name="date"
+                    min={minDate}
                     value={formData.date}
                     onChange={handleInputChange}
                     className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"

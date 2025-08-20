@@ -17,6 +17,8 @@ import { useGetBlogDetailsQuery } from "../../../store/slices/apiSlice";
 import { useEditBlogMutation } from "../../../store/slices/apiSlice";
 import { errorToast, successToast } from "../../../utils/toast";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
 
 interface BlogFormData {
   title: string;
@@ -30,7 +32,7 @@ interface EditBlogPostProps {
 
 const EditBlogPost: React.FC<EditBlogPostProps> = ({ blogId }) => {
   const navigate = useNavigate();
-  const { data: blog, isLoading } = useGetBlogDetailsQuery(blogId, {
+  const { data: blog, isLoading, isError } = useGetBlogDetailsQuery(blogId, {
     skip: !blogId,
   });
   const [editBlog] = useEditBlogMutation();
@@ -239,16 +241,9 @@ const EditBlogPost: React.FC<EditBlogPostProps> = ({ blogId }) => {
     return html;
   };
 
-  if (isLoading) {
-    return (
-      <div className="edit-blog-post min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading blog post...</p>
-        </div>
-      </div>
-    );
-  }
+  
+  if (isLoading) return <Loader />
+  if (isError) return <SomethingWentWrong />
 
   return (
     <div className="edit-blog-post min-h-screen bg-gray-50">

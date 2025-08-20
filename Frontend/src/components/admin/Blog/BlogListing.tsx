@@ -4,6 +4,8 @@ import { useGetBlogsQuery, useDeleteBlogMutation, useUpdateBlogStatusMutation } 
 import { useNavigate } from 'react-router-dom'
 import CustomModal from '../common/CustomeModal'
 import { toast } from 'react-toastify'
+import Loader from '../../common/Loader'
+import SomethingWentWrong from '../../common/error'
 
 
 interface BlogPost {
@@ -52,8 +54,8 @@ const BlogListing: React.FC = () => {
     }
   }, [getBlogs])
 
-  if (isLoading) return <p>Loading blogs...</p>
-  if (isError) return <p>Failed to load blogs</p>
+  if (isLoading) return <Loader />
+  if (isError) return <SomethingWentWrong />
 
   const totalPages = Math.ceil(blogs.length / postsPerPage)
 

@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { useGetEventsQuery, useUpdateEventStatusMutation, useDeleteEventMutation } from "../../../store/slices/apiSlice";
 import { toast } from 'react-toastify'
 import CustomModal from '../common/CustomeModal'
+import Loader from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
 
 interface Event {
   _id: number;
@@ -27,7 +29,7 @@ interface Event {
 const EventListing: React.FC = () => {
   const navigate = useNavigate();
 
-  const { data: eventData } = useGetEventsQuery(undefined);
+  const { data: eventData, isLoading, isError } = useGetEventsQuery(undefined);
 
 
 
@@ -131,6 +133,10 @@ const EventListing: React.FC = () => {
       console.error(`Error performing ${actionType} for event ${eventId}:`, error);
     }
   };
+
+
+  if (isLoading) return <Loader />
+  if (isError) return <SomethingWentWrong />
 
   return (
     <div className="admin-event-listing p-6 space-y-6">

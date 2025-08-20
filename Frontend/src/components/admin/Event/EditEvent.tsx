@@ -10,6 +10,8 @@ import {
 import { formatDateForInput } from "../../../utils/fomatDate";
 import { errorToast, successToast } from "../../../utils/toast";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
 
 interface EventFormData {
   title: string;
@@ -28,7 +30,7 @@ const EditEvent: React.FC<EditEventProps> = ({ eventId }) => {
   const {
     data: eventResponse,
     isLoading: isLoadingEvent,
-    error,
+    isError,
   } = useGetEventDetailsQuery(eventId);
 
   console.log("event response : ", eventResponse);
@@ -154,32 +156,8 @@ const EditEvent: React.FC<EditEventProps> = ({ eventId }) => {
 };
 
 
-  if (isLoadingEvent) {
-    return (
-      <div className="edit-event min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading event data...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="edit-event min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Error loading event data</p>
-          <button
-            onClick={() => window.history.back()}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (isLoadingEvent) return <Loader />
+    if (isError) return <SomethingWentWrong />
 
   return (
     <div className="edit-event min-h-screen bg-gray-50">

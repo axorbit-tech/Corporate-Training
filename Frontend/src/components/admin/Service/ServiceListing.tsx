@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom"
 import CustomModal from "../common/CustomeModal"
 import { toast } from "react-toastify"
 import type { IService } from "../../../types/types"
+import Loader from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
 
 const ServiceListing: React.FC = () => {
 
@@ -16,16 +18,16 @@ const ServiceListing: React.FC = () => {
   const [selectedServices, setSelectedServices] = useState<number[]>([])
   const [hoveredService, setHoveredService] = useState<number | null>(null)
   const [open, setOpen] = useState(false);
- 
 
 
-  const { data: serviceResponse } = useGetServicesQuery(undefined)
+
+  const { data: serviceResponse, isLoading: isLoadingServices, isError } = useGetServicesQuery(undefined)
   const [changeServiceStatus, { isLoading }] = useUpdateServiceStatusMutation();
   const [deleteService, { isLoading: isDeleting }] = useDeleteServiceMutation();
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
   const [services, setServices] = useState<IService[]>([])
 
-  useEffect(()=> {
+  useEffect(() => {
     setServices(serviceResponse?.data)
   }, [serviceResponse])
 
@@ -74,7 +76,7 @@ const ServiceListing: React.FC = () => {
     try {
       if (actionType === "status") {
         const res = await changeServiceStatus(serviceId).unwrap();
-        if(res.success) {
+        if (res.success) {
           setServices(prevServices =>
             prevServices.map(service =>
               service._id === serviceId
@@ -105,11 +107,14 @@ const ServiceListing: React.FC = () => {
   };
 
 
-
+  if (isLoadingServices) return <Loader />
+  if (isError) return <SomethingWentWrong />
 
   const handleEditButton = (id: number) => {
     navigate(`/admin/edit-service/${id}`)
   }
+
+
 
   return (
     <div className="admin-service-listing p-6 space-y-6">
@@ -227,191 +232,218 @@ const ServiceListing: React.FC = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody className="admin-table-body bg-white divide-y divide-gray-200">
-                {services?.map((service: IService) => (
-                  <tr key={service._id} className="admin-table-row hover:bg-gray-50 transition-colors duration-200">
-                    <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
-                      <input
-                        type="checkbox"
-                        checked={selectedServices.includes(service._id)}
-                        onChange={() => handleSelectService(service._id)}
-                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                      />
-                    </td>
-                    <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
-                      <div className="admin-service-image-container w-12 h-12 rounded-lg overflow-hidden border border-gray-200">
-                        <img
-                          src={service.image || "/placeholder.svg?height=48&width=48&query=service"}
-                          alt={service.title}
-                          className="admin-service-image w-full h-full object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="admin-table-cell px-6 py-4">
-                      <div className="flex items-center space-x-3">
-                        <div>
-                          <div className="admin-service-title text-sm font-medium text-gray-900 line-clamp-2">
-                            {service.title}
-                          </div>
-                          <div className="admin-service-description text-xs text-gray-500 line-clamp-1 mt-1">
-                            {service.content}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
-                      <div
-                        className="admin-subservices-count relative"
-                        onMouseEnter={() => setHoveredService(service._id)}
-                        onMouseLeave={() => setHoveredService(null)}
-                      >
-                        <span className="text-sm text-blue-600 cursor-pointer hover:text-blue-800 font-medium">
-                          {service.subServices.length} sub-service{service.subServices.length !== 1 ? "s" : ""}
-                        </span>
 
-                        {/* Hover Dropdown */}
-                        {hoveredService === service._id && service.subServices.length > 0 && (
-                          <div className="admin-subservices-dropdown absolute z-10 top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
-                            <div className="text-xs font-medium text-gray-700 mb-2">Sub Services:</div>
-                            <div className="space-y-1">
-                              {service.subServices.map((subService, index) => (
-                                <div
-                                  key={index}
-                                  className="text-xs text-gray-600 py-1 border-b border-gray-100 last:border-b-0"
-                                >
-                                  <div className="font-medium">{subService.title}</div>
-                                  <div className="text-gray-500 line-clamp-1">{subService.content}</div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor(service.status)}`}
-                        onClick={() => handleFunctionTypes(service._id, "status")}
-                      >
-                        {service.status}
-                      </span>
-                    </td>
-                    <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
-                      <div className="admin-action-buttons flex items-center space-x-2">
-                        <button
-                          onClick={() => navigate(`/admin/service-details/${service._id}`)}
-                          className="admin-action-btn p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
-                          title="View Service"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleEditButton(service._id)}
-                          className="admin-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                          title="Edit Service"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleFunctionTypes(service._id, "delete")}
-                          className="admin-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
-                          title="Delete Service"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+
+              <tbody className="admin-table-body bg-white divide-y divide-gray-200">
+                {services?.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="text-center py-8">
+                      <div className="flex justify-center items-center text-gray-500">
+                        No services found
                       </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+
+                  services?.map((service: IService) => (
+                    <tr key={service._id} className="admin-table-row hover:bg-gray-50 transition-colors duration-200">
+                      <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
+                        <input
+                          type="checkbox"
+                          checked={selectedServices.includes(service._id)}
+                          onChange={() => handleSelectService(service._id)}
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                      </td>
+                      <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
+                        <div className="admin-service-image-container w-12 h-12 rounded-lg overflow-hidden border border-gray-200">
+                          <img
+                            src={service.image || "/placeholder.svg?height=48&width=48&query=service"}
+                            alt={service.title}
+                            className="admin-service-image w-full h-full object-cover"
+                          />
+                        </div>
+                      </td>
+                      <td className="admin-table-cell px-6 py-4">
+                        <div className="flex items-center space-x-3">
+                          <div>
+                            <div className="admin-service-title text-sm font-medium text-gray-900 line-clamp-2">
+                              {service.title}
+                            </div>
+                            <div className="admin-service-description text-xs text-gray-500 line-clamp-1 mt-1">
+                              {service.content}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
+                        <div
+                          className="admin-subservices-count relative"
+                          onMouseEnter={() => setHoveredService(service._id)}
+                          onMouseLeave={() => setHoveredService(null)}
+                        >
+                          <span className="text-sm text-blue-600 cursor-pointer hover:text-blue-800 font-medium">
+                            {service.subServices.length} sub-service{service.subServices.length !== 1 ? "s" : ""}
+                          </span>
+
+                          {/* Hover Dropdown */}
+                          {hoveredService === service._id && service.subServices.length > 0 && (
+                            <div className="admin-subservices-dropdown absolute z-10 top-full left-0 mt-1 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-3">
+                              <div className="text-xs font-medium text-gray-700 mb-2">Sub Services:</div>
+                              <div className="space-y-1">
+                                {service.subServices.map((subService, index) => (
+                                  <div
+                                    key={index}
+                                    className="text-xs text-gray-600 py-1 border-b border-gray-100 last:border-b-0"
+                                  >
+                                    <div className="font-medium">{subService.title}</div>
+                                    <div className="text-gray-500 line-clamp-1">{subService.content}</div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold cursor-pointer rounded-full ${getStatusColor(service.status)}`}
+                          onClick={() => handleFunctionTypes(service._id, "status")}
+                        >
+                          {service.status}
+                        </span>
+                      </td>
+                      <td className="admin-table-cell px-6 py-4 whitespace-nowrap">
+                        <div className="admin-action-buttons flex items-center space-x-2">
+                          <button
+                            onClick={() => navigate(`/admin/service-details/${service._id}`)}
+                            className="admin-action-btn p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
+                            title="View Service"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleEditButton(service._id)}
+                            className="admin-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
+                            title="Edit Service"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleFunctionTypes(service._id, "delete")}
+                            className="admin-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                            title="Delete Service"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+
               </tbody>
             </table>
           </div>
 
           {/* Mobile Cards */}
+
+
           <div className="lg:hidden space-y-4 p-4">
-            {services?.map((service: IService) => (
-              <div
-                key={service._id}
-                className="admin-mobile-card bg-white border border-gray-200 rounded-lg p-4 space-y-3"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-3 flex-1">
-                    <input
-                      type="checkbox"
-                      checked={selectedServices.includes(service._id)}
-                      onChange={() => handleSelectService(service._id)}
-                      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
-                    />
-                    <div className="admin-mobile-service-image-container w-12 h-12 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
-                      <img
-                        src={service.image || "/placeholder.svg?height=48&width=48&query=service"}
-                        alt={service.title}
-                        className="w-full h-full object-cover"
+            {services?.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="text-center py-8">
+                  <div className="flex justify-center items-center text-gray-500">
+                    No services found
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              services?.map((service: IService) => (
+                <div
+                  key={service._id}
+                  className="admin-mobile-card bg-white border border-gray-200 rounded-lg p-4 space-y-3"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3 flex-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedServices.includes(service._id)}
+                        onChange={() => handleSelectService(service._id)}
+                        className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-1"
                       />
+                      <div className="admin-mobile-service-image-container w-12 h-12 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0">
+                        <img
+                          src={service.image || "/placeholder.svg?height=48&width=48&query=service"}
+                          alt={service.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="admin-mobile-service-title text-sm font-medium text-gray-900 line-clamp-2">
+                          {service.title}
+                        </h3>
+                        <p className="admin-mobile-service-description text-xs text-gray-500 line-clamp-1 mt-1">
+                          {service.content}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className="admin-mobile-service-title text-sm font-medium text-gray-900 line-clamp-2">
-                        {service.title}
-                      </h3>
-                      <p className="admin-mobile-service-description text-xs text-gray-500 line-clamp-1 mt-1">
-                        {service.content}
-                      </p>
+                    <button className="admin-more-btn p-1 text-gray-400 hover:text-gray-600">
+                      <MoreVertical className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="admin-mobile-meta grid grid-cols-2 gap-2 text-xs text-gray-600">
+                    <div className="flex items-center space-x-1">
+                      <Tag className="w-3 h-3" />
+                      <span>{service.subServices.length} sub-services</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Calendar className="w-3 h-3" />
+                      <span>{service.lastModified}</span>
                     </div>
                   </div>
-                  <button className="admin-more-btn p-1 text-gray-400 hover:text-gray-600">
-                    <MoreVertical className="w-4 h-4" />
-                  </button>
-                </div>
 
-                <div className="admin-mobile-meta grid grid-cols-2 gap-2 text-xs text-gray-600">
-                  <div className="flex items-center space-x-1">
-                    <Tag className="w-3 h-3" />
-                    <span>{service.subServices.length} sub-services</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Calendar className="w-3 h-3" />
-                    <span>{service.lastModified}</span>
-                  </div>
-                </div>
+                  <div className="flex items-center justify-between">
+                    <span
+                      className={`admin-mobile-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(service.status)}`}
+                      onClick={() => handleFunctionTypes(service._id, "status")}
+                    >
+                      {service.status}
+                    </span>
 
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`admin-mobile-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(service.status)}`}
-                    onClick={() => handleFunctionTypes(service._id, "status")}
-                  >
-                    {service.status}
-                  </span>
-
-                  <div className="admin-mobile-action-buttons flex items-center space-x-2">
-                    <button
-                      onClick={() => navigate(`/admin/service-details/${service._id}`)}
-                      className="admin-mobile-action-btn p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
-                      title="View Service"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleEditButton(service._id)}
-                      className="admin-mobile-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
-                      title="Edit Service"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => handleFunctionTypes(service._id, "delete")}
-                      className="admin-mobile-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
-                      title="Delete Service"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="admin-mobile-action-buttons flex items-center space-x-2">
+                      <button
+                        onClick={() => navigate(`/admin/service-details/${service._id}`)}
+                        className="admin-mobile-action-btn p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors duration-200"
+                        title="View Service"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleEditButton(service._id)}
+                        className="admin-mobile-action-btn p-2 text-gray-600 hover:bg-gray-50 rounded-md transition-colors duration-200"
+                        title="Edit Service"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleFunctionTypes(service._id, "delete")}
+                        className="admin-mobile-action-btn p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                        title="Delete Service"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
         {/* Pagination */}
+
         <div className="admin-pagination-container border-t border-gray-200 bg-gray-50 px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="admin-pagination-info text-sm text-gray-700">

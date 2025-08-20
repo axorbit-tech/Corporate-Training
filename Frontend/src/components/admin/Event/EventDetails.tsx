@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { ArrowLeft, Edit, Trash2, Calendar, ImageIcon, Globe, MoreVertical, Download, Archive } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useGetEventDetailsQuery } from '../../../store/slices/apiSlice'
+import Loader from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
 
 interface Event {
   _id: number
@@ -17,7 +19,7 @@ const EventDetails: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const {data: eventData} = useGetEventDetailsQuery(id)
+  const {data: eventData, isLoading, isError} = useGetEventDetailsQuery(id)
 
   console.log( "eventDAtaaa : ", eventData)
 
@@ -61,6 +63,9 @@ const EventDetails: React.FC = () => {
       minute: '2-digit'
     })
   }
+
+  if (isLoading) return <Loader />
+  if (isError) return <SomethingWentWrong />
 
   if (!id || !event) {
     return (

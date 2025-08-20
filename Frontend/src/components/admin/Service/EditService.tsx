@@ -4,6 +4,8 @@ import { ArrowLeft, Upload, X, Save, Plus } from "lucide-react"
 import { useGetServiceDetailsQuery, useEditServiceMutation } from "../../../store/slices/apiSlice";
 import { useNavigate } from "react-router-dom";
 import { errorToast, successToast } from "../../../utils/toast";
+import Loader from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
 
 interface Subservice {
   _id: number
@@ -27,7 +29,7 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
   console.log(serviceId, "serviceeeeiddddd")
   const navigate = useNavigate()
   // Updated hook name from useGetServiceByIdQuery to useGetServiceQuery
-  const { data: serviceResponse, refetch, isLoading, error } = useGetServiceDetailsQuery(serviceId)
+  const { data: serviceResponse, refetch, isLoading, isError } = useGetServiceDetailsQuery(serviceId)
 
   console.log(serviceResponse, )
   const [updateService, { isLoading: isUpdating }] = useEditServiceMutation()
@@ -152,32 +154,9 @@ const EditService: React.FC<EditServiceProps> = ({ serviceId }) => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="edit-service min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading service...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="edit-service min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Error loading service</p>
-          <button
-            onClick={() => window.history.back()}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
-    )
-  }
+  if (isLoading) return <Loader />
+  if (isError) return <SomethingWentWrong />
+  
 
   return (
     <div className="edit-service min-h-screen bg-gray-50">

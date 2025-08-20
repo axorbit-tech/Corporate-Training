@@ -33,6 +33,7 @@ import AdminEditBlogPage from "./pages/admin/blog/EditBlog";
 import AdminEditEventPage from "./pages/admin/event/EditEvent";
 import AdminClientListingPage from "./pages/admin/client/ClientListing";
 import TrainerRegisterPage from "./pages/trainers/register/TrainerRegister";
+import PageNotFound from "./components/common/PageNotFound";
 
 
 function App() {
@@ -116,6 +117,8 @@ function App() {
             <Route path="/whyUs" element={<WhyUs />} />
             <Route path="/changePass" element={<ChangePass />} /> */}
           </Route>
+
+          <Route path="*" element={<PageNotFound />}></Route>
         </Routes>
       </Router>
     </>
