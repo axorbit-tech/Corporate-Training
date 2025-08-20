@@ -71,7 +71,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
       id: 'requests',
       label: 'Requests',
       icon: MessageSquare,
-      badge: '24'
+      badge: '24',
+      href: '/admin/requests'
     },
     // {
     //   id: 'analytics',
