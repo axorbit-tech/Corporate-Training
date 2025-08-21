@@ -1,6 +1,7 @@
 import express from "express";
 import userController from "../controllers/userController/userController";
 import trainerController from "../controllers/adminControllers/tainerController";
+import upload from "../config/multerConfig";
 
 
 const router = express.Router();
@@ -32,7 +33,7 @@ router.post('/booking', userController.createBooking);
 
 // ========================================= Trainers ===========================================
 
-router.post('/trainer-registration', trainerController.trainerRegistration);
+router.post('/trainer-registration', upload.single('image'), trainerController.trainerRegistration);
 router.get('/trainers', userController.getTrainers);
 
 

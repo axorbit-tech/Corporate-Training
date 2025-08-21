@@ -33,6 +33,20 @@ const trainerRegistration = async (req: Request, res: Response) => {
       description,
     } = req.body;
 
+    console.log(req.body, "reqqqq bodyydyydydydy");
+
+    if (!req.file) {
+      if (!req.file) {
+        res.status(HttpStatusCode.BAD_REQUEST).json({
+          success: false,
+          error: "Profile image is required!",
+        });
+        return;
+      }
+    }
+
+    const image = req.file?.path;
+
     // Check if trainer already exists
     let trainer = await TrainerModel.findOne({ email });
 
@@ -44,37 +58,41 @@ const trainerRegistration = async (req: Request, res: Response) => {
       return;
     }
 
-    // Transform selectedServices array of strings to array of objects
-    const servicesArray = selectedServices?.map((serviceTitle: string) => ({
-      title: serviceTitle
-    })) || [];
+    const parsedSelectedServices = JSON.parse(selectedServices || "[]");
+    const parsedSelectedSubServices = JSON.parse(selectedSubServices || "[]");
 
-    // Transform selectedSubServices array of strings to array of objects
-    const subServicesArray = selectedSubServices?.map((subServiceTitle: string) => ({
-      title: subServiceTitle
-    })) || [];
+    const servicesArray = parsedSelectedServices.map(
+      (serviceTitle: string) => ({
+        title: serviceTitle,
+      })
+    );
 
-    // Create new trainer
+    const subServicesArray = parsedSelectedSubServices.map(
+      (subServiceTitle: string) => ({
+        title: subServiceTitle,
+      })
+    );
+
     trainer = await TrainerModel.create({
       email,
       name,
       phone,
+      image,
       designation,
       website,
       language,
       experience,
       company,
-      services: servicesArray, // Now properly formatted
-      subServices: subServicesArray, // Now properly formatted
+      services: servicesArray,
+      subServices: subServicesArray,
       country,
       state,
-      description, // Now included
+      description,
     });
 
     res.status(HttpStatusCode.CREATED).json({
       success: true,
       message: "Trainer created successfully",
-      data: trainer, // Optional: return the created trainer
     });
   } catch (error) {
     console.log(error);
@@ -88,7 +106,7 @@ const getTrainers = async (req: Request, res: Response) => {
   try {
     const trainers = await TrainerModel.aggregate([
       { $match: { isApproved: "approved" } },
-      { $sort: { createdAt: -1 } }
+      { $sort: { createdAt: -1 } },
     ]);
     console.log(trainers, "trainersssss");
 
@@ -132,31 +150,30 @@ const getRequests = async (req: Request, res: Response) => {
 
 const getTrainerDetails = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params
+    const { id } = req.params;
 
-    const details = await TrainerModel.findById(id)
+    const details = await TrainerModel.findById(id);
 
-    console.log(details, "detaillsss trainerrr")
+    console.log(details, "detaillsss trainerrr");
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: details,
     });
-
   } catch (error) {
     console.log(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ success: false, error: "Error creating Trainer" });
   }
-}
+};
 
 const updateTrainerStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;  // ✅ read from body now
+    const { status } = req.body; // ✅ read from body now
 
-    console.log(req.body, "req bodyyyyy")
+    console.log(req.body, "req bodyyyyy");
 
     const trainer = await TrainerModel.findById(id);
 
@@ -192,14 +209,12 @@ const updateTrainerStatus = async (req: Request, res: Response) => {
   }
 };
 
-
-
 const trainerController = {
   trainerRegistration,
   getTrainers,
   getRequests,
   getTrainerDetails,
-  updateTrainerStatus
+  updateTrainerStatus,
 };
 
 export default trainerController;

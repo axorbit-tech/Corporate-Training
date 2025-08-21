@@ -255,10 +255,10 @@ const createBooking = async (req: Request, res: Response) => {
       return;
     }
 
-    const { email, name, phone, age } = value;
+    const { email, name, phone, age, gender } = value;
     let user = await userModel.findOne({ email });
     if (!user) {
-      user = await userModel.create({ email, name, phone, age });
+      user = await userModel.create({ email, name, phone, age, gender });
     }
 
     await bookingModel.create({

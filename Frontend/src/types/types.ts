@@ -37,6 +37,7 @@ export interface ITrainer {
   name: string;
   email: string;
   phone: number;
+  image: string;
   designation: string;
   website?: string;
   language: string;
@@ -77,7 +78,7 @@ export interface IUser {
   name: string;
   phone: number;
   age: number;
-  sex: string;
+  gender: string;
   createdAt?: string;
   updatedAt?: string;
 }

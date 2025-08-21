@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import { useGetServicesQuery, useCreateBookingMutation } from '../../../store/slices/userApiSlice'
+import React, { useState, useEffect } from "react";
+import {
+  useGetServicesQuery,
+  useCreateBookingMutation,
+} from "../../../store/slices/userApiSlice";
 import { Country, State } from "country-state-city";
-import CustomModal from '../../admin/common/CustomeModal';
-import { toast } from 'react-toastify'
+import CustomModal from "../../admin/common/CustomeModal";
+import { toast } from "react-toastify";
 
 interface Services {
-  _id: number
-  title: string
+  _id: number;
+  title: string;
 }
 
 const BookingFormSection: React.FC = () => {
-  const [countries, setCountries] = useState<{ name: string; isoCode: string }[]>([]);
+  const [countries, setCountries] = useState<
+    { name: string; isoCode: string }[]
+  >([]);
   const [states, setStates] = useState<{ name: string; isoCode: string }[]>([]);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    age: '',
-    service: '',
-    country: '',
-    state: '',
-    date: ""
-  })
+    name: "",
+    email: "",
+    phone: "",
+    age: "",
+    gender: "",
+    service: "",
+    country: "",
+    state: "",
+    date: "",
+  });
 
   useEffect(() => {
     // Load all countries
@@ -35,18 +41,20 @@ const BookingFormSection: React.FC = () => {
   const [createEnquiry, { isLoading }] = useCreateBookingMutation();
   const [open, setOpen] = useState(false);
 
-  const { data: servicesData } = useGetServicesQuery(undefined)
-  const services = servicesData?.data
+  const { data: servicesData } = useGetServicesQuery(undefined);
+  const services = servicesData?.data;
 
   const minDate = new Date().toISOString().split("T")[0];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleCountryInputChange = (
     e: React.ChangeEvent<HTMLSelectElement>
@@ -75,17 +83,16 @@ const BookingFormSection: React.FC = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setOpen(true)
-  }
+    e.preventDefault();
+    setOpen(true);
+  };
 
   const handleConfirmForm = async () => {
-
     try {
       const payload = {
         ...formData,
         phone: Number(formData.phone),
-        age: Number(formData.age)
+        age: Number(formData.age),
       };
 
       await createEnquiry(payload).unwrap();
@@ -93,36 +100,31 @@ const BookingFormSection: React.FC = () => {
       toast.success("Enquiry submitted successfully");
       setOpen(false);
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        age: '',
-        service: '',
-        country: '',
-        state: '',
-        date: ""
-      })
+        name: "",
+        email: "",
+        phone: "",
+        age: "",
+        gender: "",
+        service: "",
+        country: "",
+        state: "",
+        date: "",
+      });
     } catch (error) {
       if (error) {
         toast.error("Failed to add booking");
         console.error("Error adding Booking:", error);
       }
     }
-  }
-
-
-
-
+  };
 
   return (
     <section className="contact-form-section py-16 sm:py-20 lg:py-24 lg:px-10 lg:mt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden shadow-xl">
-
           {/* Left Side - Text Content */}
           <div className="contact-text-section bg-green-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
             <div className="space-y-6 sm:space-y-8">
-
               {/* Main Heading */}
               <h2 className="contact-form-heading text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">
                 Start Your Journey to Clarity and Well-being
@@ -130,7 +132,12 @@ const BookingFormSection: React.FC = () => {
 
               {/* Description Text */}
               <p className="contact-form-description text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
-                Please fill out the form below to help us understand your needs and match you with the right counselor. All information is kept confidential and is used solely to provide you with the best support possible. Whether you're facing personal, professional, or career-related challenges, we're here to help you take the first step toward a better tomorrow.
+                Please fill out the form below to help us understand your needs
+                and match you with the right counselor. All information is kept
+                confidential and is used solely to provide you with the best
+                support possible. Whether you're facing personal, professional,
+                or career-related challenges, we're here to help you take the
+                first step toward a better tomorrow.
               </p>
             </div>
           </div>
@@ -138,11 +145,13 @@ const BookingFormSection: React.FC = () => {
           {/* Right Side - Contact Form */}
           <div className="contact-form-section bg-blue-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
             <form onSubmit={handleSubmit} className="space-y-6">
-
               {/* Name and Email Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="name" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="name"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Name
                   </label>
                   <input
@@ -157,7 +166,10 @@ const BookingFormSection: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="email" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="email"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Email
                   </label>
                   <input
@@ -175,7 +187,10 @@ const BookingFormSection: React.FC = () => {
               {/* Phone and Age Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="phone" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="phone"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Phone
                   </label>
                   <input
@@ -185,7 +200,8 @@ const BookingFormSection: React.FC = () => {
                     value={formData.phone}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, ""); // remove non-digits
-                      if (value.length <= 12) { // limit to 12 digits
+                      if (value.length <= 12) {
+                        // limit to 12 digits
                         setFormData({ ...formData, phone: value });
                       }
                     }}
@@ -195,7 +211,10 @@ const BookingFormSection: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="age" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="age"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Age
                   </label>
                   <input
@@ -205,7 +224,8 @@ const BookingFormSection: React.FC = () => {
                     value={formData.age}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, ""); // remove non-digits
-                      if (value.length <= 3) { // limit to 12 digits
+                      if (value.length <= 3) {
+                        // limit to 12 digits
                         setFormData({ ...formData, age: value });
                       }
                     }}
@@ -220,28 +240,31 @@ const BookingFormSection: React.FC = () => {
               {/* Category and Country Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="category" className="form-label block text-sm font-medium text-gray-700 mb-2">
-                    Category
+                  <label
+                    htmlFor="gender"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Gender
                   </label>
                   <select
-                    id="category"
-                    name="service"
-                    value={formData.service}
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
                     onChange={handleInputChange}
                     className="form-select w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
                     required
                   >
-                    <option value="">Select Category</option>
-                    {services?.map((service: Services) => (
-                      <option key={service._id} value={service.title}>
-                        {service.title}
-                      </option>
-                    ))}
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="date" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="date"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Appointment Date
                   </label>
                   <input
@@ -255,14 +278,39 @@ const BookingFormSection: React.FC = () => {
                     required
                   />
                 </div>
+              </div>
 
-
+              <div className="form-group">
+                <label
+                  htmlFor="category"
+                  className="form-label block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Category
+                </label>
+                <select
+                  id="category"
+                  name="service"
+                  value={formData.service}
+                  onChange={handleInputChange}
+                  className="form-select w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {services?.map((service: Services) => (
+                    <option key={service._id} value={service.title}>
+                      {service.title}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* State Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
-                  <label htmlFor="country" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="country"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Country
                   </label>
                   <select
@@ -283,7 +331,10 @@ const BookingFormSection: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="state" className="form-label block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="state"
+                    className="form-label block text-sm font-medium text-gray-700 mb-2"
+                  >
                     State
                   </label>
                   <select
@@ -303,7 +354,6 @@ const BookingFormSection: React.FC = () => {
                   </select>
                 </div>
               </div>
-
 
               {/* Submit Button */}
               <div className="pt-4 text-center">
@@ -329,11 +379,11 @@ const BookingFormSection: React.FC = () => {
         buttonText="OK"
         loading={isLoading}
         onButtonClick={async () => {
-          await handleConfirmForm()
+          await handleConfirmForm();
         }}
       />
     </section>
-  )
-}
+  );
+};
 
-export default BookingFormSection
+export default BookingFormSection;

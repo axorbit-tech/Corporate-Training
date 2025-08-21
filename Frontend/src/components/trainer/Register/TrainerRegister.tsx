@@ -5,7 +5,7 @@ import {
 } from "../../../store/slices/userApiSlice";
 import type { IService, ISubService } from "../../../types/types";
 import { Country, State } from "country-state-city";
-import { successToast } from "../../../utils/toast";
+import { successToast, warningToast } from "../../../utils/toast";
 
 const TrainerRegister: React.FC = () => {
   const [trainerRegistration] = useTrainerRegisterMutation();
@@ -13,6 +13,9 @@ const TrainerRegister: React.FC = () => {
     { name: string; isoCode: string }[]
   >([]);
   const [states, setStates] = useState<{ name: string; isoCode: string }[]>([]);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -82,20 +85,94 @@ const TrainerRegister: React.FC = () => {
     }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please select a valid image file (JPEG, JPG, PNG, or WebP)');
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+      if (file.size > maxSize) {
+        warningToast('please select a image less thatn 5 MB');
+        return;
+      }
+
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImagePreview(event.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+    // Reset the file input
+    const fileInput = document.getElementById('profileImage') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await trainerRegistration(formData).unwrap();
+      
+      const submitData = new FormData();
+      
+      
+      Object.entries(formData).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          
+          submitData.append(key, JSON.stringify(value));
+        } else {
+          submitData.append(key, value.toString());
+        }
+      });
+
+      
+      if (selectedImage) {
+        submitData.append('image', selectedImage);
+      }
+
+      const res = await trainerRegistration(submitData).unwrap();
 
       if (res.success) {
         successToast("submitted successfully");
+        
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          designation: "",
+          website: "",
+          language: "",
+          experience: 0,
+          company: "",
+          selectedServices: [],
+          selectedSubServices: [],
+          country: "",
+          state: "",
+          description: ""
+        });
+        setSelectedImage(null);
+        setImagePreview(null);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Get available subservices based on selected service titles
+  
   const getAvailableSubServices = () => {
     if (!formData.selectedServices.length || !services.length) return [];
 
@@ -143,7 +220,84 @@ const TrainerRegister: React.FC = () => {
 
           {/* Right Side - Contact Form */}
           <div className="contact-form-section bg-blue-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
+              
+              {/* Profile Image Upload Section */}
+              <div className="form-group">
+                <label className="form-label block text-sm font-medium text-gray-700 mb-3">
+                  Profile Image
+                </label>
+                <div className="flex flex-col items-center space-y-4">
+                  {/* Image Preview */}
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Profile preview"
+                        className="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-200 shadow-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
+                      <svg
+                        className="w-8 h-8 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+
+                  {/* File Input */}
+                  <div className="flex flex-col items-center space-y-2">
+                    <label
+                      htmlFor="profileImage"
+                      className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
+                    >
+                      <svg
+                        className="w-4 h-4 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                      Choose Image
+                    </label>
+                    <input
+                      type="file"
+                      id="profileImage"
+                      name="profileImage"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                    <p className="text-xs text-gray-500 text-center">
+                      Max 5MB • JPEG, PNG, WebP
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* Name and Email Row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="form-group">
