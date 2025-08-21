@@ -6,6 +6,7 @@ import {
 import { Country, State } from "country-state-city";
 import CustomModal from "../../admin/common/CustomeModal";
 import { toast } from "react-toastify";
+import type { IService } from "../../../types/types";
 
 interface Services {
   _id: number;
@@ -42,9 +43,12 @@ const BookingFormSection: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const { data: servicesData } = useGetServicesQuery(undefined);
-  const services = servicesData?.data;
+  
+  const [services, setServices] = useState<IService[]>([])
 
-  const minDate = new Date().toISOString().split("T")[0];
+  useEffect(()=> {
+    setServices(servicesData?.data)
+  },[servicesData])
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -268,13 +272,13 @@ const BookingFormSection: React.FC = () => {
                     Appointment Date
                   </label>
                   <input
-                    type="date"
+                    type="datetime-local"
                     id="date"
                     name="date"
-                    min={minDate}
+                    min={new Date().toISOString().slice(0, 16)}
                     value={formData.date}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300  bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                     required
                   />
                 </div>
