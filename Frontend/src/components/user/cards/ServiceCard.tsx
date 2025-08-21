@@ -1,3 +1,5 @@
+import limitWords from "../../../utils/wordLimitor"
+
 interface ServiceCardProps {
   image: string
   title: string
@@ -16,7 +18,7 @@ const ServiceCard = ({ image, title, description }: ServiceCardProps) => {
       <div className="p-6">
         <h3 className="text-lg font-bold mb-3 uppercase tracking-wide">{title}</h3>
 
-        <p className="text-gray-700 text-sm leading-relaxed">{description}</p>
+        <p className="text-gray-700 text-sm leading-relaxed">{limitWords(description, 30)}</p>
       </div>
     </div>
   )

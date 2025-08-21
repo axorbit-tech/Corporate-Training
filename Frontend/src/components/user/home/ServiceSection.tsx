@@ -1,60 +1,26 @@
 import ServiceCard from "../cards/ServiceCard"
 import { useNavigate } from "react-router-dom"
+import { useGetServicesQuery } from "../../../store/slices/userApiSlice"
+import Loader from "../../common/Loader"
+
+interface Service {
+  _id: number
+  image: string
+  title: string
+  content: string
+}
 
 const ServiceSection = () => {
 
+  const { data: serviceResponse, isLoading: isLoadingServices, isError } = useGetServicesQuery(undefined)
+  const services = serviceResponse?.data
+
   const navigate = useNavigate()
   // Sample service data - you can modify this as needed
-  const services = [
-    {
-      id: 1,
-      image:
-        "/assets/aboutpageImage1.jpg",
-      title: "CORPORATE COUNSELLING SERVICES",
-      description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
-    },
-    {
-      id: 2,
-      image:
-        "/assets/heroSectionImage.jpg",
-      title: "CORPORATE COUNSELLING SERVICES",
-      description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
-    },
-    {
-      id: 3,
-      image:
-        "/assets/benefitSectionImage.jpg",
-      title: "CORPORATE COUNSELLING SERVICES",
-      description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
-    },
-    {
-      id: 4,
-      image:
-        "/assets/aboutpageImage2.jpg",
-      title: "CORPORATE COUNSELLING SERVICES",
-      description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
-    },
-    {
-      id: 5,
-      image:
-        "/assets/aboutpageImage3.jpg",
-      title: "CORPORATE COUNSELLING SERVICES",
-      description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
-    },
-    {
-      id: 6,
-      image:
-        "/assets/heroSectionImage.jpg",
-      title: "CORPORATE COUNSELLING SERVICES",
-      description:
-        "Our Corporate Counselling Services are designed to provide your employees with a safe, confidential, and supportive environment to address personal and professional challenges.",
-    },
-  ]
+
+  if(isLoadingServices) return <Loader />
+  if(isError) return null
+  
 
   return (
     <section className="service-section py-16 lg:py-16">
@@ -68,12 +34,12 @@ const ServiceSection = () => {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {services.map((service) => (
+          {services?.slice(0, 6).map((service: Service) => (
             <ServiceCard
-              key={service.id}
+              key={service._id}
               image={service.image}
               title={service.title}
-              description={service.description}
+              description={service.content}
             />
           ))}
         </div>
