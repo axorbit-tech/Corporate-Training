@@ -33,7 +33,7 @@ const serviceSchema = new mongoose.Schema<IServices>(
       required: true,
     },
     image: {
-      type: String, // store image URL or path
+      type: String,
       required: true,
     },
     status: {

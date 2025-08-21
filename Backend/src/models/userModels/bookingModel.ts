@@ -1,11 +1,12 @@
 import mongoose, { Document } from "mongoose";
 
 export interface IBooking extends Document {
-  userId: string;
+  userId: mongoose.Types.ObjectId;
   service: string;
   date: Date;
   country: string;
   state : string;
+  status: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -13,7 +14,8 @@ export interface IBooking extends Document {
 const bookingSchema = new mongoose.Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     service: {
@@ -31,6 +33,11 @@ const bookingSchema = new mongoose.Schema(
     state: {
         type: String,
         required: true
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'confirmed', 'cancelled', 'completed'],
+      default: "pending"
     }
   },
   { timestamps: true }
