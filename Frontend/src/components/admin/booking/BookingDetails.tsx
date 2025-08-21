@@ -13,16 +13,10 @@ import {
 } from "lucide-react";
 import { useGetBookingDetailsQuery } from "../../../store/slices/apiSlice";
 import { useParams } from "react-router-dom";
-import type { IBookingData } from "../../../types/types";
+import type { IBookingData, ITrainer } from "../../../types/types";
 import { generateAvatar } from "../../../utils/generateAvatar";
 import { formatDate } from "../../../utils/fomatDate";
-
-interface TrainerOption {
-  id: string;
-  name: string;
-  designation: string;
-  email: string;
-}
+import { useGetTrainersQuery } from "../../../store/slices/apiSlice";
 
 interface BookingDetailsProps {
   bookingId?: string;
@@ -32,56 +26,26 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
   const { id } = useParams<{ id: string }>();
 
   const { data: bookingResponse } = useGetBookingDetailsQuery(id);
+    const {data: trainersResponse} = useGetTrainersQuery(undefined);
+
+
+    const [trainers, setTrainers] = useState<ITrainer[]>([])
 
   const [booking, setBooking] = useState<IBookingData>();
 
   useEffect(() => {
     setBooking(bookingResponse?.data);
-  }, [bookingResponse]);
-
-
-  // Mock trainers data - replace with actual API call
-  const [trainers] = useState<TrainerOption[]>([
-    {
-      id: "trainer-1",
-      name: "Dr. Sarah Johnson",
-      designation: "Senior Corporate Wellness Consultant",
-      email: "sarah.johnson@example.com",
-    },
-    {
-      id: "trainer-2",
-      name: "Michael Chen",
-      designation: "Leadership Development Specialist",
-      email: "michael.chen@example.com",
-    },
-    {
-      id: "trainer-3",
-      name: "Emily Rodriguez",
-      designation: "Executive Coach",
-      email: "emily.rodriguez@example.com",
-    },
-    {
-      id: "trainer-4",
-      name: "David Thompson",
-      designation: "Team Building Expert",
-      email: "david.thompson@example.com",
-    },
-    {
-      id: "trainer-5",
-      name: "Lisa Wang",
-      designation: "Stress Management Consultant",
-      email: "lisa.wang@example.com",
-    },
-  ]);
+    setTrainers(trainersResponse?.data)
+  }, [bookingResponse, trainersResponse]);
 
   const [selectedTrainerId, setSelectedTrainerId] = useState<string>(
     booking?.trainerId || ""
   );
   const [originalTrainerId] = useState<string>(booking?.trainerId || "");
   const [selectedStatus, setSelectedStatus] = useState<string>(
-    booking?.status || 'pending'
+    booking?.status || "pending"
   );
-  const [originalStatus] = useState<string>(booking?.status || 'pending');
+  const [originalStatus] = useState<string>(booking?.status || "pending");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,7 +63,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
   );
 
   const selectedTrainer = trainers.find(
-    (trainer) => trainer.id === selectedTrainerId
+    (trainer) => trainer._id.toString() === selectedTrainerId
   );
 
   const getStatusColor = (status: string) => {
@@ -294,7 +258,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       Booking Date
                     </span>
                     <p className="admin-detail-value text-gray-900">
-                      {booking?.date ? formatDate(booking.date) : 'not found'}
+                      {booking?.date ? formatDate(booking.date) : "not found"}
                     </p>
                   </div>
                 </div>
@@ -394,14 +358,14 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       {filteredTrainers.length > 0 ? (
                         filteredTrainers.map((trainer) => (
                           <button
-                            key={trainer.id}
+                            key={trainer?._id}
                             onClick={() => {
-                              setSelectedTrainerId(trainer.id);
+                              setSelectedTrainerId(trainer?._id.toString());
                               setIsDropdownOpen(false);
                               setSearchTerm("");
                             }}
                             className={`admin-trainer-option w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 transition-colors duration-200 ${
-                              trainer.id === selectedTrainerId
+                              trainer?._id.toString() === selectedTrainerId
                                 ? "bg-blue-50 border-r-2 border-blue-500"
                                 : ""
                             }`}
@@ -424,7 +388,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                                 {trainer.email}
                               </p>
                             </div>
-                            {trainer.id === selectedTrainerId && (
+                            {trainer._id.toString() === selectedTrainerId && (
                               <Check className="w-4 h-4 text-blue-500" />
                             )}
                           </button>
@@ -476,7 +440,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       Created
                     </span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {booking?.createdAt ? formatDate(booking?.createdAt) : 'not found'}
+                      {booking?.createdAt
+                        ? formatDate(booking?.createdAt)
+                        : "not found"}
                     </span>
                   </div>
                   <div className="admin-info-item">
@@ -484,7 +450,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       Last Updated
                     </span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {booking?.createdAt ? formatDate(booking?.updatedAt) : 'not found'}
+                      {booking?.createdAt
+                        ? formatDate(booking?.updatedAt)
+                        : "not found"}
                     </span>
                   </div>
                 </div>
@@ -503,6 +471,26 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                     </label>
                     <div className="relative">
                       <button
+                        ref={(el) => {
+                          if (el && isStatusDropdownOpen) {
+                            const rect = el.getBoundingClientRect();
+                            const spaceBelow = window.innerHeight - rect.bottom;
+                            const dropdownHeight = 200;
+                            if (spaceBelow < dropdownHeight) {
+                              el.nextElementSibling?.classList.add(
+                                "bottom-full",
+                                "mb-1"
+                              );
+                              el.nextElementSibling?.classList.remove("mt-1");
+                            } else {
+                              el.nextElementSibling?.classList.remove(
+                                "bottom-full",
+                                "mb-1"
+                              );
+                              el.nextElementSibling?.classList.add("mt-1");
+                            }
+                          }
+                        }}
                         onClick={() =>
                           setIsStatusDropdownOpen(!isStatusDropdownOpen)
                         }
@@ -520,7 +508,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       </button>
 
                       {isStatusDropdownOpen && (
-                        <div className="admin-status-dropdown-menu absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                        <div className="admin-status-dropdown-menu absolute w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50">
                           <div className="admin-status-options">
                             {statusOptions.map((option) => (
                               <button
