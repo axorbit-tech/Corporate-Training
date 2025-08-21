@@ -87,9 +87,9 @@ const trainerRegistration = async (req: Request, res: Response) => {
 const getTrainers = async (req: Request, res: Response) => {
   try {
     const trainers = await TrainerModel.aggregate([
-  { $match: { isApproved: "approved" } },
-  { $sort: { createdAt: -1 } }
-]);
+      { $match: { isApproved: "approved" } },
+      { $sort: { createdAt: -1 } }
+    ]);
     console.log(trainers, "trainersssss");
 
     if (!trainers) {
@@ -130,19 +130,19 @@ const getRequests = async (req: Request, res: Response) => {
   }
 };
 
-const getTrainerDetails = async(req: Request, res: Response) => {
+const getTrainerDetails = async (req: Request, res: Response) => {
   try {
-    const {id} = req.params
+    const { id } = req.params
 
     const details = await TrainerModel.findById(id)
 
-    console.log(details,"detaillsss trainerrr")
+    console.log(details, "detaillsss trainerrr")
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: details,
     });
-    
+
   } catch (error) {
     console.log(error);
     res
