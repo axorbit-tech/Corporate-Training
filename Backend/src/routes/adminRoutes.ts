@@ -12,6 +12,7 @@ import authMiddleware from "../middlewares/authMiddleware";
 import clientController from "../controllers/adminControllers/clientController";
 import trainerController from "../controllers/adminControllers/tainerController";
 import bookingController from "../controllers/adminControllers/bookingController";
+import dashboardController from "../controllers/adminControllers/dashboardController";
 const router = express.Router();
 
 
@@ -158,5 +159,9 @@ router.get('/booking', bookingController.getBookings)
 router.get('/booking/:id',bookingController.getBookingDetails)
 
 router.patch('/booking',bookingController.updateBookingStatus)
+
+// ========================================= Dashboard ==============================================
+
+router.get('/dashboard', dashboardController.getDashboardDetails)
 
 export default router;
