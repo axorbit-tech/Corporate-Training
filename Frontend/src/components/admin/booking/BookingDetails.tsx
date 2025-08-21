@@ -32,15 +32,19 @@ const BookingDetails: React.FC = () => {
   const [booking, setBooking] = useState<IBookingData>();
 
   useEffect(() => {
-    setBooking(bookingResponse?.data);
-    setTrainers(trainersResponse?.data);
-    setSelectedStatus(trainersResponse?.data?.status);
-  }, [bookingResponse, trainersResponse]);
+  if (bookingResponse?.data) {
+    setBooking(bookingResponse.data);
+    setSelectedTrainerId(bookingResponse.data.trainerId || "");
+    setSelectedStatus(bookingResponse.data.status || "pending");
+    setOriginalTrainerId(bookingResponse?.data?.trainerId || "")
+  }
+  if (trainersResponse?.data) {
+    setTrainers(trainersResponse.data);
+  }
+}, [bookingResponse, trainersResponse]);
 
-  const [selectedTrainerId, setSelectedTrainerId] = useState<string>(
-    booking?.trainerId || ""
-  );
-  const [originalTrainerId] = useState<string>(booking?.trainerId || "");
+  const [selectedTrainerId, setSelectedTrainerId] = useState<string>();
+  const [originalTrainerId, setOriginalTrainerId] = useState<string>();
   const [selectedStatus, setSelectedStatus] = useState<string>(
     booking?.status || "pending"
   );
@@ -82,9 +86,6 @@ const BookingDetails: React.FC = () => {
 
   const handleSaveChanges = async () => {
     setIsSaving(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
     if (hasChanges) {
       const data: { id: string | undefined ; status: string; trainerId?: string } = {
         id,
