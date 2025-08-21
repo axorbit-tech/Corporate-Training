@@ -262,7 +262,7 @@ const BookingDetails: React.FC = () => {
                       Gender
                     </span>
                     <p className="admin-detail-value text-gray-900">
-                      {booking?.userId?.sex}
+                      {booking?.userId?.gender}
                     </p>
                   </div>
                 </div>

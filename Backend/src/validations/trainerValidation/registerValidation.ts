@@ -16,8 +16,15 @@ export const trainerSchema = Joi.object({
   language: Joi.string().required(),
   experience: Joi.number().required(),
   company: Joi.string().required(),
-  selectedServices: Joi.array().required(),
-  selectedSubServices: Joi.array().required(),
+selectedServices: Joi.alternatives().try(
+    Joi.string(),
+    Joi.array().items(Joi.string())
+  ).required(),
+  
+  selectedSubServices: Joi.alternatives().try(
+    Joi.string(),
+    Joi.array().items(Joi.string())
+  ).required(),
   country: Joi.string().required(),
   state: Joi.string().required(),
   description: Joi.string().required()

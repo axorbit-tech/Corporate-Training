@@ -14,6 +14,7 @@ export interface ITrainer extends Document {
   name: string;
   email: string;
   phone: number;
+  image: string;
   designation: string;
   website?: string;
   language: string;
@@ -44,6 +45,10 @@ const trainerSchema = new mongoose.Schema(
     phone: {
       type: Number,
       required: true,
+    },
+    image: {
+      type: String,
+      required: true
     },
     designation: {
       type: String,

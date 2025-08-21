@@ -13,6 +13,7 @@ export const bookingSchema = Joi.object({
         .messages({
             "string.pattern.base": "Email domain must be one of: email.com, gmail.com, outlook.com, yahoo.com, apple.com",
         }),
+    gender: Joi.string().required(),
     name: Joi.string().required(),
     date: Joi.string().required(),
 });
