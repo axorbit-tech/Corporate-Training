@@ -151,11 +151,55 @@ const getTrainerDetails = async (req: Request, res: Response) => {
   }
 }
 
+const updateTrainerStatus = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;  // ✅ read from body now
+
+    console.log(req.body, "req bodyyyyy")
+
+    const trainer = await TrainerModel.findById(id);
+
+    if (!trainer) {
+      return res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Trainer not found",
+      });
+    }
+
+    if (status === 1 || status === "1") {
+      trainer.isApproved = "approved";
+    } else if (status === 2 || status === "2") {
+      trainer.isApproved = "rejected";
+    } else {
+      return res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        error: "Invalid status value",
+      });
+    }
+
+    await trainer.save();
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Trainer updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error Updating Status",
+    });
+  }
+};
+
+
+
 const trainerController = {
   trainerRegistration,
   getTrainers,
   getRequests,
-  getTrainerDetails
+  getTrainerDetails,
+  updateTrainerStatus
 };
 
 export default trainerController;

@@ -15,11 +15,13 @@ import {
   XCircle,
 } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { useGetTrainerDetailsQuery } from "../../../store/slices/apiSlice";
+import { useGetTrainerDetailsQuery, useUpdateTrainerStatusMutation } from "../../../store/slices/apiSlice";
 import { useEffect, useState } from "react";
 import type { ITrainer } from "../../../types/types";
 import { generateAvatar } from "../../../utils/generateAvatar";
 import { formatDate } from "../../../utils/fomatDate";
+import CustomModal from "../common/CustomeModal";
+import { toast } from "react-toastify";
 
 
 const TrainerDetails: React.FC = () => {
@@ -31,11 +33,49 @@ const TrainerDetails: React.FC = () => {
 
   const [trainer, setTrainer] = useState<ITrainer>();
 
+  const [updateTrainerStatus, { isLoading }] = useUpdateTrainerStatusMutation()
+
+  const [open, setOpen] = useState(false);
+  const [modalAction, setModalAction] = useState<(() => void) | null>(null);
+
+
+
   useEffect(() => {
     setTrainer(trainerResponse?.data);
   }, [trainerResponse]);
 
   const avatar = generateAvatar(trainer?.name || "user");
+
+  const handleStatusChange = (statusType: string) => {
+    if (typeof id === "string") {
+      setModalAction(() => () => handleTrainersAction(id, statusType));
+    } else {
+      toast.error("Trainer ID is missing.");
+      setModalAction(null);
+    }
+    setOpen(true)
+  }
+
+  const handleTrainersAction = async (trainerId: string, statusType: string) => {
+    try {
+      const res = await updateTrainerStatus({ id: trainerId, status: statusType }).unwrap();
+
+      if (res.success) {
+        setTrainer(prev =>
+          prev ? { ...prev, isApproved: statusType === "1" ? "approved" : "rejected" } : prev
+        );
+        toast.success(
+          statusType === "1" ? "Trainer approved successfully!" : "Trainer rejected successfully!"
+        );
+        setOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong while updating trainer status.");
+    }
+  };
+
+
 
   return (
     <div className="admin-trainer-details min-h-screen bg-gray-50">
@@ -57,22 +97,20 @@ const TrainerDetails: React.FC = () => {
                 </h1>
                 <div className="flex items-center space-x-2 mt-1">
                   <span
-                    className={`admin-status-badge px-2 py-1 text-xs font-medium rounded-full ${
-                      trainer?.status === "active"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
+                    className={`admin-status-badge px-2 py-1 text-xs font-medium rounded-full ${trainer?.status === "active"
+                      ? "bg-green-100 text-green-800"
+                      : "bg-gray-100 text-gray-800"
+                      }`}
                   >
                     {trainer?.status === "active" ? "Active" : "Inactive"}
                   </span>
                   <span
-                    className={`admin-approval-badge px-2 py-1 text-xs font-medium rounded-full ${
-                      trainer?.isApproved == "approved"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
+                    className={`admin-approval-badge px-2 py-1 text-xs font-medium rounded-full ${trainer?.isApproved == "approved"
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-red-100 text-red-800"
+                      }`}
                   >
-                    {trainer?.isApproved=="approved" ? "Approved" : "Pending"}
+                    {trainer?.isApproved == "approved" ? "Approved" : trainer?.isApproved == "rejected" ? "Rejected" : "Pending"}
                   </span>
                 </div>
               </div>
@@ -137,7 +175,7 @@ const TrainerDetails: React.FC = () => {
                   <Globe className="w-5 h-5 text-gray-500" />
                   <div>
                     <span className="admin-contact-label text-sm font-medium text-gray-600">
-                      Website:  
+                      Website:
                     </span>
                     <a
                       href={trainer?.website}
@@ -264,11 +302,10 @@ const TrainerDetails: React.FC = () => {
                         <XCircle className="w-4 h-4 text-gray-500" />
                       )}
                       <span
-                        className={`admin-info-value text-sm font-medium ${
-                          trainer?.status === "active"
-                            ? "text-green-600"
-                            : "text-gray-600"
-                        }`}
+                        className={`admin-info-value text-sm font-medium ${trainer?.status === "active"
+                          ? "text-green-600"
+                          : "text-gray-600"
+                          }`}
                       >
                         {trainer?.status === "active" ? "Active" : "Inactive"}
                       </span>
@@ -285,11 +322,10 @@ const TrainerDetails: React.FC = () => {
                         <XCircle className="w-4 h-4 text-red-500" />
                       )}
                       <span
-                        className={`admin-info-value text-sm font-medium ${
-                          trainer?.isApproved =='approved' ? "text-blue-600" : "text-red-600"
-                        }`}
+                        className={`admin-info-value text-sm font-medium ${trainer?.isApproved == 'approved' ? "text-blue-600" : "text-red-600"
+                          }`}
                       >
-                        {trainer?.isApproved == 'approved' ? "Approved" : "Pending Approval"}
+                        {trainer?.isApproved == 'approved' ? "Approved" : trainer?.isApproved == 'rejected' ? 'Rejected' : "Pending Approval"}
                       </span>
                     </div>
                   </div>
@@ -347,13 +383,13 @@ const TrainerDetails: React.FC = () => {
                     <>
                       <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-green-50 rounded-lg transition-colors duration-200 text-green-600">
                         <CheckCircle className="w-4 h-4" />
-                        <span className="text-sm font-medium">
+                        <span className="text-sm font-medium" onClick={() => handleStatusChange("1")}>
                           Approve Trainer
                         </span>
                       </button>
                       <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors duration-200 text-red-600">
                         <XCircle className="w-4 h-4" />
-                        <span className="text-sm font-medium">
+                        <span className="text-sm font-medium" onClick={() => handleStatusChange("2")}>
                           Reject Trainer
                         </span>
                       </button>
@@ -373,6 +409,24 @@ const TrainerDetails: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <CustomModal
+          open={open}
+          onClose={() => setOpen(false)}
+          title="Are You sure to confirm this action?"
+          // description={`This modal works with TypeScript. Service ID: ${selectedServiceId}`}
+          size={{ width: 300 }}
+          color="#f0f0f0"
+          buttonText="OK"
+          loading={isLoading}
+          onButtonClick={() => {
+            if (modalAction) {
+              modalAction();
+            } else {
+              toast.error("Something went wrong");
+            }
+          }}
+        />
       </div>
     </div>
   );

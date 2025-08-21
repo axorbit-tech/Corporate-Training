@@ -144,11 +144,14 @@ router.get('/client', clientController.getAllClients)
 // ========================================= Trainer ==============================================
 router.get('/trainer', trainerController.getTrainers)
 
+router.get('/trainer/:id', trainerController.getTrainerDetails)
 
-// ========================================= Trainer ==============================================
+router.patch('/trainer/:id', trainerController.updateTrainerStatus)
+
 router.get('/requests', trainerController.getRequests)
 
-router.get('/trainer/:id', trainerController.getTrainerDetails)
+
+// ========================================= Booking ==============================================
 
 router.get('/bookings', bookingController.getBookings)
 

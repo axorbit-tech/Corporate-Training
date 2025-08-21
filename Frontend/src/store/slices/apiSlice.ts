@@ -179,7 +179,14 @@ export const apiSlices = createApi({
         method: HttpMethod.GET,
       }),
     }),
-    
+
+    updateTrainerStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/admin/trainer/${id}`,
+        method: HttpMethod.PATCH,
+        body: {status},   
+      }),
+    }),
   }),
 });
 
@@ -209,5 +216,6 @@ export const {
   useGetTrainersQuery,
   useGetRequestesQuery,
   useGetTrainerDetailsQuery,
+  useUpdateTrainerStatusMutation,
   useGetBookingsQuery
 } = apiSlices;
