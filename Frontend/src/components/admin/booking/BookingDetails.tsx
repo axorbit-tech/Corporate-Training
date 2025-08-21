@@ -26,34 +26,38 @@ const BookingDetails: React.FC = () => {
   const { data: trainersResponse } = useGetTrainersQuery(undefined);
   const [updateBookingStatus] = useUpdateBookingStatusMutation();
 
-
   const [trainers, setTrainers] = useState<ITrainer[]>([])
-
   const [booking, setBooking] = useState<IBookingData>();
 
-  useEffect(() => {
-  if (bookingResponse?.data) {
-    setBooking(bookingResponse.data);
-    setSelectedTrainerId(bookingResponse.data.trainerId || "");
-    setSelectedStatus(bookingResponse.data.status || "pending");
-    setOriginalTrainerId(bookingResponse?.data?.trainerId || "")
-  }
-  if (trainersResponse?.data) {
-    setTrainers(trainersResponse.data);
-  }
-}, [bookingResponse, trainersResponse]);
-
-  const [selectedTrainerId, setSelectedTrainerId] = useState<string>();
-  const [originalTrainerId, setOriginalTrainerId] = useState<string>();
-  const [selectedStatus, setSelectedStatus] = useState<string>(
-    booking?.status || "pending"
-  );
-  const [originalStatus] = useState<string>(booking?.status || "pending");
+  // State for tracking original and current values
+  const [selectedTrainerId, setSelectedTrainerId] = useState<string>("");
+  const [originalTrainerId, setOriginalTrainerId] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [originalStatus, setOriginalStatus] = useState<string>("");
+  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
+  useEffect(() => {
+    if (bookingResponse?.data) {
+      setBooking(bookingResponse.data);
+      const trainerId = bookingResponse.data.trainerId || "";
+      const status = bookingResponse.data.status || "pending";
+      
+      // Set both original and current values
+      setSelectedTrainerId(trainerId);
+      setOriginalTrainerId(trainerId);
+      setSelectedStatus(status);
+      setOriginalStatus(status);
+    }
+    if (trainersResponse?.data) {
+      setTrainers(trainersResponse.data);
+    }
+  }, [bookingResponse, trainersResponse]);
+
+  // Check if there are any changes
   const hasTrainerChanged = selectedTrainerId !== originalTrainerId;
   const hasStatusChanged = selectedStatus !== originalStatus;
   const hasChanges = hasTrainerChanged || hasStatusChanged;
@@ -85,31 +89,35 @@ const BookingDetails: React.FC = () => {
   };
 
   const handleSaveChanges = async () => {
+    if (!hasChanges) return;
+    
     setIsSaving(true);
-    if (hasChanges) {
-      const data: { id: string | undefined ; status: string; trainerId?: string } = {
+    try {
+      const data: { id: string | undefined; status: string; trainerId?: string } = {
         id,
         status: selectedStatus,
       };
       if (selectedTrainerId) {
-        data.trainerId = selectedTrainerId;  // only add if not empty
+        data.trainerId = selectedTrainerId;
       }
+      
       const res = await updateBookingStatus(data);
       if (res?.error) {
         console.error("Error updating booking status:", res.error);
         toast.error("Error updating booking status");
       } else {
         toast.success("Booking status updated successfully");
+        // Update original values to reflect the saved state
+        setOriginalTrainerId(selectedTrainerId);
+        setOriginalStatus(selectedStatus);
         console.log("Booking status updated successfully");
       }
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      toast.error("Error saving changes");
+    } finally {
+      setIsSaving(false);
     }
-
-    console.log("Saving changes:", {
-      id,
-      trainerId: selectedTrainerId,
-      status: selectedStatus,
-    });
-    setIsSaving(false);
   };
 
   const statusOptions = [
@@ -164,17 +172,22 @@ const BookingDetails: React.FC = () => {
                     {selectedStatus?.charAt(0).toUpperCase() +
                       selectedStatus?.slice(1)}
                   </span>
+                  {hasChanges && (
+                    <span className="text-xs text-orange-600 font-medium">
+                      • Unsaved changes
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
 
-            {/* Right Section */}
-            <div className="flex items-center space-x-3">
-              {hasChanges && (
+            {/* Right Section - Only show save button when there are changes */}
+            {hasChanges && (
+              <div className="flex items-center space-x-3">
                 <button
                   onClick={handleSaveChanges}
                   disabled={isSaving}
-                  className="admin-save-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50"
+                  className="admin-save-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSaving ? (
                     <>
@@ -188,8 +201,8 @@ const BookingDetails: React.FC = () => {
                     </>
                   )}
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -296,23 +309,37 @@ const BookingDetails: React.FC = () => {
                   <span className="admin-detail-label text-sm font-medium text-gray-600">
                     Status:
                   </span>
-                  <span
-                    className={`admin-detail-value inline-block px-3 py-1 text-sm font-medium rounded-full mt-1 ${getStatusColor(
-                      selectedStatus
-                    )}`}
-                  >
-                    {selectedStatus?.charAt(0).toUpperCase() +
-                      selectedStatus?.slice(1)}
-                  </span>
+                  <div className="flex items-center space-x-2 mt-1">
+                    <span
+                      className={`admin-detail-value inline-block px-3 py-1 text-sm font-medium rounded-full ${getStatusColor(
+                        selectedStatus
+                      )}`}
+                    >
+                      {selectedStatus?.charAt(0).toUpperCase() +
+                        selectedStatus?.slice(1)}
+                    </span>
+                    {hasStatusChanged && (
+                      <span className="text-xs text-orange-600 font-medium">
+                        (Modified)
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Trainer Assignment */}
             <div className="admin-trainer-assignment bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">
-                Trainer Assignment
-              </h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="admin-section-title text-lg font-semibold text-gray-900">
+                  Trainer Assignment
+                </h3>
+                {hasTrainerChanged && (
+                  <span className="text-xs text-orange-600 font-medium bg-orange-50 px-2 py-1 rounded">
+                    Modified
+                  </span>
+                )}
+              </div>
 
               {/* Current Trainer Display */}
               {selectedTrainer && (
@@ -334,7 +361,7 @@ const BookingDetails: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    {selectedTrainerId === originalTrainerId && (
+                    {!hasTrainerChanged && (
                       <Check className="w-5 h-5 text-green-500" />
                     )}
                   </div>
@@ -442,14 +469,19 @@ const BookingDetails: React.FC = () => {
                     <span className="admin-info-label text-sm font-medium text-gray-600">
                       Status
                     </span>
-                    <span
-                      className={`admin-info-value inline-block px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
-                        selectedStatus
-                      )}`}
-                    >
-                      {selectedStatus?.charAt(0).toUpperCase() +
-                        selectedStatus?.slice(1)}
-                    </span>
+                    <div className="flex items-center space-x-2">
+                      <span
+                        className={`admin-info-value inline-block px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                          selectedStatus
+                        )}`}
+                      >
+                        {selectedStatus?.charAt(0).toUpperCase() +
+                          selectedStatus?.slice(1)}
+                      </span>
+                      {hasStatusChanged && (
+                        <span className="text-xs text-orange-600">•</span>
+                      )}
+                    </div>
                   </div>
                   <div className="admin-info-item">
                     <span className="admin-info-label text-sm font-medium text-gray-600">
@@ -466,7 +498,7 @@ const BookingDetails: React.FC = () => {
                       Last Updated
                     </span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {booking?.createdAt
+                      {booking?.updatedAt
                         ? formatDate(booking?.updatedAt)
                         : "not found"}
                     </span>
