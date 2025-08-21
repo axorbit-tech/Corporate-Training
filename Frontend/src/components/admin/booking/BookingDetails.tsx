@@ -102,17 +102,6 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
     (trainer) => trainer.id === selectedTrainerId
   );
 
-  const formatBookingDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmed":
@@ -305,7 +294,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       Booking Date
                     </span>
                     <p className="admin-detail-value text-gray-900">
-                      {booking?.date ? formatBookingDate(booking.date) : 'not found'}
+                      {booking?.date ? formatDate(booking.date) : 'not found'}
                     </p>
                   </div>
                 </div>
