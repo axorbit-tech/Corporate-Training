@@ -2,6 +2,7 @@ import mongoose, { Document } from "mongoose";
 
 export interface IBooking extends Document {
   userId: mongoose.Types.ObjectId;
+  trainerId: mongoose.Types.ObjectId;
   service: string;
   date: Date;
   country: string;
@@ -17,6 +18,10 @@ const bookingSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    trainerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Trainer"
     },
     service: {
       type: String,
