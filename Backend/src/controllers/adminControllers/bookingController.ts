@@ -28,7 +28,9 @@ const getBookings = async (req: Request, res: Response) => {
       query.status = "pending";
     }
 
-    const bookings = await BookingModel.find(query).populate('userId').sort({ date: 1 });
+    const bookings = await BookingModel.find(query)
+      .populate("userId")
+      .sort({ date: 1 });
 
     res.status(HttpStatusCode.OK).json({
       success: true,
@@ -43,8 +45,27 @@ const getBookings = async (req: Request, res: Response) => {
   }
 };
 
+const getBookingDetails = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const booking = await BookingModel.findById(id).populate("userId");
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: booking,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error fetching bookings",
+    });
+  }
+};
+
 const BookingController = {
   getBookings,
+  getBookingDetails,
 };
 
 export default BookingController;

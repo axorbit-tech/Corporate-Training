@@ -1,68 +1,44 @@
-"use client"
-
-import type React from "react"
-import { useState } from "react"
+import type React from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
-  Edit,
   User,
-  Mail,
   Phone,
   Calendar,
   MapPin,
   Search,
   Save,
   Check,
-} from "lucide-react"
+  ChevronDown,
+} from "lucide-react";
+import { useGetBookingDetailsQuery } from "../../../store/slices/apiSlice";
+import { useParams } from "react-router-dom";
+import type { IBookingData } from "../../../types/types";
+import { generateAvatar } from "../../../utils/generateAvatar";
+import { formatDate } from "../../../utils/fomatDate";
 
 interface TrainerOption {
-  id: string
-  name: string
-  designation: string
-  email: string
-}
-
-interface BookingData {
-  id: string
-  username: string
-  userEmail: string
-  phone: string
-  age: number
-  sex: "Male" | "Female" | "Other"
-  service: string
-  date: string
-  country: string
-  state: string
-  status: "pending" | "confirmed" | "cancelled" | "completed"
-  trainerId?: string
-  trainerName?: string
-  createdAt: string
-  updatedAt: string
+  id: string;
+  name: string;
+  designation: string;
+  email: string;
 }
 
 interface BookingDetailsProps {
-  bookingId?: string
+  bookingId?: string;
 }
 
 const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
-  // Mock data - replace with actual API call
-  const [bookingData] = useState<BookingData>({
-    id: "1",
-    username: "John Smith",
-    userEmail: "john.smith@example.com",
-    phone: "+1 (555) 987-6543",
-    age: 32,
-    sex: "Male",
-    service: "Corporate Training - Leadership Development",
-    date: "2024-02-15T14:00:00Z",
-    country: "United States",
-    state: "New York",
-    status: "pending",
-    trainerId: "trainer-1",
-    trainerName: "Dr. Sarah Johnson",
-    createdAt: "2024-01-10T09:30:00Z",
-    updatedAt: "2024-01-12T16:45:00Z",
-  })
+  const { id } = useParams<{ id: string }>();
+
+  const { data: bookingResponse } = useGetBookingDetailsQuery(id);
+
+  const [booking, setBooking] = useState<IBookingData>();
+
+  useEffect(() => {
+    setBooking(bookingResponse?.data);
+  }, [bookingResponse]);
+
 
   // Mock trainers data - replace with actual API call
   const [trainers] = useState<TrainerOption[]>([
@@ -78,100 +54,105 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
       designation: "Leadership Development Specialist",
       email: "michael.chen@example.com",
     },
-    { id: "trainer-3", name: "Emily Rodriguez", designation: "Executive Coach", email: "emily.rodriguez@example.com" },
+    {
+      id: "trainer-3",
+      name: "Emily Rodriguez",
+      designation: "Executive Coach",
+      email: "emily.rodriguez@example.com",
+    },
     {
       id: "trainer-4",
       name: "David Thompson",
       designation: "Team Building Expert",
       email: "david.thompson@example.com",
     },
-    { id: "trainer-5", name: "Lisa Wang", designation: "Stress Management Consultant", email: "lisa.wang@example.com" },
-  ])
+    {
+      id: "trainer-5",
+      name: "Lisa Wang",
+      designation: "Stress Management Consultant",
+      email: "lisa.wang@example.com",
+    },
+  ]);
 
-  const [selectedTrainerId, setSelectedTrainerId] = useState<string>(bookingData.trainerId || "")
-  const [originalTrainerId] = useState<string>(bookingData.trainerId || "")
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isSaving, setIsSaving] = useState(false)
+  const [selectedTrainerId, setSelectedTrainerId] = useState<string>(
+    booking?.trainerId || ""
+  );
+  const [originalTrainerId] = useState<string>(booking?.trainerId || "");
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    booking?.status || 'pending'
+  );
+  const [originalStatus] = useState<string>(booking?.status || 'pending');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
-  const hasTrainerChanged = selectedTrainerId !== originalTrainerId
+  const hasTrainerChanged = selectedTrainerId !== originalTrainerId;
+  const hasStatusChanged = selectedStatus !== originalStatus;
+  const hasChanges = hasTrainerChanged || hasStatusChanged;
 
   const filteredTrainers = trainers.filter(
     (trainer) =>
       trainer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       trainer.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      trainer.email.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+      trainer.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const selectedTrainer = trainers.find((trainer) => trainer.id === selectedTrainerId)
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  }
-
-  const formatBookingDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
-  }
+  const selectedTrainer = trainers.find(
+    (trainer) => trainer.id === selectedTrainerId
+  );
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "confirmed":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800";
       case "pending":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800";
       case "cancelled":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800";
       case "completed":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 text-blue-800";
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 text-gray-800";
     }
-  }
+  };
 
-  const generateAvatar = (name: string) => {
-    const initials = name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-    const colors = [
-      "bg-blue-500",
-      "bg-green-500",
-      "bg-purple-500",
-      "bg-pink-500",
-      "bg-indigo-500",
-      "bg-red-500",
-      "bg-yellow-500",
-      "bg-teal-500",
-    ]
-    const colorIndex = name.length % colors.length
-    return { initials, colorClass: colors[colorIndex] }
-  }
-
-  const handleSaveTrainer = async () => {
-    setIsSaving(true)
+  const handleSaveChanges = async () => {
+    setIsSaving(true);
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    console.log("Saving trainer assignment:", { bookingId, trainerId: selectedTrainerId })
-    setIsSaving(false)
-    // Reset the original trainer ID to hide save button
-    // setOriginalTrainerId(selectedTrainerId)
-  }
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    console.log("Saving changes:", {
+      bookingId,
+      trainerId: selectedTrainerId,
+      status: selectedStatus,
+    });
+    setIsSaving(false);
+  };
 
-  const userAvatar = generateAvatar(bookingData.username)
+  const statusOptions = [
+    {
+      value: "pending",
+      label: "Pending",
+      color: "bg-yellow-100 text-yellow-800",
+    },
+    {
+      value: "confirmed",
+      label: "Confirmed",
+      color: "bg-green-100 text-green-800",
+    },
+    {
+      value: "cancelled",
+      label: "Cancelled",
+      color: "bg-red-100 text-red-800",
+    },
+    {
+      value: "completed",
+      label: "Completed",
+      color: "bg-blue-100 text-blue-800",
+    },
+  ];
+
+  const userAvatar = generateAvatar(booking?.userId?.name || "user");
 
   return (
     <div className="admin-booking-details min-h-screen bg-gray-50">
@@ -193,9 +174,12 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                 </h1>
                 <div className="flex items-center space-x-2 mt-1">
                   <span
-                    className={`admin-status-badge px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(bookingData.status)}`}
+                    className={`admin-status-badge px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                      selectedStatus
+                    )}`}
                   >
-                    {bookingData.status.charAt(0).toUpperCase() + bookingData.status.slice(1)}
+                    {selectedStatus.charAt(0).toUpperCase() +
+                      selectedStatus.slice(1)}
                   </span>
                 </div>
               </div>
@@ -203,9 +187,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
 
             {/* Right Section */}
             <div className="flex items-center space-x-3">
-              {hasTrainerChanged && (
+              {hasChanges && (
                 <button
-                  onClick={handleSaveTrainer}
+                  onClick={handleSaveChanges}
                   disabled={isSaving}
                   className="admin-save-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2 disabled:opacity-50"
                 >
@@ -234,38 +218,56 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
           <div className="lg:col-span-3 space-y-8">
             {/* Customer Information */}
             <div className="admin-customer-section bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">Customer Information</h3>
+              <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">
+                Customer Information
+              </h3>
               <div className="flex items-center space-x-4 mb-6">
                 <div
-                  className={`w-16 h-16 ${userAvatar.colorClass} rounded-full flex items-center justify-center text-white text-xl font-bold`}
+                  className={`w-16 h-16 ${userAvatar.color} rounded-full flex items-center justify-center text-white text-xl font-bold`}
                 >
                   {userAvatar.initials}
                 </div>
                 <div>
-                  <h4 className="admin-customer-name text-xl font-bold text-gray-900">{bookingData.username}</h4>
-                  <p className="admin-customer-email text-gray-600">{bookingData.userEmail}</p>
+                  <h4 className="admin-customer-name text-xl font-bold text-gray-900">
+                    {booking?.userId?.name}
+                  </h4>
+                  <p className="admin-customer-email text-gray-600">
+                    {booking?.userId?.email}
+                  </p>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="admin-customer-detail flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-gray-500" />
                   <div>
-                    <span className="admin-detail-label text-sm font-medium text-gray-600">Phone</span>
-                    <p className="admin-detail-value text-gray-900">{bookingData.phone}</p>
+                    <span className="admin-detail-label text-sm font-medium text-gray-600">
+                      Phone
+                    </span>
+                    <p className="admin-detail-value text-gray-900">
+                      {booking?.userId?.phone}
+                    </p>
                   </div>
                 </div>
                 <div className="admin-customer-detail flex items-center space-x-3">
                   <User className="w-5 h-5 text-gray-500" />
                   <div>
-                    <span className="admin-detail-label text-sm font-medium text-gray-600">Age</span>
-                    <p className="admin-detail-value text-gray-900">{bookingData.age} years</p>
+                    <span className="admin-detail-label text-sm font-medium text-gray-600">
+                      Age
+                    </span>
+                    <p className="admin-detail-value text-gray-900">
+                      {booking?.userId?.age} years
+                    </p>
                   </div>
                 </div>
                 <div className="admin-customer-detail flex items-center space-x-3">
                   <User className="w-5 h-5 text-gray-500" />
                   <div>
-                    <span className="admin-detail-label text-sm font-medium text-gray-600">Gender</span>
-                    <p className="admin-detail-value text-gray-900">{bookingData.sex}</p>
+                    <span className="admin-detail-label text-sm font-medium text-gray-600">
+                      Gender
+                    </span>
+                    <p className="admin-detail-value text-gray-900">
+                      {booking?.userId?.sex}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -273,34 +275,51 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
 
             {/* Booking Information */}
             <div className="admin-booking-info-section bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">Booking Information</h3>
+              <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">
+                Booking Information
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="admin-booking-detail">
-                  <span className="admin-detail-label text-sm font-medium text-gray-600">Service</span>
-                  <p className="admin-detail-value text-gray-900 mt-1">{bookingData.service}</p>
+                  <span className="admin-detail-label text-sm font-medium text-gray-600">
+                    Service
+                  </span>
+                  <p className="admin-detail-value text-gray-900 mt-1">
+                    {booking?.service}
+                  </p>
                 </div>
                 <div className="admin-booking-detail flex items-center space-x-3">
                   <Calendar className="w-5 h-5 text-gray-500" />
                   <div>
-                    <span className="admin-detail-label text-sm font-medium text-gray-600">Booking Date</span>
-                    <p className="admin-detail-value text-gray-900">{formatBookingDate(bookingData.date)}</p>
+                    <span className="admin-detail-label text-sm font-medium text-gray-600">
+                      Booking Date
+                    </span>
+                    <p className="admin-detail-value text-gray-900">
+                      {booking?.date ? formatDate(booking.date) : 'not found'}
+                    </p>
                   </div>
                 </div>
                 <div className="admin-booking-detail flex items-center space-x-3">
                   <MapPin className="w-5 h-5 text-gray-500" />
                   <div>
-                    <span className="admin-detail-label text-sm font-medium text-gray-600">Location</span>
+                    <span className="admin-detail-label text-sm font-medium text-gray-600">
+                      Location
+                    </span>
                     <p className="admin-detail-value text-gray-900">
-                      {bookingData.state}, {bookingData.country}
+                      {booking?.state}, {booking?.country}
                     </p>
                   </div>
                 </div>
                 <div className="admin-booking-detail">
-                  <span className="admin-detail-label text-sm font-medium text-gray-600">Status</span>
+                  <span className="admin-detail-label text-sm font-medium text-gray-600">
+                    Status:
+                  </span>
                   <span
-                    className={`admin-detail-value inline-block px-3 py-1 text-sm font-medium rounded-full mt-1 ${getStatusColor(bookingData.status)}`}
+                    className={`admin-detail-value inline-block px-3 py-1 text-sm font-medium rounded-full mt-1 ${getStatusColor(
+                      selectedStatus
+                    )}`}
                   >
-                    {bookingData.status.charAt(0).toUpperCase() + bookingData.status.slice(1)}
+                    {selectedStatus.charAt(0).toUpperCase() +
+                      selectedStatus.slice(1)}
                   </span>
                 </div>
               </div>
@@ -308,7 +327,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
 
             {/* Trainer Assignment */}
             <div className="admin-trainer-assignment bg-white rounded-lg border border-gray-200 p-6">
-              <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">Trainer Assignment</h3>
+              <h3 className="admin-section-title text-lg font-semibold text-gray-900 mb-6">
+                Trainer Assignment
+              </h3>
 
               {/* Current Trainer Display */}
               {selectedTrainer && (
@@ -316,16 +337,24 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div
-                        className={`w-10 h-10 ${generateAvatar(selectedTrainer.name).colorClass} rounded-full flex items-center justify-center text-white text-sm font-bold`}
+                        className={`w-10 h-10 ${
+                          generateAvatar(selectedTrainer.name).color
+                        } rounded-full flex items-center justify-center text-white text-sm font-bold`}
                       >
                         {generateAvatar(selectedTrainer.name).initials}
                       </div>
                       <div>
-                        <p className="admin-trainer-name font-medium text-gray-900">{selectedTrainer.name}</p>
-                        <p className="admin-trainer-designation text-sm text-gray-600">{selectedTrainer.designation}</p>
+                        <p className="admin-trainer-name font-medium text-gray-900">
+                          {selectedTrainer.name}
+                        </p>
+                        <p className="admin-trainer-designation text-sm text-gray-600">
+                          {selectedTrainer.designation}
+                        </p>
                       </div>
                     </div>
-                    {selectedTrainerId === originalTrainerId && <Check className="w-5 h-5 text-green-500" />}
+                    {selectedTrainerId === originalTrainerId && (
+                      <Check className="w-5 h-5 text-green-500" />
+                    )}
                   </div>
                 </div>
               )}
@@ -340,7 +369,9 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                   className="admin-dropdown-trigger w-full flex items-center justify-between px-4 py-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <span className="text-gray-700">
-                    {selectedTrainer ? `Change from ${selectedTrainer.name}` : "Choose a trainer..."}
+                    {selectedTrainer
+                      ? `Change from ${selectedTrainer.name}`
+                      : "Choose a trainer..."}
                   </span>
                   <Search className="w-4 h-4 text-gray-500" />
                 </button>
@@ -365,25 +396,37 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                           <button
                             key={trainer.id}
                             onClick={() => {
-                              setSelectedTrainerId(trainer.id)
-                              setIsDropdownOpen(false)
-                              setSearchTerm("")
+                              setSelectedTrainerId(trainer.id);
+                              setIsDropdownOpen(false);
+                              setSearchTerm("");
                             }}
                             className={`admin-trainer-option w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 transition-colors duration-200 ${
-                              trainer.id === selectedTrainerId ? "bg-blue-50 border-r-2 border-blue-500" : ""
+                              trainer.id === selectedTrainerId
+                                ? "bg-blue-50 border-r-2 border-blue-500"
+                                : ""
                             }`}
                           >
                             <div
-                              className={`w-8 h-8 ${generateAvatar(trainer.name).colorClass} rounded-full flex items-center justify-center text-white text-xs font-bold`}
+                              className={`w-8 h-8 ${
+                                generateAvatar(trainer.name).color
+                              } rounded-full flex items-center justify-center text-white text-xs font-bold`}
                             >
                               {generateAvatar(trainer.name).initials}
                             </div>
                             <div className="flex-1">
-                              <p className="admin-option-name font-medium text-gray-900">{trainer.name}</p>
-                              <p className="admin-option-designation text-sm text-gray-600">{trainer.designation}</p>
-                              <p className="admin-option-email text-xs text-gray-500">{trainer.email}</p>
+                              <p className="admin-option-name font-medium text-gray-900">
+                                {trainer.name}
+                              </p>
+                              <p className="admin-option-designation text-sm text-gray-600">
+                                {trainer.designation}
+                              </p>
+                              <p className="admin-option-email text-xs text-gray-500">
+                                {trainer.email}
+                              </p>
                             </div>
-                            {trainer.id === selectedTrainerId && <Check className="w-4 h-4 text-blue-500" />}
+                            {trainer.id === selectedTrainerId && (
+                              <Check className="w-4 h-4 text-blue-500" />
+                            )}
                           </button>
                         ))
                       ) : (
@@ -403,30 +446,45 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
             <div className="admin-sidebar-content space-y-6 sticky top-24">
               {/* Booking Info Card */}
               <div className="admin-info-card bg-white rounded-lg border border-gray-200 p-6">
-                <h3 className="admin-card-title text-lg font-semibold text-gray-900 mb-4">Booking Summary</h3>
+                <h3 className="admin-card-title text-lg font-semibold text-gray-900 mb-4">
+                  Booking Summary
+                </h3>
                 <div className="admin-info-items space-y-4">
                   <div className="admin-info-item">
-                    <span className="admin-info-label text-sm font-medium text-gray-600">Booking ID</span>
-                    <span className="admin-info-value block text-sm text-gray-900">#{bookingData.id}</span>
+                    <span className="admin-info-label text-sm font-medium text-gray-600">
+                      Booking ID
+                    </span>
+                    <span className="admin-info-value block text-sm text-gray-900">
+                      #{booking?._id}
+                    </span>
                   </div>
                   <div className="admin-info-item">
-                    <span className="admin-info-label text-sm font-medium text-gray-600">Status</span>
+                    <span className="admin-info-label text-sm font-medium text-gray-600">
+                      Status
+                    </span>
                     <span
-                      className={`admin-info-value inline-block px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(bookingData.status)}`}
+                      className={`admin-info-value inline-block px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(
+                        selectedStatus
+                      )}`}
                     >
-                      {bookingData.status.charAt(0).toUpperCase() + bookingData.status.slice(1)}
+                      {selectedStatus.charAt(0).toUpperCase() +
+                        selectedStatus.slice(1)}
                     </span>
                   </div>
                   <div className="admin-info-item">
-                    <span className="admin-info-label text-sm font-medium text-gray-600">Created</span>
+                    <span className="admin-info-label text-sm font-medium text-gray-600">
+                      Created
+                    </span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {formatDate(bookingData.createdAt)}
+                      {booking?.createdAt ? formatDate(booking?.createdAt) : 'not found'}
                     </span>
                   </div>
                   <div className="admin-info-item">
-                    <span className="admin-info-label text-sm font-medium text-gray-600">Last Updated</span>
+                    <span className="admin-info-label text-sm font-medium text-gray-600">
+                      Last Updated
+                    </span>
                     <span className="admin-info-value block text-sm text-gray-900">
-                      {formatDate(bookingData.updatedAt)}
+                      {booking?.createdAt ? formatDate(booking?.updatedAt) : 'not found'}
                     </span>
                   </div>
                 </div>
@@ -434,20 +492,64 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
 
               {/* Quick Actions Card */}
               <div className="admin-actions-card bg-white rounded-lg border border-gray-200 p-6">
-                <h3 className="admin-card-title text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                <h3 className="admin-card-title text-lg font-semibold text-gray-900 mb-4">
+                  Quick Actions
+                </h3>
                 <div className="admin-actions-list space-y-3">
-                  <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors duration-200">
-                    <Edit className="w-4 h-4 text-gray-600" />
-                    <span className="text-sm font-medium text-gray-700">Edit Booking</span>
-                  </button>
-                  <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-green-50 rounded-lg transition-colors duration-200 text-green-600">
-                    <Check className="w-4 h-4" />
-                    <span className="text-sm font-medium">Confirm Booking</span>
-                  </button>
-                  <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors duration-200 text-red-600">
-                    <Mail className="w-4 h-4" />
-                    <span className="text-sm font-medium">Cancel Booking</span>
-                  </button>
+                  {/* Status Dropdown */}
+                  <div className="admin-status-selector">
+                    <label className="admin-selector-label block text-sm font-medium text-gray-700 mb-2">
+                      Update Status
+                    </label>
+                    <div className="relative">
+                      <button
+                        onClick={() =>
+                          setIsStatusDropdownOpen(!isStatusDropdownOpen)
+                        }
+                        className="admin-status-dropdown-trigger w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <span
+                          className={`text-sm font-medium px-2 py-1 rounded-full ${getStatusColor(
+                            selectedStatus
+                          )}`}
+                        >
+                          {selectedStatus.charAt(0).toUpperCase() +
+                            selectedStatus.slice(1)}
+                        </span>
+                        <ChevronDown className="w-4 h-4 text-gray-500" />
+                      </button>
+
+                      {isStatusDropdownOpen && (
+                        <div className="admin-status-dropdown-menu absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+                          <div className="admin-status-options">
+                            {statusOptions.map((option) => (
+                              <button
+                                key={option.value}
+                                onClick={() => {
+                                  setSelectedStatus(option.value);
+                                  setIsStatusDropdownOpen(false);
+                                }}
+                                className={`admin-status-option w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 transition-colors duration-200 ${
+                                  option.value === selectedStatus
+                                    ? "bg-blue-50"
+                                    : ""
+                                }`}
+                              >
+                                <span
+                                  className={`text-sm font-medium px-2 py-1 rounded-full ${option.color}`}
+                                >
+                                  {option.label}
+                                </span>
+                                {option.value === selectedStatus && (
+                                  <Check className="w-4 h-4 text-blue-500" />
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -455,7 +557,7 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BookingDetails
+export default BookingDetails;

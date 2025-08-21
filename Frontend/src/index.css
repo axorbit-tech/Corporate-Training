@@ -1214,7 +1214,8 @@
 }
 
 /* Dropdown positioning */
-.admin-booking-details .admin-dropdown-menu {
+.admin-booking-details .admin-dropdown-menu,
+.admin-booking-details .admin-status-dropdown-menu {
   max-height: 300px;
 }
 

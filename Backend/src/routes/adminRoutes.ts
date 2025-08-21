@@ -153,6 +153,8 @@ router.get('/requests', trainerController.getRequests)
 
 // ========================================= Booking ==============================================
 
-router.get('/bookings', bookingController.getBookings)
+router.get('/booking', bookingController.getBookings)
+
+router.get('/booking/:id',bookingController.getBookingDetails)
 
 export default router;

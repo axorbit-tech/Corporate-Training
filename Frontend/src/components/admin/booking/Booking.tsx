@@ -1,8 +1,9 @@
 import type React from "react"
 import { useEffect, useState } from "react"
-import { Search, Filter, MoreHorizontal, Eye, Edit, Trash2, Calendar, Briefcase } from "lucide-react"
+import { Search, Filter, MoreHorizontal, Eye, Trash2, Calendar, Briefcase } from "lucide-react"
 import { useLocation } from "react-router-dom";
 import { useGetBookingsQuery } from "../../../store/slices/apiSlice";
+import { useNavigate } from "react-router-dom";
 
 
 interface IUser {
@@ -25,6 +26,8 @@ interface IBooking {
 }
 
 const BookingListing: React.FC = () => {
+
+  const navigate = useNavigate()
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -216,11 +219,8 @@ const BookingListing: React.FC = () => {
                   </td>
                   <td className="admin-booking-actions px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center space-x-2">
-                      <button className="admin-view-btn text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50">
+                      <button onClick={()=> navigate(`/admin/booking-details/${booking?._id}`)} className="admin-view-btn text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50">
                         <Eye className="w-4 h-4" />
-                      </button>
-                      <button className="admin-edit-btn text-gray-600 hover:text-gray-900 p-1 rounded hover:bg-gray-50">
-                        <Edit className="w-4 h-4" />
                       </button>
                       <button className="admin-delete-btn text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50">
                         <Trash2 className="w-4 h-4" />
