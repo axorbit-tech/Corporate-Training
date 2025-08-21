@@ -1193,3 +1193,34 @@
     font-size: 1.5rem;
   }
 }
+
+.admin-booking-details .admin-booking-page-title,
+.admin-booking-details .admin-section-title,
+.admin-booking-details .admin-customer-name,
+.admin-booking-details .admin-card-title {
+  font-family: "Lusitana", serif;
+}
+
+.admin-booking-details .admin-customer-email,
+.admin-booking-details .admin-detail-label,
+.admin-booking-details .admin-detail-value,
+.admin-booking-details .admin-trainer-name,
+.admin-booking-details .admin-trainer-designation,
+.admin-booking-details .admin-info-label,
+.admin-booking-details .admin-info-value,
+.admin-booking-details .admin-action-btn,
+.admin-booking-details .admin-action-item {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Dropdown positioning */
+.admin-booking-details .admin-dropdown-menu {
+  max-height: 300px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .admin-booking-details .admin-customer-name {
+    font-size: 1.25rem;
+  }
+}

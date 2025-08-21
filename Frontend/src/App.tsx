@@ -40,6 +40,7 @@ import AdminTrainerListingPage from "./pages/admin/tainer/TrainerListing";
 import AdminTrainerDetailsPage from "./pages/admin/tainer/TrainerDetails";
 import AdminRequestListingPage from "./pages/admin/requests/Requests";
 import AdminBookingListingPage from "./pages/admin/booking/BookingListing";
+import AdminBookingDetailsPage from "./pages/admin/booking/BookingDetails";
 
 
 
@@ -116,6 +117,7 @@ function App() {
           <Route path="/admin/trainer-details/:id" element={<AdminTrainerDetailsPage />} />
           <Route path="/admin/requests" element={<AdminRequestListingPage />} />
           <Route path="/admin/bookings" element={<AdminBookingListingPage />} />
+          <Route path="/admin/booking-details/:id" element={<AdminBookingDetailsPage />} />
 
           <Route path="/admin/login" element={<AdminLoginPage />} />
 
