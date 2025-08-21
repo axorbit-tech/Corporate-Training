@@ -26,7 +26,7 @@ const Header: React.FC = () => {
   return (
     <header className="fixed w-full top-0 z-50" style={headerStyle}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
+        <div className="flex items-center px-8  justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
             <NavLink
@@ -115,15 +115,29 @@ const Header: React.FC = () => {
           </nav>
 
           {/* Desktop Book Appointment Button - Right */}
-          <div className="hidden lg:block flex-shrink-0">
-            <NavLink
-              to="/booking"
-              className=" hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 cursor-pointer px-8 py-4 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-              style={{ fontFamily: "Montserrat, sans-serif" }}
-            >
-              BOOK APPOINTMENT
-            </NavLink>
+          <div className="flex items-center gap-4">
+            <div className="hidden lg:block flex-shrink-0">
+              <NavLink
+                to="/booking"
+                className=" hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 cursor-pointer px-4 py-4 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
+                BOOK APPOINTMENT
+              </NavLink>
+            </div>
+
+            <div className="hidden lg:block flex-shrink-0">
+              <NavLink
+                to="/trainer-registration"
+                className=" hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 cursor-pointer px-5 py-4 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+                style={{ fontFamily: "Montserrat, sans-serif" }}
+              >
+                REGISTER AS A TRAINER
+              </NavLink>
+            </div>
           </div>
+
+
 
           {/* Mobile Menu Button */}
           <button
@@ -164,7 +178,7 @@ const Header: React.FC = () => {
             <div className="pt-2 pb-3 space-y-1">
               <NavLink
                 to="/"
-                
+
                 className={({ isActive }) =>
                   `block px-3 py-2  font-medium text-sm tracking-wide rounded-md transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                   }`
@@ -235,7 +249,8 @@ const Header: React.FC = () => {
               </NavLink>
 
               {/* Mobile Book Appointment Button */}
-              <div className="pt-2 px-3">
+              <div className="mt-4 px-4 sm:px-6 lg:px-8">
+                <div className="pt-2 px-3">
                 <NavLink
                   to="/booking"
                   className="block w-full text-center hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 px-4 py-3 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm"
@@ -243,6 +258,16 @@ const Header: React.FC = () => {
                 >
                   BOOK APPOINTMENT
                 </NavLink>
+              </div>
+              <div className="pt-2 px-3">
+                <NavLink
+                  to="/booking"
+                  className="block w-full text-center hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 px-4 py-3 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm"
+                  style={{ fontFamily: "Montserrat, sans-serif" }}
+                >
+                  REGISTER AS A TRAINER
+                </NavLink>
+              </div>
               </div>
             </div>
           </div>
