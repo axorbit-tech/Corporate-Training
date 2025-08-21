@@ -55,14 +55,14 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
   const hasStatusChanged = selectedStatus !== originalStatus;
   const hasChanges = hasTrainerChanged || hasStatusChanged;
 
-  const filteredTrainers = trainers.filter(
+  const filteredTrainers = trainers?.filter(
     (trainer) =>
       trainer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       trainer.designation.toLowerCase().includes(searchTerm.toLowerCase()) ||
       trainer.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const selectedTrainer = trainers.find(
+  const selectedTrainer = trainers?.find(
     (trainer) => trainer._id.toString() === selectedTrainerId
   );
 
@@ -355,8 +355,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       </div>
                     </div>
                     <div className="admin-trainer-options max-h-60 overflow-y-auto">
-                      {filteredTrainers.length > 0 ? (
-                        filteredTrainers.map((trainer) => (
+                      {filteredTrainers?.length > 0 ? (
+                        filteredTrainers?.map((trainer) => (
                           <button
                             key={trainer?._id}
                             onClick={() => {
