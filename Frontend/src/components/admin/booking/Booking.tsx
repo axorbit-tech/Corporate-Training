@@ -1,86 +1,66 @@
-"use client"
-
 import type React from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Search, Filter, MoreHorizontal, Eye, Edit, Trash2, Calendar, Briefcase } from "lucide-react"
+import { useLocation } from "react-router-dom";
+import { useGetBookingsQuery } from "../../../store/slices/apiSlice";
 
-interface Booking {
-  id: number
-  customerName: string
-  service: string
-  bookingDate: string
-  status: "confirmed" | "pending" | "cancelled" | "completed"
-  createdAt: string
+
+interface IUser {
+  _id: number;
+  name: string;
+  email: string;
+  phone: number;
+  age: number;
+  sex: string;
+}
+
+interface IBooking {
+  _id: number;
+  userId: IUser;
+  service: string;
+  date: string;
+  country: string;
+  state: string;
+  status: string
 }
 
 const BookingListing: React.FC = () => {
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const filter = params.get("filter") || "all";
+
+  const {data: bookingResponse} = useGetBookingsQuery(filter);
+
+  const [bookings, setBookings] = useState<IBooking[]>([])
+
+  useEffect(()=> {
+    setBookings(bookingResponse?.data)
+  },[bookingResponse])
+
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [selectedBookings, setSelectedBookings] = useState<number[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
 
-  // Mock data - replace with actual API call
-  const mockBookings: Booking[] = [
-    {
-      id: 1,
-      customerName: "John Smith",
-      service: "Corporate Training",
-      bookingDate: "2024-01-15",
-      status: "confirmed",
-      createdAt: "2024-01-10",
-    },
-    {
-      id: 2,
-      customerName: "Sarah Johnson",
-      service: "Leadership Development",
-      bookingDate: "2024-01-20",
-      status: "pending",
-      createdAt: "2024-01-12",
-    },
-    {
-      id: 3,
-      customerName: "Michael Brown",
-      service: "Team Building Workshop",
-      bookingDate: "2024-01-25",
-      status: "completed",
-      createdAt: "2024-01-08",
-    },
-    {
-      id: 4,
-      customerName: "Emily Davis",
-      service: "Executive Coaching",
-      bookingDate: "2024-01-30",
-      status: "cancelled",
-      createdAt: "2024-01-14",
-    },
-    {
-      id: 5,
-      customerName: "David Wilson",
-      service: "Strategic Planning",
-      bookingDate: "2024-02-05",
-      status: "confirmed",
-      createdAt: "2024-01-16",
-    },
-  ]
-
   // Filter bookings based on search and status
-  const filteredBookings = mockBookings.filter((booking) => {
+  const filteredBookings = bookings?.filter((booking) => {
     const matchesSearch =
-      booking.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booking?.userId?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.service.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === "all" || booking.status === statusFilter
     return matchesSearch && matchesStatus
   })
 
   // Pagination
-  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage)
+  const totalPages = Math.ceil(filteredBookings?.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedBookings = filteredBookings.slice(startIndex, startIndex + itemsPerPage)
+  const paginatedBookings = filteredBookings?.slice(startIndex, startIndex + itemsPerPage)
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      setSelectedBookings(paginatedBookings.map((booking) => booking.id))
+      setSelectedBookings(paginatedBookings?.map((booking) => booking._id))
     } else {
       setSelectedBookings([])
     }
@@ -115,7 +95,7 @@ const BookingListing: React.FC = () => {
   return (
     <div className="admin-booking-listing min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="admin-booking-header bg-white border-b border-gray-200 sticky top-0 z-30">
+      <div className="admin-booking-header bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div>
@@ -173,7 +153,7 @@ const BookingListing: React.FC = () => {
                 <th className="admin-table-checkbox-header px-6 py-3 text-left">
                   <input
                     type="checkbox"
-                    checked={selectedBookings.length === paginatedBookings.length && paginatedBookings.length > 0}
+                    checked={selectedBookings?.length === paginatedBookings?.length && paginatedBookings?.length > 0}
                     onChange={(e) => handleSelectAll(e.target.checked)}
                     className="admin-select-all-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
@@ -196,27 +176,27 @@ const BookingListing: React.FC = () => {
               </tr>
             </thead>
             <tbody className="admin-booking-table-body bg-white divide-y divide-gray-200">
-              {paginatedBookings.map((booking) => (
-                <tr key={booking.id} className="admin-booking-row hover:bg-gray-50">
+              {paginatedBookings?.map((booking) => (
+                <tr key={booking._id} className="admin-booking-row hover:bg-gray-50">
                   <td className="admin-table-checkbox px-6 py-4">
                     <input
                       type="checkbox"
-                      checked={selectedBookings.includes(booking.id)}
-                      onChange={(e) => handleSelectBooking(booking.id, e.target.checked)}
+                      checked={selectedBookings.includes(booking._id)}
+                      onChange={(e) => handleSelectBooking(booking._id, e.target.checked)}
                       className="admin-booking-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                   </td>
                   <td className="admin-customer-name px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="admin-customer-avatar w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                        {booking.customerName
-                          .split(" ")
+                        {booking?.userId?.name
+                          ?.split(" ")
                           .map((n) => n[0])
                           .join("")}
                       </div>
                       <div className="ml-3">
                         <div className="admin-customer-name-text text-sm font-medium text-gray-900">
-                          {booking.customerName}
+                          {booking?.userId?.name}
                         </div>
                       </div>
                     </div>
@@ -225,13 +205,13 @@ const BookingListing: React.FC = () => {
                     <div className="admin-service-text text-sm text-gray-900">{booking.service}</div>
                   </td>
                   <td className="admin-booking-date px-6 py-4 whitespace-nowrap">
-                    <div className="admin-date-text text-sm text-gray-900">{formatDate(booking.bookingDate)}</div>
+                    <div className="admin-date-text text-sm text-gray-900">{formatDate(booking?.date)}</div>
                   </td>
                   <td className="admin-booking-status px-6 py-4 whitespace-nowrap">
                     <span
                       className={`admin-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(booking.status)}`}
                     >
-                      {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                      {booking?.status.charAt(0).toUpperCase() + booking?.status?.slice(1)}
                     </span>
                   </td>
                   <td className="admin-booking-actions px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -255,33 +235,33 @@ const BookingListing: React.FC = () => {
 
         {/* Mobile Card View */}
         <div className="admin-booking-cards md:hidden space-y-4">
-          {paginatedBookings.map((booking) => (
-            <div key={booking.id} className="admin-booking-card bg-white rounded-lg border border-gray-200 p-4">
+          {paginatedBookings?.map((booking) => (
+            <div key={booking._id} className="admin-booking-card bg-white rounded-lg border border-gray-200 p-4">
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3 flex-1">
                   <input
                     type="checkbox"
-                    checked={selectedBookings.includes(booking.id)}
-                    onChange={(e) => handleSelectBooking(booking.id, e.target.checked)}
+                    checked={selectedBookings.includes(booking._id)}
+                    onChange={(e) => handleSelectBooking(booking._id, e.target.checked)}
                     className="admin-mobile-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <div className="admin-mobile-avatar w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                    {booking.customerName
-                      .split(" ")
+                    {booking?.userId?.name
+                      ?.split(" ")
                       .map((n) => n[0])
                       .join("")}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="admin-mobile-customer-name text-sm font-medium text-gray-900 truncate">
-                      {booking.customerName}
+                      {booking?.userId?.name}
                     </div>
                     <div className="admin-mobile-service text-sm text-gray-600 truncate">
                       <Briefcase className="inline w-3 h-3 mr-1" />
-                      {booking.service}
+                      {booking?.service}
                     </div>
                     <div className="admin-mobile-date text-sm text-gray-600">
                       <Calendar className="inline w-3 h-3 mr-1" />
-                      {formatDate(booking.bookingDate)}
+                      {formatDate(booking?.date)}
                     </div>
                   </div>
                 </div>
@@ -289,7 +269,7 @@ const BookingListing: React.FC = () => {
                   <span
                     className={`admin-mobile-status-badge inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(booking.status)}`}
                   >
-                    {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                    {booking?.status?.charAt(0).toUpperCase() + booking?.status?.slice(1)}
                   </span>
                   <button className="admin-mobile-more-btn text-gray-400 hover:text-gray-600 p-1">
                     <MoreHorizontal className="w-4 h-4" />
@@ -304,8 +284,8 @@ const BookingListing: React.FC = () => {
         {totalPages > 1 && (
           <div className="admin-booking-pagination flex items-center justify-between mt-6">
             <div className="admin-pagination-info text-sm text-gray-700">
-              Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredBookings.length)} of{" "}
-              {filteredBookings.length} bookings
+              Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredBookings?.length)} of{" "}
+              {filteredBookings?.length} bookings
             </div>
             <div className="admin-pagination-controls flex items-center space-x-2">
               <button

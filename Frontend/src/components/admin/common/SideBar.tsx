@@ -45,10 +45,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
       label: 'Appointments',
       icon: Calendar,
       submenu: [
-        { label: 'All Appointments', href: '/admin/appointments' },
-        { label: 'Today\'s Schedule', href: '/admin/appointments/today' },
-        { label: 'Upcoming', href: '/admin/appointments/upcoming' },
-        { label: 'Cancelled', href: '/admin/appointments/cancelled' }
+        { label: 'All Appointments', href: `/admin/bookings?filter=all` },
+        { label: 'Today\'s Schedule', href: `/admin/bookings?filter=today` },
+        { label: 'Upcoming', href: `/admin/bookings?filter=upcoming` },
       ]
     },
     {
@@ -184,7 +183,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onToggle }) => {
                 ) : (
                   // Regular Menu Item
                   <a
-                    href={item.href}
+                    onClick={() => navigate(item.href)}
                     className={`
                       nav-item flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
                       ${item.active
