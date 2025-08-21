@@ -14,7 +14,7 @@ const getDashboardDetails = async (req: Request, res: Response) => {
                 $gte: now.startOf("day").toDate(),
                 $lte: now.endOf("day").toDate(),
             },
-        }).populate("userId", "name").populate("trainerId", "name designation").sort({ createdAt: 1 }).limit(4);
+        }).populate("userId", "name").populate("trainerId", "name designation").sort({ createdAt: -1 }).limit(4);
 
        
 
