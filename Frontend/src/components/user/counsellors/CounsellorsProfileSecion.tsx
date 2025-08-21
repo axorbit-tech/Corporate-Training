@@ -17,7 +17,7 @@ interface ICounsellor {
 
 const CounsellorProfileSection: React.FC = () => {
   const [page, setPage] = useState(1);
-  const limit = 3;
+  const limit = 6;
 
   const [counsellors, setCounsellors] = useState<ICounsellor[]>([]);
 
@@ -83,7 +83,7 @@ const CounsellorProfileSection: React.FC = () => {
             onPageChange={setPage}
             onShowLess={() => {
               setPage(1);            // reset back to page 1
-              setCounsellors(prev => prev.slice(0, 3)); // keep only first 3
+              setCounsellors(prev => prev.slice(0, 6)); // keep only first 6 counsellors
             }}
             variant="loadMore"
             isLoading={isLoading && page > 1}

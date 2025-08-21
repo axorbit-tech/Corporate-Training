@@ -285,7 +285,7 @@ const createBooking = async (req: Request, res: Response) => {
 const getTrainers = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
-    const limit = parseInt(req.query.limit as string) || 3;
+    const limit = parseInt(req.query.limit as string) || 6;
 
     // calculate how many to skip
     const skip = (page - 1) * limit;
