@@ -51,3 +51,33 @@ export interface ITrainer {
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface IBookingData {
+  _id: number;
+  userId: IUser;
+  username: string;
+  userEmail: string;
+  phone: string;
+  age: number;
+  sex: string;
+  service: string;
+  date: string;
+  country: string;
+  state: string;
+  status: "pending" | "confirmed" | "cancelled" | "completed";
+  trainerId?: string;
+  trainerName?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IUser {
+  _id: number;
+  email: string;
+  name: string;
+  phone: number;
+  age: number;
+  sex: string;
+  createdAt?: string;
+  updatedAt?: string;
+}

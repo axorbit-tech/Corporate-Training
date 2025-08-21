@@ -175,7 +175,13 @@ export const apiSlices = createApi({
     }),
     getBookings: builder.query({
       query: (filter) => ({
-        url: `/admin/bookings?filter=${filter}`,
+        url: `/admin/booking?filter=${filter}`,
+        method: HttpMethod.GET,
+      }),
+    }),
+    getBookingDetails: builder.query({
+      query: (id) => ({
+        url: `/admin/booking/${id}`,
         method: HttpMethod.GET,
       }),
     }),
@@ -209,5 +215,6 @@ export const {
   useGetTrainersQuery,
   useGetRequestesQuery,
   useGetTrainerDetailsQuery,
-  useGetBookingsQuery
+  useGetBookingsQuery,
+  useGetBookingDetailsQuery
 } = apiSlices;

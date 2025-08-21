@@ -150,6 +150,8 @@ router.get('/requests', trainerController.getRequests)
 
 router.get('/trainer/:id', trainerController.getTrainerDetails)
 
-router.get('/bookings', bookingController.getBookings)
+router.get('/booking', bookingController.getBookings)
+
+router.get('/booking/:id',bookingController.getBookingDetails)
 
 export default router;
