@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import BookingModel from "../../models/userModels/bookingModel";
+import trainerModel from "../../models/trainerModels/trainerModel";
 import dayjs from "dayjs";
 import { HttpStatusCode } from "../../constants/httpStatusCodes";
 
@@ -63,9 +64,48 @@ const getBookingDetails = async (req: Request, res: Response) => {
   }
 };
 
+const updateBookingStatus = async (req: Request, res: Response) => {
+  try {
+
+    const { id, trainerId, status } = req.body;
+    const booking = await BookingModel.findById(id);
+
+    if (!booking) {
+      return res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Booking not found",
+      });
+    }
+
+    if (trainerId && trainerId.trim() !== "") {
+      const trainer = await trainerModel.findById(trainerId);
+
+      if (!trainer) {
+        return res.status(HttpStatusCode.NOT_FOUND).json({
+          success: false,
+          error: "Trainer not found",
+        });
+      }
+    }
+    booking.status = status;
+    booking.trainerId = trainerId;
+    await booking.save();
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Booking status updated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error updating booking status",
+    });
+  }
+}
+
 const BookingController = {
   getBookings,
   getBookingDetails,
+  updateBookingStatus
 };
 
 export default BookingController;

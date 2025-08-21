@@ -157,4 +157,6 @@ router.get('/booking', bookingController.getBookings)
 
 router.get('/booking/:id',bookingController.getBookingDetails)
 
+router.patch('/booking',bookingController.updateBookingStatus)
+
 export default router;

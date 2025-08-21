@@ -11,31 +11,30 @@ import {
   Check,
   ChevronDown,
 } from "lucide-react";
-import { useGetBookingDetailsQuery } from "../../../store/slices/apiSlice";
+import { useGetBookingDetailsQuery, useUpdateBookingStatusMutation } from "../../../store/slices/apiSlice";
 import { useParams } from "react-router-dom";
 import type { IBookingData, ITrainer } from "../../../types/types";
 import { generateAvatar } from "../../../utils/generateAvatar";
 import { formatDate } from "../../../utils/fomatDate";
 import { useGetTrainersQuery } from "../../../store/slices/apiSlice";
+import { toast } from "react-toastify";
 
-interface BookingDetailsProps {
-  bookingId?: string;
-}
-
-const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
+const BookingDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data: bookingResponse } = useGetBookingDetailsQuery(id);
-    const {data: trainersResponse} = useGetTrainersQuery(undefined);
+  const { data: trainersResponse } = useGetTrainersQuery(undefined);
+  const [updateBookingStatus] = useUpdateBookingStatusMutation();
 
 
-    const [trainers, setTrainers] = useState<ITrainer[]>([])
+  const [trainers, setTrainers] = useState<ITrainer[]>([])
 
   const [booking, setBooking] = useState<IBookingData>();
 
   useEffect(() => {
     setBooking(bookingResponse?.data);
-    setTrainers(trainersResponse?.data)
+    setTrainers(trainersResponse?.data);
+    setSelectedStatus(trainersResponse?.data?.status);
   }, [bookingResponse, trainersResponse]);
 
   const [selectedTrainerId, setSelectedTrainerId] = useState<string>(
@@ -85,8 +84,27 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
     setIsSaving(true);
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    if (hasChanges) {
+      const data: { id: string | undefined ; status: string; trainerId?: string } = {
+        id,
+        status: selectedStatus,
+      };
+      if (selectedTrainerId) {
+        data.trainerId = selectedTrainerId;  // only add if not empty
+      }
+      const res = await updateBookingStatus(data);
+      if (res?.error) {
+        console.error("Error updating booking status:", res.error);
+        toast.error("Error updating booking status");
+      } else {
+        toast.success("Booking status updated successfully");
+        console.log("Booking status updated successfully");
+      }
+    }
+
     console.log("Saving changes:", {
-      bookingId,
+      id,
       trainerId: selectedTrainerId,
       status: selectedStatus,
     });
@@ -142,8 +160,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       selectedStatus
                     )}`}
                   >
-                    {selectedStatus.charAt(0).toUpperCase() +
-                      selectedStatus.slice(1)}
+                    {selectedStatus?.charAt(0).toUpperCase() +
+                      selectedStatus?.slice(1)}
                   </span>
                 </div>
               </div>
@@ -282,8 +300,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                       selectedStatus
                     )}`}
                   >
-                    {selectedStatus.charAt(0).toUpperCase() +
-                      selectedStatus.slice(1)}
+                    {selectedStatus?.charAt(0).toUpperCase() +
+                      selectedStatus?.slice(1)}
                   </span>
                 </div>
               </div>
@@ -301,9 +319,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div
-                        className={`w-10 h-10 ${
-                          generateAvatar(selectedTrainer.name).color
-                        } rounded-full flex items-center justify-center text-white text-sm font-bold`}
+                        className={`w-10 h-10 ${generateAvatar(selectedTrainer.name).color
+                          } rounded-full flex items-center justify-center text-white text-sm font-bold`}
                       >
                         {generateAvatar(selectedTrainer.name).initials}
                       </div>
@@ -364,16 +381,14 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                               setIsDropdownOpen(false);
                               setSearchTerm("");
                             }}
-                            className={`admin-trainer-option w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 transition-colors duration-200 ${
-                              trainer?._id.toString() === selectedTrainerId
-                                ? "bg-blue-50 border-r-2 border-blue-500"
-                                : ""
-                            }`}
+                            className={`admin-trainer-option w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 transition-colors duration-200 ${trainer?._id.toString() === selectedTrainerId
+                              ? "bg-blue-50 border-r-2 border-blue-500"
+                              : ""
+                              }`}
                           >
                             <div
-                              className={`w-8 h-8 ${
-                                generateAvatar(trainer.name).color
-                              } rounded-full flex items-center justify-center text-white text-xs font-bold`}
+                              className={`w-8 h-8 ${generateAvatar(trainer.name).color
+                                } rounded-full flex items-center justify-center text-white text-xs font-bold`}
                             >
                               {generateAvatar(trainer.name).initials}
                             </div>
@@ -431,8 +446,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                         selectedStatus
                       )}`}
                     >
-                      {selectedStatus.charAt(0).toUpperCase() +
-                        selectedStatus.slice(1)}
+                      {selectedStatus?.charAt(0).toUpperCase() +
+                        selectedStatus?.slice(1)}
                     </span>
                   </div>
                   <div className="admin-info-item">
@@ -501,8 +516,8 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                             selectedStatus
                           )}`}
                         >
-                          {selectedStatus.charAt(0).toUpperCase() +
-                            selectedStatus.slice(1)}
+                          {selectedStatus?.charAt(0).toUpperCase() +
+                            selectedStatus?.slice(1)}
                         </span>
                         <ChevronDown className="w-4 h-4 text-gray-500" />
                       </button>
@@ -517,11 +532,10 @@ const BookingDetails: React.FC<BookingDetailsProps> = ({ bookingId = "1" }) => {
                                   setSelectedStatus(option.value);
                                   setIsStatusDropdownOpen(false);
                                 }}
-                                className={`admin-status-option w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 transition-colors duration-200 ${
-                                  option.value === selectedStatus
-                                    ? "bg-blue-50"
-                                    : ""
-                                }`}
+                                className={`admin-status-option w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 transition-colors duration-200 ${option.value === selectedStatus
+                                  ? "bg-blue-50"
+                                  : ""
+                                  }`}
                               >
                                 <span
                                   className={`text-sm font-medium px-2 py-1 rounded-full ${option.color}`}
