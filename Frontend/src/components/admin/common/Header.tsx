@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Menu, Mail, Settings, ChevronDown, LogOut, UserCircle } from 'lucide-react'
+import CustomModal from './CustomeModal'
+import { useNavigate } from 'react-router-dom'
 
 interface AdminHeaderProps {
   onSidebarToggle: () => void
@@ -8,6 +10,13 @@ interface AdminHeaderProps {
 const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
   // const [showNotifications, setShowNotifications] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    setOpen(true)
+  }
 
   // const notifications = [
   //   {
@@ -177,15 +186,24 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
                   </a> */}
                 </div>
                 <div className="border-t border-gray-200 py-2">
-                  <button className="profile-menu-item flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left">
-                    <LogOut className="w-4 h-4" />
-                    <span>Logout</span>
+                  <button onClick={handleLogout} className="profile-menu-item cursor-pointer flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors w-full text-left">
+                    <LogOut  className="w-4 h-4" />
+                    <span >Logout</span>
                   </button>
                 </div>
               </div>
             )}
           </div>
         </div>
+
+        <CustomModal
+          open={open}
+          onClose={() => setOpen(false)}
+          title="Logout"
+          description="Are you sure you want to logout?"
+          buttonText="Logout"
+          onButtonClick={() => navigate('/admin/logout')}
+        />
       </div>
     </header>
   )
