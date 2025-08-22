@@ -21,7 +21,7 @@ const ServicesHeroSection: React.FC = () => {
           <div className="lg:col-span-5 order-1 lg:order-2">
             <div className="space-y-6 sm:space-y-8">
               {/* Main Heading */}
-              <h2 className="services-main-heading text-xl sm:text-xl md:text-xl lg:text-4xl xl:text-4xl font-bold text-gray-900 leading-tight">
+              <h2 className="services-main-heading text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
                 Our Services
               </h2>
 

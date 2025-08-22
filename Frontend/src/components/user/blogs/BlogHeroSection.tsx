@@ -21,7 +21,7 @@ const BlogHeroSection: React.FC = () => {
           <div className="order-1 lg:order-2">
             <div className="space-y-6 sm:space-y-8">
               {/* Main Heading */}
-              <h1 className="blog-hero-heading text-4xl sm:text-4xl md:text-4xl lg:text-4xl xl:text-4xl font-bold text-gray-900 leading-tight">
+              <h1 className="blog-hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-gray-900 leading-tight">
                 Blogs
               </h1>
 
