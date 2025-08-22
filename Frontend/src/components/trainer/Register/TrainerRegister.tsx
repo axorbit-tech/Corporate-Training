@@ -15,7 +15,7 @@ const TrainerRegister: React.FC = () => {
   const [states, setStates] = useState<{ name: string; isoCode: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -103,7 +103,7 @@ const TrainerRegister: React.FC = () => {
       }
 
       setSelectedImage(file);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -126,20 +126,20 @@ const TrainerRegister: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      
+
       const submitData = new FormData();
-      
-      
+
+
       Object.entries(formData).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-          
+
           submitData.append(key, JSON.stringify(value));
         } else {
           submitData.append(key, value.toString());
         }
       });
 
-      
+
       if (selectedImage) {
         submitData.append('image', selectedImage);
       }
@@ -148,7 +148,7 @@ const TrainerRegister: React.FC = () => {
 
       if (res.success) {
         successToast("submitted successfully");
-        
+
         setFormData({
           name: "",
           email: "",
@@ -172,7 +172,7 @@ const TrainerRegister: React.FC = () => {
     }
   };
 
-  
+
   const getAvailableSubServices = () => {
     if (!formData.selectedServices.length || !services.length) return [];
 
@@ -199,7 +199,7 @@ const TrainerRegister: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden shadow-xl">
           {/* Left Side - Text Content */}
-          <div className="contact-text-section bg-green-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
+          <div className="contact-text-section bg-green-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col ">
             <div className="space-y-6 sm:space-y-8">
               {/* Main Heading */}
               <h2 className="contact-form-heading text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">
@@ -216,12 +216,19 @@ const TrainerRegister: React.FC = () => {
                 first step toward a better tomorrow.
               </p>
             </div>
+            <div className="mt-8">
+              <img
+              src="assets/therapist-trainer-reg-2.jpg"
+              alt="Blog Image"
+              className="w-full  h-[400px] sm:h-[400px] md:h-[700px] lg:h-[700px] object-fit"
+            />
+            </div>
           </div>
 
           {/* Right Side - Contact Form */}
           <div className="contact-form-section bg-blue-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
             <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
-              
+
               {/* Profile Image Upload Section */}
               <div className="form-group">
                 <label className="form-label block text-sm font-medium text-gray-700 mb-3">
@@ -461,11 +468,10 @@ const TrainerRegister: React.FC = () => {
                     {services?.map((service) => (
                       <div
                         key={service._id}
-                        className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                          formData.selectedServices.includes(service.title)
+                        className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${formData.selectedServices.includes(service.title)
                             ? "border-blue-500 bg-blue-50 shadow-md transform scale-105"
                             : "border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-25"
-                        }`}
+                          }`}
                         onClick={() => {
                           const serviceTitle = service.title;
                           const isSelected = formData.selectedServices.includes(serviceTitle);
@@ -495,11 +501,10 @@ const TrainerRegister: React.FC = () => {
                       >
                         <div className="flex items-center space-x-3">
                           <div
-                            className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                              formData.selectedServices.includes(service.title)
+                            className={`w-4 h-4 rounded border-2 flex items-center justify-center ${formData.selectedServices.includes(service.title)
                                 ? "border-blue-500 bg-blue-500"
                                 : "border-gray-300"
-                            }`}
+                              }`}
                           >
                             {formData.selectedServices.includes(service.title) && (
                               <svg
@@ -545,13 +550,12 @@ const TrainerRegister: React.FC = () => {
                         {availableSubServices.map((subService, index) => (
                           <div
                             key={`${subService.title}-${index}`}
-                            className={`group relative p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out ${
-                              formData.selectedSubServices.includes(
-                                subService.title
-                              )
+                            className={`group relative p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out ${formData.selectedSubServices.includes(
+                              subService.title
+                            )
                                 ? "border-blue-500 bg-blue-50 shadow-lg shadow-blue-100/50 ring-2 ring-blue-100"
                                 : "border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-25 hover:shadow-md hover:-translate-y-0.5"
-                            }`}
+                              }`}
                             onClick={() => {
                               const isSelected =
                                 formData.selectedSubServices.includes(
@@ -579,39 +583,37 @@ const TrainerRegister: React.FC = () => {
                           >
                             <div className="flex items-start space-x-3">
                               <div
-                                className={`relative flex-shrink-0 w-5 h-5 rounded-md border-2 transition-all duration-200 ${
-                                  formData.selectedSubServices.includes(
-                                    subService.title
-                                  )
+                                className={`relative flex-shrink-0 w-5 h-5 rounded-md border-2 transition-all duration-200 ${formData.selectedSubServices.includes(
+                                  subService.title
+                                )
                                     ? "border-blue-500 bg-blue-500 shadow-sm"
                                     : "border-slate-300 bg-white group-hover:border-blue-400"
-                                }`}
+                                  }`}
                               >
                                 {formData.selectedSubServices.includes(
                                   subService.title
                                 ) && (
-                                  <svg
-                                    className="w-3 h-3 text-white absolute top-0.5 left-0.5 transition-all duration-200"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
-                                )}
+                                    <svg
+                                      className="w-3 h-3 text-white absolute top-0.5 left-0.5 transition-all duration-200"
+                                      fill="currentColor"
+                                      viewBox="0 0 20 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <h4
-                                  className={`font-semibold text-xs leading-tight transition-colors duration-200 ${
-                                    formData.selectedSubServices.includes(
-                                      subService.title
-                                    )
+                                  className={`font-semibold text-xs leading-tight transition-colors duration-200 ${formData.selectedSubServices.includes(
+                                    subService.title
+                                  )
                                       ? "text-blue-900"
                                       : "text-slate-900 group-hover:text-blue-800"
-                                  }`}
+                                    }`}
                                 >
                                   {subService.title}
                                 </h4>
@@ -622,10 +624,10 @@ const TrainerRegister: React.FC = () => {
                             {formData.selectedSubServices.includes(
                               subService.title
                             ) && (
-                              <div className="absolute top-2 right-2">
-                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                              </div>
-                            )}
+                                <div className="absolute top-2 right-2">
+                                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                                </div>
+                              )}
                           </div>
                         ))}
                       </div>
@@ -633,11 +635,10 @@ const TrainerRegister: React.FC = () => {
                       <div className="flex items-center justify-between px-1">
                         <div className="flex items-center space-x-2">
                           <div
-                            className={`w-2 h-2 rounded-full transition-colors duration-200 ${
-                              formData.selectedSubServices.length > 0
+                            className={`w-2 h-2 rounded-full transition-colors duration-200 ${formData.selectedSubServices.length > 0
                                 ? "bg-blue-500"
                                 : "bg-slate-300"
-                            }`}
+                              }`}
                           ></div>
                           <span className="text-sm font-medium text-slate-700">
                             {formData.selectedSubServices.length} selected

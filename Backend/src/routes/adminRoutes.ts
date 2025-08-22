@@ -13,6 +13,7 @@ import clientController from "../controllers/adminControllers/clientController";
 import trainerController from "../controllers/adminControllers/tainerController";
 import bookingController from "../controllers/adminControllers/bookingController";
 import userController from "../controllers/userController/userController";
+import dashboardController from "../controllers/adminControllers/dashboardController";
 const router = express.Router();
 
 
@@ -165,5 +166,8 @@ router.get('/user-bookings/:id', bookingController.getUserBookings)
 
 
 router.get('/user/:id', userController.getUserDetails)
+// ========================================= Dashboard ==============================================
+
+router.get('/dashboard', dashboardController.getDashboardDetails)
 
 export default router;

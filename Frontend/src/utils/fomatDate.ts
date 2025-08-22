@@ -45,3 +45,13 @@ export const formatDateTimeWithSuffix = (dateString: string) => {
   return { readableDate, time }
 }
 
+
+export function formatTimeOnly(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+

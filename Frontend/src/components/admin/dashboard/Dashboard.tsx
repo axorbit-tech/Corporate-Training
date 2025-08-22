@@ -1,12 +1,51 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Users, Calendar, TrendingUp, DollarSign, Clock, CheckCircle, BarChart3, ArrowUp, ArrowDown, MoreVertical } from 'lucide-react'
+import  { useGetDashboardDetailsQuery } from '../../../store/slices/apiSlice'
+import { formatTimeOnly } from '../../../utils/fomatDate';
+
+
+interface IRescentBookings {
+  _id: string;
+  userId: IUser;
+  trainerId: ITrainer;
+  date: string;
+  service: string;
+  status: string;
+  totalClients: number
+}
+
+interface IUser {
+  name: string;
+}
+
+interface ITrainer {
+  name: string;
+  designation: string;
+}
 
 const AdminDashboard: React.FC = () => {
+
+  const { data : dashboardResponse } = useGetDashboardDetailsQuery(undefined)
+
+
+  const [todaysAppointment, setTodaysAppointment] = React.useState<IRescentBookings[]>([])
+  const [totalClients, setTotalClients] = React.useState<number>(0)
+  console.log(dashboardResponse)
+
+  useEffect(() => {
+    if (dashboardResponse?.data) {
+      setTodaysAppointment(dashboardResponse.data?.todaysAppointment || [])
+      setTotalClients(dashboardResponse.data?.totalClients || 0)
+    }
+  })
+
+
+  
   
   const stats = [
     {
       title: 'Total Clients',
-      value: '2,847',
+      value: totalClients || 0,
       change: '+12.5%',
       trend: 'up',
       icon: Users,
@@ -14,7 +53,7 @@ const AdminDashboard: React.FC = () => {
     },
     {
       title: 'Appointments Today',
-      value: '24',
+      value: todaysAppointment?.length || 0,
       change: '+8.2%',
       trend: 'up',
       icon: Calendar,
@@ -38,40 +77,7 @@ const AdminDashboard: React.FC = () => {
     }
   ]
 
-  const recentAppointments = [
-    {
-      id: 1,
-      client: 'John Doe',
-      therapist: 'Dr. Sarah Johnson',
-      time: '10:00 AM',
-      type: 'Individual Counseling',
-      status: 'confirmed'
-    },
-    {
-      id: 2,
-      client: 'Jane Smith',
-      therapist: 'Michael Chen',
-      time: '11:30 AM',
-      type: 'Corporate Training',
-      status: 'pending'
-    },
-    {
-      id: 3,
-      client: 'Robert Wilson',
-      therapist: 'Dr. Sarah Johnson',
-      time: '2:00 PM',
-      type: 'Stress Management',
-      status: 'confirmed'
-    },
-    {
-      id: 4,
-      client: 'Emily Davis',
-      therapist: 'Michael Chen',
-      time: '3:30 PM',
-      type: 'Family Counseling',
-      status: 'cancelled'
-    }
-  ]
+  
 
   const recentActivities = [
     {
@@ -131,6 +137,7 @@ const AdminDashboard: React.FC = () => {
         return 'bg-gray-500'
     }
   }
+  
 
   return (
     <div className="admin-dashboard p-6 space-y-8">
@@ -191,24 +198,25 @@ const AdminDashboard: React.FC = () => {
               </button>
             </div>
             <div className="appointments-list">
-              {recentAppointments.map((appointment) => (
-                <div key={appointment.id} className="appointment-item flex items-center justify-between p-6 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
+              {todaysAppointment?.map((appointment) => (
+                <div key={appointment._id} className="appointment-item flex items-center justify-between p-6 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
                   <div className="appointment-info flex-1">
                     <div className="flex items-center space-x-4">
                       <div className="appointment-time">
                         <div className="flex items-center space-x-2">
                           <Clock className="w-4 h-4 text-gray-400" />
                           <span className="text-sm font-medium text-gray-900">
-                            {appointment.time}
+                            {formatTimeOnly(appointment.date)}
                           </span>
                         </div>
                       </div>
                       <div className="appointment-details flex-1">
                         <p className="text-sm font-medium text-gray-900">
-                          {appointment.client}
+                          {appointment.userId?.name}
                         </p>
+
                         <p className="text-xs text-gray-600">
-                          with {appointment.therapist} • {appointment.type}
+                          {appointment.trainerId?.name ? `with ${appointment.trainerId?.name} - ${appointment.trainerId?.designation}` : 'not assigned'}
                         </p>
                       </div>
                     </div>
