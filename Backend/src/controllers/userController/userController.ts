@@ -328,6 +328,31 @@ const getTrainers = async (req: Request, res: Response) => {
   }
 };
 
+const getUserDetails = async (req: Request, res: Response) => {
+  try {
+    const {id} = req.params
+
+    const user = await userModel.findById(id)
+
+    if(!user) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: 'User not found'
+      })
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: user
+    })
+  } catch (error) {
+    console.log(error);
+    res
+      .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ success: false, error: "Error creating Trainer" });
+  }
+}
+
 const userController = {
   createEnquiry,
   getAllServices,
@@ -338,6 +363,7 @@ const userController = {
   getEventDetails,
   createBooking,
   getTrainers,
+  getUserDetails
 };
 
 export default userController;

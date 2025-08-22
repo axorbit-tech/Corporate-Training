@@ -102,10 +102,41 @@ const updateBookingStatus = async (req: Request, res: Response) => {
   }
 }
 
+const getUserBookings = async (req: Request, res: Response) => {
+  try {
+
+    const {id} = req.params
+
+    console.log(req.params, "reqqq pramrarmamrm")
+
+    if (!id) {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        message: "User ID is required",
+      });
+      return;
+    }
+
+    const bookings = await BookingModel.find({userId: id});
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      data: bookings
+    })
+    
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error fetching user bookings",
+    });
+  }
+}
+
 const BookingController = {
   getBookings,
   getBookingDetails,
-  updateBookingStatus
+  updateBookingStatus,
+  getUserBookings
 };
 
 export default BookingController;

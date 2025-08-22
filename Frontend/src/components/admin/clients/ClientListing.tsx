@@ -8,6 +8,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useGetUsersQuery } from "../../../store/slices/apiSlice";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   _id: number;
@@ -18,6 +19,8 @@ interface User {
 }
 
 const ClientListing: React.FC = () => {
+
+  const navigate = useNavigate()
   const { data: userData, isLoading, isError } = useGetUsersQuery(undefined);
 
     useEffect(()=> {
@@ -252,7 +255,7 @@ const ClientListing: React.FC = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => handleUserAction("view", user._id)}
+                            onClick={() => navigate(`/admin/user-bookings/${user._id}`)}
                             className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded"
                           >
                             <Eye className="w-4 h-4" />
@@ -321,7 +324,7 @@ const ClientListing: React.FC = () => {
 
                   <div className="flex items-center justify-center space-x-2">
                     <button
-                      onClick={() => handleUserAction("view", user._id)}
+                      onClick={() => navigate(`/admin/user-bookings/${user._id}`)}
                       className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded"
                     >
                       <Eye className="w-4 h-4" />

@@ -66,7 +66,7 @@ export interface IBookingData {
   country: string;
   state: string;
   status: "pending" | "confirmed" | "cancelled" | "completed";
-  trainerId?: string;
+  trainerId?: ITrainer;
   trainerName?: string;
   createdAt: string;
   updatedAt: string;

@@ -41,6 +41,7 @@ import AdminTrainerDetailsPage from "./pages/admin/tainer/TrainerDetails";
 import AdminRequestListingPage from "./pages/admin/requests/Requests";
 import AdminBookingListingPage from "./pages/admin/booking/BookingListing";
 import AdminBookingDetailsPage from "./pages/admin/booking/BookingDetails";
+import AdminUserBookingsPage from "./pages/admin/booking/UserBooking";
 
 
 
@@ -118,6 +119,7 @@ function App() {
           <Route path="/admin/requests" element={<AdminRequestListingPage />} />
           <Route path="/admin/bookings" element={<AdminBookingListingPage />} />
           <Route path="/admin/booking-details/:id" element={<AdminBookingDetailsPage />} />
+          <Route path="/admin/user-bookings/:id" element={<AdminUserBookingsPage />} />
 
           <Route path="/admin/login" element={<AdminLoginPage />} />
 

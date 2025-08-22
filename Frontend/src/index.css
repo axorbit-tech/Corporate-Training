@@ -1225,3 +1225,19 @@
     font-size: 1.25rem;
   }
 }
+
+.admin-user-bookings .admin-user-bookings-title,
+.admin-user-bookings .admin-user-info-title,
+.admin-user-bookings .admin-bookings-title,
+.admin-user-bookings .admin-user-name {
+  font-family: "Lusitana", serif;
+}
+
+.admin-user-bookings .admin-user-email,
+.admin-user-bookings .admin-detail-label,
+.admin-user-bookings .admin-detail-value,
+.admin-user-bookings .admin-service-text,
+.admin-user-bookings .admin-date-text,
+.admin-user-bookings .admin-trainer-text {
+  font-family: "Montserrat", sans-serif;
+}

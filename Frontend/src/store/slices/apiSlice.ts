@@ -201,6 +201,20 @@ export const apiSlices = createApi({
         body: data,   
       }),
     }),
+
+    getUserBookings: builder.query({
+      query: (id) => ({
+        url: `/admin/user-bookings/${id}`,
+        method: HttpMethod.GET,
+      }),
+    }),
+
+    getUserDetails: builder.query({
+      query: (id) => ({
+        url: `/admin/user/${id}`,
+        method: HttpMethod.GET,
+      }),
+    }),
   }),
 });
 
@@ -233,5 +247,7 @@ export const {
   useUpdateTrainerStatusMutation,
   useGetBookingsQuery,
   useGetBookingDetailsQuery,
-  useUpdateBookingStatusMutation
+  useUpdateBookingStatusMutation,
+  useGetUserBookingsQuery,
+  useGetUserDetailsQuery
 } = apiSlices;
