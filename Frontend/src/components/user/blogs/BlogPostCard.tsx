@@ -38,7 +38,7 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({
               <img
                 src={image || "/assets/blog-hero-image.jpg"}
                 alt={title}
-                className="blog-post-image w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                className="blog-post-image w-full h-[400px] sm:h-[400px] md:h-[700px] lg:h-[700px] hover:scale-105 transition-transform duration-300"
               />
             </a>
           </div>
