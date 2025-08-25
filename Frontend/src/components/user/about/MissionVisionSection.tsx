@@ -12,10 +12,8 @@ const MissionVisionSection: React.FC = () => {
               <h3 className="mission-heading text-xl sm:text-2xl font-bold text-blue-500">
                 Mission
               </h3>
-              <p className="mission-text text-sm sm:text-base text-gray-800 leading-relaxed">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit
-                <br />
-                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit
+              <p className="mission-text text-sm sm:text-base text-gray-800 leading-relaxed text-justify">
+                Our mission is to empower professionals and organisations with the right guidance, tools, and mindset to achieve lasting success. We are committed to helping individuals reduce stress, improve focus, and build the confidence they need to excel in their roles. For businesses, our mission is to create healthier workplaces that encourage collaboration, accountability, and long-term growth. Through counselling, training, and continuous support, we strive to make professional and personal balance a reality for everyone we work with.
               </p>
             </div>
           </div>
@@ -26,10 +24,8 @@ const MissionVisionSection: React.FC = () => {
               <h3 className="vision-heading text-xl sm:text-2xl font-bold text-blue-500">
                 Vision
               </h3>
-              <p className="vision-text text-sm sm:text-base text-gray-800 leading-relaxed">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit
-              <br />
-                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit
+              <p className="vision-text text-sm sm:text-base text-gray-800 leading-relaxed text-justify">
+                Our vision is to redefine the way companies and individuals approach well-being and performance. We aim to be a trusted partner in fostering positive change, where success is measured not only by results but also by the well-being and satisfaction of people. By combining proven strategies with a people-first approach, we envision workplaces that are more resilient, more productive, and more human. In this future, professionals feel valued, teams work with purpose, and organisations thrive with balance and integrity at their core.
              
               </p>
             </div>

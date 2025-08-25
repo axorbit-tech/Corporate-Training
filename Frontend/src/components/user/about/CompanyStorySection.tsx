@@ -20,14 +20,14 @@ const CompanyStorySection: React.FC = () => {
             {/* First Paragraph */}
             <div>
               <p className="story-text text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugitSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremqueremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
+                Our story began with a vision to create a positive impact in the way professionals and organisations approach growth and well-being. From the very beginning, we understood that success is not just measured by results, but by the balance, clarity, and confidence that individuals bring to their work and lives. Over time, this belief shaped our approach to counselling and training, helping businesses and employees find new ways to stay organised, manage time effectively, and work with greater purpose.
               </p>
             </div>
 
             {/* Second Paragraph */}
             <div>
               <p className="story-text text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugitSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugitSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                We believe that every professional deserves the opportunity to thrive in an environment that supports both personal and career goals. Our vision is to build workplaces that inspire accountability, collaboration, and resilience, ensuring that people feel valued and empowered. By combining proven strategies with compassionate guidance, we support organisations in achieving measurable results while also fostering a culture of trust and growth.
               </p>
             </div>
           </div>
@@ -60,7 +60,7 @@ const CompanyStorySection: React.FC = () => {
                   {/* About Us Text */}
                   <div>
                     <p className="about-us-text text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed">
-                      Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                      Our values form the foundation of everything we do — integrity in our work, accountability in our actions, collaboration in our approach, and continuous improvement in our methods. These principles drive us to deliver meaningful change, not just quick fixes. With every individual we guide and every organisation we support, we stay committed to creating lasting transformation. Together, we believe that balance, success, and fulfilment can truly go hand in hand.
                     </p>
                   </div>
                 </div>
