@@ -4,44 +4,37 @@ import Loader from "../../common/Loader";
 import SomethingWentWrong from "../../common/error";
 import { useGetTrainersQuery } from "../../../store/slices/userApiSlice";
 import Pagination from "../../pagination";
-
-interface ICounsellor {
-  _id: string;
-  name: string;
-  email: string;
-  image: string;
-  phone: string;
-  profession: string;
-  description: string;
-}
+import type { ITrainer } from "../../../types/types";
 
 const CounsellorProfileSection: React.FC = () => {
   const [page, setPage] = useState(1);
   const limit = 6;
-
-  const [counsellors, setCounsellors] = useState<ICounsellor[]>([]);
 
   const { data: trainerData, isLoading, error } = useGetTrainersQuery({
     page,
     limit,
   });
 
-  const counsellorsList = trainerData?.data || [];
-  const pagination = trainerData?.pagination;
+  const [counsellorsList, setCounsellorsList] = useState<ITrainer[]>([]);
 
-  // ✅ Append new data when page changes
+  // ✅ Merge data when trainerData or page changes
   useEffect(() => {
-    if (counsellorsList.length) {
-      setCounsellors((prev) => {
-        const merged = page === 1 ? counsellorsList : [...prev, ...counsellorsList];
-        return Array.from(new Map(merged.map((c: ICounsellor) => [c._id, c])).values()) as ICounsellor[];
+    if (trainerData?.data) {
+      setCounsellorsList((prev) => {
+        if (page === 1) return trainerData.data;
+        const merged = [...prev, ...trainerData.data];
+        // ✅ Remove duplicates by _id
+        return Array.from(new Map(merged.map((c) => [c._id, c])).values());
       });
     }
-  }, [counsellorsList, page]);
+  }, [trainerData, page]);
 
+  const pagination = trainerData?.pagination;
+
+  // ✅ Handle states
   if (isLoading && page === 1) return <Loader />;
   if (error) return <SomethingWentWrong />;
-  if (!counsellors.length) return null;
+  if (!counsellorsList?.length && !isLoading) return <p className="text-center text-gray-500">No counsellors found.</p>;
 
   const abtText =
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod...";
@@ -63,28 +56,25 @@ const CounsellorProfileSection: React.FC = () => {
 
         {/* Counsellors Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-          {counsellors.map((counsellor) => (
+          {counsellorsList.map((counsellor) => (
             <CounsellorCard
-              key={counsellor._id}
-              name={counsellor.name}
-              profession={counsellor.profession}
-              email={counsellor.email}
-              aboutText={counsellor.description || abtText}
-              image={counsellor.image}
+              key={counsellor?._id || counsellor?.email} // ✅ fallback key
+              name={counsellor?.name}
+              profession={counsellor?.designation}
+              email={counsellor?.email}
+              aboutText={counsellor?.description?.trim() || abtText} // ✅ handle empty string
+              image={counsellor?.image}
             />
           ))}
         </div>
 
         {/* Load More */}
-        {pagination && (
+        {pagination && pagination.pages > 1 && (
           <Pagination
             currentPage={pagination.page}
             totalPages={pagination.pages}
             onPageChange={setPage}
-            onShowLess={() => {
-              setPage(1);            // reset back to page 1
-              setCounsellors(prev => prev.slice(0, 6)); // keep only first 6 counsellors
-            }}
+            onShowLess={() => setPage(1)} // ✅ reset to first page
             variant="loadMore"
             isLoading={isLoading && page > 1}
           />
