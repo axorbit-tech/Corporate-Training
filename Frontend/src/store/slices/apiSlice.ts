@@ -202,6 +202,19 @@ export const apiSlices = createApi({
       }),
     }),
 
+    getUserBookings: builder.query({
+      query: (id) => ({
+        url: `/admin/user-bookings/${id}`,
+        method: HttpMethod.GET,
+      }),
+    }),
+
+    getUserDetails: builder.query({
+      query: (id) => ({
+        url: `/admin/user/${id}`,
+        method: HttpMethod.GET,
+      }),
+    }),
     getDashboardDetails: builder.query({
       query: () => ({
         url: "/admin/dashboard",
@@ -241,5 +254,7 @@ export const {
   useGetBookingsQuery,
   useGetBookingDetailsQuery,
   useUpdateBookingStatusMutation,
+  useGetUserBookingsQuery,
+  useGetUserDetailsQuery,
   useGetDashboardDetailsQuery
 } = apiSlices;
