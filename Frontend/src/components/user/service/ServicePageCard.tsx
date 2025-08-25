@@ -18,15 +18,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
 
   return (
-    <div className="service-card bg-white border border-gray-300 p-6 sm:p-8 lg:p-10 hover:shadow-lg transition-shadow duration-300">
+    <div className="service-card bg-white border border-gray-300 p-6 sm:p-8 lg:p-10 cursor-pointer hover:shadow-lg transition-shadow duration-300">
       <div className="space-y-4 sm:space-y-6">
         {/* Service Title */}
-        <h3 className="service-card-title text-xl sm:text-2xl font-bold text-blue-500 text-center">
+        <h3 className="service-card-title text-xl sm:text-2xl font-bold cursor-text text-blue-500 text-center">
           {title}
         </h3>
 
         {/* Service Description */}
-        <p className="service-card-description text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
+        <p className="service-card-description text-sm sm:text-base text-gray-700 cursor-text leading-relaxed text-justify">
           {limitWords(description, 30)}
         </p>
 

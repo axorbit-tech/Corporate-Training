@@ -1,24 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import BlogPostCard from "./BlogPostCard";
 import { useGetBlogsQuery } from '../../../store/slices/userApiSlice'
-
-interface BlogPost {
-  _id: number
-  title: string
-  content: string
-  image: string
-  status: "active" | "inactive"
-  date: string
-  createdDate: string
-  lastModified: string
-  link: string
-}
+import type { IBlog } from "../../../types/types";
 
 const BlogPostsSection: React.FC = () => {
 
   const { data: getBlog, isLoading, isError } = useGetBlogsQuery(undefined)
-  const blogPosts = getBlog?.data
+  
+  const [blogPosts, setBlogPosts] = useState<IBlog[]>([])
+
+  useEffect(()=> {
+    if(getBlog) {
+      setBlogPosts(getBlog.data)
+    }
+  }, [getBlog])
 
   // state to track whether to show all services or not
   const [showAll, setShowAll] = useState(false)
@@ -57,17 +53,16 @@ const BlogPostsSection: React.FC = () => {
 
         {/* Blog Posts Grid */}
         <div className="space-y-8 sm:space-y-10 lg:space-y-12">
-          {visibleServices?.map((post: BlogPost, index: number) => (
+          {visibleServices?.map((post: IBlog, index: number) => (
             <BlogPostCard
               key={post._id}
               Index={index}
               id={post._id}
               author={"Admin"}
-              date={post.date}
+              date={post.createdAt}
               title={post.title}
               description={post.content}
               image={post.image}
-              link={post.link}
             />
           ))}
         </div>
