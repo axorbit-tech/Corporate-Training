@@ -25,7 +25,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="fixed w-full top-0 z-50" style={headerStyle}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-1 xl:px-8">
         <div className="flex items-center px-8  justify-between h-16 lg:h-20">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -102,14 +102,14 @@ const Header: React.FC = () => {
                 CONTACT US
               </NavLink>
               <NavLink
-                to="/counsellors"
+                to="/trainers"
                 className={({ isActive }) =>
                   `text-sm font-medium tracking-wide py-2 transition-colors ${isActive ? "text-blue-600" : "text-gray-700 hover:text-blue-600"
                   }`
                 }
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
-                COUNSELLORS
+                TRAINERS
               </NavLink>
             </div>
           </nav>
@@ -122,17 +122,7 @@ const Header: React.FC = () => {
                 className=" hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 cursor-pointer px-4 py-4 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
-                BOOK APPOINTMENT
-              </NavLink>
-            </div>
-
-            <div className="hidden lg:block flex-shrink-0">
-              <NavLink
-                to="/trainer-registration"
-                className=" hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 cursor-pointer px-5 py-4 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
-              >
-                REGISTER AS A TRAINER
+                REGISTER AS TRAINER
               </NavLink>
             </div>
           </div>

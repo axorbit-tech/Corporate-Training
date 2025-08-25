@@ -22,6 +22,8 @@ export interface IBlog {
   content: string
   image: string
   status: "active" | "inactive"
+  createdAt: string;
+  updatedAt: string
 }
 
 export interface ITrainerService {
