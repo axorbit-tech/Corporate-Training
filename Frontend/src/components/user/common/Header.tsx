@@ -118,7 +118,7 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="hidden lg:block flex-shrink-0">
               <NavLink
-                to="/booking"
+                to="/trainer-registration"
                 className=" hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 cursor-pointer px-4 py-4 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
                 style={{ fontFamily: "Montserrat, sans-serif" }}
               >
@@ -251,7 +251,7 @@ const Header: React.FC = () => {
               </div>
               <div className="pt-2 px-3">
                 <NavLink
-                  to="/booking"
+                  to="/trainer-registration"
                   className="block w-full text-center hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-600 px-4 py-3 rounded-2xl font-medium text-sm tracking-wide transition-all duration-300 shadow-sm"
                   style={{ fontFamily: "Montserrat, sans-serif" }}
                 >

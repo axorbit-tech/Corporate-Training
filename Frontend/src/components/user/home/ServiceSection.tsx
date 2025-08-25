@@ -37,6 +37,7 @@ const ServiceSection = () => {
           {services?.slice(0, 6).map((service: Service) => (
             <ServiceCard
               key={service._id}
+              id={service._id}
               image={service.image}
               title={service.title}
               description={service.content}

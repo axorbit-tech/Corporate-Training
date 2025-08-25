@@ -1,6 +1,9 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
+
+  const navigate = useNavigate()
+  
   return (
     <section className="hero-section min-h-screen relative overflow-hidden flex items-centermb-3">
       {/* Background Image - Full Clear */}
@@ -36,7 +39,7 @@ const HeroSection: React.FC = () => {
 
                   <div className="pt-4 sm:pt-6">
                     <a
-                      href="/book-session"
+                      onClick={()=> navigate('/booking')}
                       className="hero-cta-btn inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-16 lg:py-4 rounded-2xl font-semibold text-sm sm:text-base lg:text-lg tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                     >
                       Book A Session

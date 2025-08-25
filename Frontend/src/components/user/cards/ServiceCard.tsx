@@ -1,14 +1,18 @@
 import limitWords from "../../../utils/wordLimitor"
+import { useNavigate } from "react-router-dom";
 
 interface ServiceCardProps {
+  id: number;
   image: string
   title: string
   description: string
 }
 
-const ServiceCard = ({ image, title, description }: ServiceCardProps) => {
+const ServiceCard = ({ id, image, title, description }: ServiceCardProps) => {
+
+  const navigate = useNavigate()
   return (
-    <div className=" rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div onClick={()=> navigate(`/service-details/${id}`)} className="rounded-lg shadow-lg cursor-pointer overflow-hidden hover:shadow-xl transition-shadow duration-300">
       {/* Image Section */}
       <div className="relative h-48 bg-gray-200">
         <img src={image || "/placeholder.svg"} alt={title} className="w-full h-full object-cover" />
