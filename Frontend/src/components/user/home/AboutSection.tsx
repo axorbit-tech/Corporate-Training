@@ -31,8 +31,7 @@ const AboutSection: React.FC = () => {
             <div className="space-y-6 sm:space-y-8">
               {/* Main Heading */}
               <h2 className="about-main-heading text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold text-gray-900 leading-tight">
-                We Can Support You In Achieving The Results You're Looking For.
-                Together we will argue consectetur tell us
+                Empowering Professionals & Businesses To Reach Their Full Potential
               </h2>
 
               {/* Subheading */}
@@ -42,16 +41,7 @@ const AboutSection: React.FC = () => {
 
               {/* Body Text */}
               <p className="about-body-text text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed">
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae
-                vitae dicta sunt explicabo. Sed ut perspiciatis unde omnis iste
-                natus error sit voluptatem accusantium doloremque laudantium,
-                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
-                et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-                fugit, sed quia consequuntur magni dolores eos qui ratione
-                voluptatem sequi nesciunt.
+                We specialise in guiding individuals and organisations to achieve balance, clarity, and measurable growth. Through expert counselling and tailored training, we help professionals stay organised, manage time, set meaningful goals, and build accountability. Our mission is simple — to support you in creating sustainable success and a healthier workplace culture.
               </p>
             </div>
           </div>

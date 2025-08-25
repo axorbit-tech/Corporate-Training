@@ -28,7 +28,7 @@ const BlogSection = () => {
 
 
   return (
-    <section className="blog-section bg-gray-50 py-16 lg:py-24">
+    <section className="blog-section bg-gray-50 py-10 lg:py-10">
       <div className="mx-auto px-4 sm:px-6 lg:px-16">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -57,7 +57,7 @@ const BlogSection = () => {
                   <img
                     src={post.image || "/placeholder.svg"}
                     alt={post.title}
-                    className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-48 object-fill group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
 

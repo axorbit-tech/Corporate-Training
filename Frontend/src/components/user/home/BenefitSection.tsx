@@ -5,24 +5,25 @@ const BenefitsSection: React.FC = () => {
     {
       number: "01",
       title: "Reduce Stress & Anxiety",
-      description: "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,"
+      description: "Practical guidance that helps professionals stay calm and focused even under workplace pressure."
     },
     {
       number: "02",
-      title: "Reduce Stress & Anxiety",
-      description: "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,"
+      title: "Boost Productivity",
+      description: "Simple strategies to organise priorities, manage time effectively, and achieve daily goals with ease."
     },
     {
       number: "03",
-      title: "Reduce Stress & Anxiety",
-      description: "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,"
+      title: "Improve Work-Life Balance",
+      description: "Support to create boundaries, maintain energy, and find harmony between personal and professional life."
     },
     {
       number: "04",
-      title: "Reduce Stress & Anxiety",
-      description: "Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,"
+      title: "Enhance Team Performance",
+      description: "Tools that build accountability, trust, and collaboration to strengthen results across the organisation."
     }
   ]
+
 
   return (
     <section className="benefits-section px-4 sm:px-6 lg:px-8">
@@ -48,12 +49,12 @@ const BenefitsSection: React.FC = () => {
                       {benefit.number}
                     </span>
                   </div>
-                  
+
                   {/* Title */}
                   <h3 className="benefits-title text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
                     {benefit.title}
                   </h3>
-                  
+
                   {/* Description */}
                   <p className="benefits-desc text-sm sm:text-base text-gray-700 leading-relaxed">
                     {benefit.description}

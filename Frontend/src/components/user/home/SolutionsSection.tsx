@@ -9,7 +9,7 @@ const SolutionsSection: React.FC = () => {
         </svg>
       ),
       title: "Stay Organised",
-      description: "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"
+      description: "An organised mind creates an organised workplace. We provide strategies that keep tasks clear and priorities in order."
     },
     {
       icon: (
@@ -17,8 +17,8 @@ const SolutionsSection: React.FC = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
-      title: "Time Management",
-      description: "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"
+      title: "Mastering Time Management",
+      description: "Effective use of time drives performance. Our training helps professionals focus on what matters and reduce wasted effort."
     },
     {
       icon: (
@@ -26,8 +26,8 @@ const SolutionsSection: React.FC = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       ),
-      title: "Life Goals",
-      description: "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"
+      title: "Defining Life & Career Goals",
+      description: "Success begins with direction. We support individuals and teams in defining clear goals and building a path to reach them."
     },
     {
       icon: (
@@ -35,8 +35,8 @@ const SolutionsSection: React.FC = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       ),
-      title: "Accountability",
-      description: "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been"
+      title: "Building Accountability",
+      description: "Strong accountability builds stronger results. We coach professionals to take ownership and deliver with consistency."
     }
   ]
 
@@ -96,7 +96,7 @@ const SolutionsSection: React.FC = () => {
           {/* Right Content */}
           <div>
             <p className="solutions-bottom-text text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed">
-              It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.
+              Success isn’t just about hard work — it’s about working with clarity, balance, and purpose. Our corporate counselling programs help professionals and organisations stay organised, manage time effectively, set meaningful goals, and stay accountable, creating lasting growth and success.
             </p>
           </div>
         </div>
