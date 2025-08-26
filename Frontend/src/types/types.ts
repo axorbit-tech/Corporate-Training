@@ -85,3 +85,10 @@ export interface IUser {
   createdAt?: string;
   updatedAt?: string;
 }
+
+
+export interface IChangePassForm {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string
+}

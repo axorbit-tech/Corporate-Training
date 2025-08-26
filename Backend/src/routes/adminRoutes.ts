@@ -20,6 +20,7 @@ const router = express.Router();
 
 // authentication routes
 router.post('/login', adminController.login)
+router.put('/change-password/:id', adminController.changePassword)
 // router.post('/signup', adminController.signupAdmin)
 
 // Protected routes (auth applies to everything below this line)

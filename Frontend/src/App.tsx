@@ -42,6 +42,7 @@ import AdminRequestListingPage from "./pages/admin/requests/Requests";
 import AdminBookingListingPage from "./pages/admin/booking/BookingListing";
 import AdminBookingDetailsPage from "./pages/admin/booking/BookingDetails";
 import AdminUserBookingsPage from "./pages/admin/booking/UserBooking";
+import AdminChangePasswordPage from "./pages/admin/auth/ChangePassword";
 
 
 
@@ -68,6 +69,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin/logout" element={<AdminLogout />} />
+          <Route path="/admin/change-password" element={<AdminChangePasswordPage />} />
 
           {/* Userside Details Pages */}
           <Route path="/event-details/:id" element={<EventDetails />} />

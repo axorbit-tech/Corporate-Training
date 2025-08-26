@@ -1241,3 +1241,24 @@
 .admin-user-bookings .admin-trainer-text {
   font-family: "Montserrat", sans-serif;
 }
+
+.admin-change-password {
+  font-family: "Montserrat", sans-serif;
+}
+
+.admin-change-password .admin-password-input:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.admin-change-password .admin-password-toggle:focus {
+  outline: none;
+}
+
+.admin-change-password .admin-save-password-btn:disabled {
+  transform: none;
+}
+
+.admin-change-password .admin-save-password-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}

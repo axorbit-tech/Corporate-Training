@@ -220,7 +220,15 @@ export const apiSlices = createApi({
         url: "/admin/dashboard",
         method: HttpMethod.GET,
       }),
-    })
+    }),
+
+    changePassword: builder.mutation({
+      query: ({userId, formData})=> ({
+        url: `/admin/change-password/${userId}`,
+        method: HttpMethod.PUT,
+        body: formData
+      })
+    }),
   }),
 });
 
@@ -256,5 +264,6 @@ export const {
   useUpdateBookingStatusMutation,
   useGetUserBookingsQuery,
   useGetUserDetailsQuery,
-  useGetDashboardDetailsQuery
+  useGetDashboardDetailsQuery,
+  useChangePasswordMutation
 } = apiSlices;

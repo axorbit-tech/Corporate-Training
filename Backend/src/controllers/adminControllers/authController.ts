@@ -4,7 +4,7 @@ import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import adminModel from "../../models/adminModels/adminModel";
-import { authSchema } from "../../validations/adminValidation/authValidation";
+import { authSchema, changePassSchema } from "../../validations/adminValidation/authValidation";
 
 dotenv.config();
 
@@ -81,8 +81,78 @@ const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const changePassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+
+
+    const {error} = changePassSchema.validate(req.body);
+
+    if(error) {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        error: error.details[0].message
+      })
+    }
+    const {currentPassword, newPassword} = req.body;
+
+    const { id } = req.params
+
+    // Find the admin
+    const admin = await adminModel.findById(id);
+
+    if (!admin) {
+      res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Admin not found"
+      });
+      return;
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, admin.password);
+
+    if (!isCurrentPasswordValid) {
+      res.status(HttpStatusCode.UNAUTHORIZED).json({
+        success: false,
+        error: "Current password is incorrect"
+      });
+      return;
+    }
+
+    const isSamePassword = await bcrypt.compare(newPassword, admin.password);
+    if (isSamePassword) {
+      res.status(HttpStatusCode.BAD_REQUEST).json({
+        success: false,
+        error: "New password must be different from current password"
+      });
+      return;
+    }
+
+    const saltRounds = 12;
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // Update the admin's password
+    await adminModel.findByIdAndUpdate(id, {
+      password: hashedNewPassword,
+    });
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Password changed successfully"
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      success: false,
+      error: "Error changing password"
+    });
+  }
+};
+
 const adminController = {
   login,
+  changePassword
 };
 
 export default adminController;
