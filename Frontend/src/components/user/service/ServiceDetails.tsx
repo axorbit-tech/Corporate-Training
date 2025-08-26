@@ -1,27 +1,18 @@
-import type React from "react"
-import { ArrowLeft } from "lucide-react"
-import { useGetServiceDetailsQuery } from "../../../store/slices/userApiSlice"
+import React, { useEffect, useState } from 'react'
+import { useGetServiceDetailsQuery } from '../../../store/slices/userApiSlice'
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import type { IService, ISubService } from "../../../types/types";
+import type { IService, ISubService } from '../../../types/types';
 
-type ServiceDetailsParams = {
+type ServiceDetailsImageSectionParams = {
     id: string;
 };
 
-interface ServiceDetailsProps {
-    serviceId?: string
-}
-
-const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
-
-    const { id } = useParams<ServiceDetailsParams>();
-
+const ServiceDetailsImageSection: React.FC = () => {
+    const { id } = useParams<ServiceDetailsImageSectionParams>();
     const { data: serviceData, isLoading, error } = useGetServiceDetailsQuery(id)
-    console.log(serviceData, "service data")
     const [service, setService] = useState<IService>()
-
-    useEffect(()=> {
+    
+    useEffect(() => {
         setService(serviceData?.data)
     }, [serviceData])
 
@@ -53,96 +44,55 @@ const ServiceDetails: React.FC<ServiceDetailsProps> = () => {
     }
 
     return (
-        <div className="admin-service-details min-h-screen bg-gray-50  flex flex-col">
-            {/* Header */}
-            <div className="admin-service-header bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-3 items-center h-16">
+        <section className="px-4 py-16 sm:px-6 sm:py-8 md:px-12 md:py-16 lg:px-20 lg:py-15">
+            <div className="px-2 sm:px-4 sm:py-6 md:px-8 md:py-10 lg:px-12 lg:py-14">
+                {/* Service Image */}
+                <img
+                    src={service?.image || "/placeholder.svg"}
+                    alt={service?.title}
+                    className="w-full h-[300px] sm:h-[300px] md:h-[400px] lg:h-[600px] object-cover object-center rounded-lg shadow-lg"
+                />
 
-                        {/* Left Section (Back Button) */}
-                        <div className="flex items-center">
-                            <button
-                                onClick={() => window.history.back()}
-                                className="admin-back-btn p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors duration-200"
-                            >
-                                <ArrowLeft className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        {/* Center Section (Title & Status) */}
-                        <div className="flex flex-col items-center">
-                            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 text-center">
-                                Service Details
-                            </h1>
-                        </div>
-
-                        {/* Right Section (empty, for balance or future actions) */}
-                        <div></div>
+                {/* Service Title and Content */}
+                <div className='mt-8 text-center'>
+                    <h1 className="service-details-heading text-2xl sm:text-2xl md:text-4xl font-bold mb-6 text-gray-800">
+                        {service?.title}
+                    </h1>
+                    
+                    <div className="text-sm sm:text-base md:text-lg mx-4 sm:mx-8 md:mx-16 text-justify leading-relaxed text-gray-700 mb-12">
+                        {service?.content}
                     </div>
                 </div>
-            </div>
 
-
-            {/* Main Content */}
-            <div className="flex justify-center px-4 sm:px-6 lg:px-8 py-8">
-                <div className="w-full max-w-4xl space-y-8">
-                    {/* Service Header Info */}
-                    <div className="bg-white rounded-lg border border-gray-200 p-6">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                            {service?.title}
+                {/* Subservices Section */}
+                {service?.subServices && service.subServices.length > 0 && (
+                    <div className="mt-12 border-t border-gray-200 pt-8">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-center mb-8 text-gray-800">
+                            Our Services Include
                         </h2>
-                    </div>
-
-                    {/* Service Image */}
-                    <div className="bg-white rounded-lg border border-gray-200 p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Service Image</h3>
-                        <div className="rounded-lg overflow-hidden">
-                            <img
-                                src={service.image || "/placeholder.svg"}
-                                alt={service.title}
-                                className="w-full h-64 sm:h-80 object-cover"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Service Description */}
-                    <div className="bg-white rounded-lg border border-gray-200 p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Service Description</h3>
-                        <div className="text-gray-700 leading-relaxed">
-                            <p>{service.content}</p>
-                        </div>
-                    </div>
-
-                    {/* Subservices Section */}
-                    <div className="bg-white rounded-lg border border-gray-200 p-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-6">
-                            Subservices ({service.subServices?.length || 0})
-                        </h3>
-
-                        {service.subServices && service.subServices.length > 0 ? (
-                            <div className="space-y-6">
-                                {service.subServices.map((subservice: ISubService, index: number) => (
-                                    <div key={index} className="border border-gray-200 rounded-lg p-6">
-                                        <h4 className="text-xl font-semibold text-gray-900 mb-3">
-                                            {index + 1}. {subservice.title}
-                                        </h4>
-                                        <p className="text-gray-700 leading-relaxed">
-                                            {subservice.content}
-                                        </p>
+                        
+                        <div className="space-y-8">
+                            {service.subServices.map((subservice: ISubService, index: number) => (
+                                <div 
+                                    key={index} 
+                                    className="bg-white rounded-lg shadow-md p-6 sm:p-8 border border-gray-100 hover:shadow-lg transition-shadow duration-300"
+                                >
+                                    <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-gray-800 border-l-4 border-blue-500 pl-4">
+                                        {subservice.title}
+                                    </h3>
+                                    
+                                    <div className="text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
+                                        {subservice.content}
                                     </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center py-8">
-                                <p className="text-gray-500">No subservices availablae for this service.</p>
-                            </div>
-                        )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    )
+                )}
 
+            </div>
+        </section>
+    )
 }
 
-export default ServiceDetails
+export default ServiceDetailsImageSection
