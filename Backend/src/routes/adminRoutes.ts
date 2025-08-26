@@ -146,10 +146,12 @@ router.get('/client', clientController.getAllClients)
 // ========================================= Trainer ==============================================
 router.get('/trainer', trainerController.getTrainers)
 
-router.get('/trainer/:id', trainerController.getTrainerDetails)
+router
+.route('/trainer/:id')
+.get(trainerController.getTrainerDetails)
+.patch(trainerController.updateTrainerApproval)
 
-router.patch('/trainer/:id', trainerController.updateTrainerStatus)
-
+router.patch('/trainer/status/:id', trainerController.updateTrainerStatus)
 router.get('/requests', trainerController.getRequests)
 
 

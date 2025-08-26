@@ -186,7 +186,7 @@ export const apiSlices = createApi({
       }),
     }),
 
-    updateTrainerStatus: builder.mutation({
+    updateTrainerApproval: builder.mutation({
       query: ({ id, status }) => ({
         url: `/admin/trainer/${id}`,
         method: HttpMethod.PATCH,
@@ -220,7 +220,16 @@ export const apiSlices = createApi({
         url: "/admin/dashboard",
         method: HttpMethod.GET,
       }),
-    })
+    }),
+
+    updateTrainerStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/admin/trainer/status/${id}`,
+        method: HttpMethod.PATCH,
+        body: {status},   
+      }),
+    }),
+    
   }),
 });
 
@@ -250,6 +259,7 @@ export const {
   useGetTrainersQuery,
   useGetRequestesQuery,
   useGetTrainerDetailsQuery,
+  useUpdateTrainerApprovalMutation,
   useUpdateTrainerStatusMutation,
   useGetBookingsQuery,
   useGetBookingDetailsQuery,

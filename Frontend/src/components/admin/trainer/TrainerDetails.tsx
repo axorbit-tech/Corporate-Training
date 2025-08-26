@@ -15,7 +15,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { useParams } from "react-router-dom";
-import { useGetTrainerDetailsQuery, useUpdateTrainerStatusMutation } from "../../../store/slices/apiSlice";
+import { useGetTrainerDetailsQuery, useUpdateTrainerApprovalMutation, useUpdateTrainerStatusMutation } from "../../../store/slices/apiSlice";
 import { useEffect, useState } from "react";
 import type { ITrainer } from "../../../types/types";
 import { generateAvatar } from "../../../utils/generateAvatar";
@@ -33,7 +33,8 @@ const TrainerDetails: React.FC = () => {
 
   const [trainer, setTrainer] = useState<ITrainer>();
 
-  const [updateTrainerStatus, { isLoading }] = useUpdateTrainerStatusMutation()
+  const [updateTrainerApproval, { isLoading }] = useUpdateTrainerApprovalMutation();
+  const [updateTrainerStatus, { isLoading: isLoadingStatus }] = useUpdateTrainerStatusMutation();
 
   const [open, setOpen] = useState(false);
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
@@ -46,27 +47,49 @@ const TrainerDetails: React.FC = () => {
 
   const avatar = generateAvatar(trainer?.name || "user");
 
-  const handleStatusChange = (statusType: string) => {
+  const handleStatusChange = (statusType: string, actionType: "approvalStatus" | "activationStatus") => {
     if (typeof id === "string") {
-      setModalAction(() => () => handleTrainersAction(id, statusType));
+      setModalAction(() => () => handleTrainersAction(id, statusType, actionType));
     } else {
       toast.error("Trainer ID is missing.");
       setModalAction(null);
     }
-    setOpen(true)
-  }
+    setOpen(true);
+  };
 
-  const handleTrainersAction = async (trainerId: string, statusType: string) => {
+  const handleTrainersAction = async (
+    trainerId: string,
+    statusType: string,
+    actionType: "approvalStatus" | "activationStatus"
+  ) => {
     try {
-      const res = await updateTrainerStatus({ id: trainerId, status: statusType }).unwrap();
+      let res;
+      if (actionType === "activationStatus") {
+        res = await updateTrainerStatus({ id: trainerId, status: statusType }).unwrap();
+      } else {
+        res = await updateTrainerApproval({ id: trainerId, status: statusType }).unwrap();
+      }
 
       if (res.success) {
         setTrainer(prev =>
-          prev ? { ...prev, isApproved: statusType === "1" ? "approved" : "rejected" } : prev
+          prev
+            ? {
+              ...prev,
+              // update depending on action type
+              ...(actionType === "approvalStatus"
+                ? { isApproved: statusType === "1" ? "approved" : "rejected" }
+                : { status: statusType === "1" ? "inactive" : "active" }),
+            }
+            : prev
         );
-        toast.success(
-          statusType === "1" ? "Trainer approved successfully!" : "Trainer rejected successfully!"
-        );
+
+        //  Toast messages based on actionType
+        if (actionType === "approvalStatus") {
+          toast.success(statusType === "1" ? "Trainer approved successfully!" : "Trainer rejected successfully!");
+        } else {
+          toast.success(statusType === "1" ? "Trainer deactivated successfully!" : "Trainer activated successfully!");
+        }
+
         setOpen(false);
       }
     } catch (error) {
@@ -74,6 +97,9 @@ const TrainerDetails: React.FC = () => {
       toast.error("Something went wrong while updating trainer status.");
     }
   };
+
+
+
 
 
 
@@ -381,29 +407,37 @@ const TrainerDetails: React.FC = () => {
                   </button>
                   {trainer?.isApproved != 'approved' && (
                     <>
-                      <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-green-50 rounded-lg transition-colors duration-200 text-green-600">
+                      <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-green-50 rounded-lg transition-colors duration-200 text-green-600"
+                        onClick={() => handleStatusChange("1", "approvalStatus")}>
                         <CheckCircle className="w-4 h-4" />
-                        <span className="text-sm font-medium" onClick={() => handleStatusChange("1")}>
+                        <span className="text-sm font-medium" >
                           Approve Trainer
                         </span>
                       </button>
-                      <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors duration-200 text-red-600">
+                      <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors duration-200 text-red-600"
+                        onClick={() => handleStatusChange("2", "approvalStatus")}>
                         <XCircle className="w-4 h-4" />
-                        <span className="text-sm font-medium" onClick={() => handleStatusChange("2")}>
+                        <span className="text-sm font-medium" >
                           Reject Trainer
                         </span>
                       </button>
                     </>
                   )}
 
-                  {trainer?.isApproved == 'approved' && (
-                    <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors duration-200 text-red-600">
+                  {trainer?.status === "active" ? (
+                    <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors duration-200 text-red-600"
+                      onClick={() => handleStatusChange("1", "activationStatus")}>
                       <User className="w-4 h-4" />
-                      <span className="text-sm font-medium">
-                        Deactivate Trainer
-                      </span>
+                      <span className="text-sm font-medium" >Deactivate Trainer</span>
+                    </button>
+                  ) : (
+                    <button className="admin-action-item w-full flex items-center space-x-3 p-3 text-left hover:bg-green-50 rounded-lg transition-colors duration-200 text-green-600"
+                      onClick={() => handleStatusChange("2", "activationStatus")}>
+                      <CheckCircle className="w-4 h-4" />
+                      <span className="text-sm font-medium" >Activate Trainer</span>
                     </button>
                   )}
+
                 </div>
               </div>
             </div>
@@ -418,7 +452,7 @@ const TrainerDetails: React.FC = () => {
           size={{ width: 300 }}
           color="#f0f0f0"
           buttonText="OK"
-          loading={isLoading}
+          loading={isLoading || isLoadingStatus}
           onButtonClick={() => {
             if (modalAction) {
               modalAction();
