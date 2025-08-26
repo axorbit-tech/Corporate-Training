@@ -45,7 +45,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
     };
 
     return (
-        <Modal open={open} onClose={onClose} aria-labelledby="custom-modal-title" >
+        <Modal className="text-center" open={open} onClose={onClose} aria-labelledby="custom-modal-title" >
             <Box sx={style}>
                 {title && (
                     <Typography id="custom-modal-title" variant="h6" component="h2">

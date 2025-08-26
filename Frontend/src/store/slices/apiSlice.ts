@@ -245,6 +245,13 @@ export const apiSlices = createApi({
         body: {status},   
       }),
     }),
+    forgotPasswordRequest: builder.mutation({
+      query:(data) => ({
+        url: '/admin/forgot-password',
+        method: HttpMethod.POST,
+        body: data
+      })
+    })
     
   }),
 });
@@ -284,5 +291,6 @@ export const {
   useGetUserBookingsQuery,
   useGetUserDetailsQuery,
   useGetDashboardDetailsQuery,
-  useChangePasswordMutation
+  useChangePasswordMutation,
+  useForgotPasswordRequestMutation
 } = apiSlices;

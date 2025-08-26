@@ -18,30 +18,6 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
     setOpen(true)
   }
 
-  // const notifications = [
-  //   {
-  //     id: 1,
-  //     title: 'New appointment booked',
-  //     message: 'John Doe scheduled for tomorrow at 2:00 PM',
-  //     time: '5 min ago',
-  //     unread: true
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Form submission received',
-  //     message: 'New client inquiry from contact form',
-  //     time: '15 min ago',
-  //     unread: true
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Event reminder',
-  //     message: 'Corporate training session starts in 1 hour',
-  //     time: '1 hour ago',
-  //     unread: false
-  //   }
-  // ]
-
   return (
     <header className="admin-header bg-white border-b border-gray-200 shadow-sm sticky top-0 z-30">
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
@@ -171,7 +147,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onSidebarToggle }) => {
                     <span>Profile</span>
                   </a>
                   <a
-                    href="/admin/reset-password"
+                    onClick={()=> navigate('/admin/change-password')}
                     className="profile-menu-item flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
                     <Settings className="w-4 h-4" />

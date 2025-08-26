@@ -10,3 +10,7 @@ export const changePassSchema = Joi.object({
   newPassword: Joi.string().min(8).required(),
   confirmPassword: Joi.string().min(8).required()
 })
+
+export const forgotPassSchema = Joi.object({
+  emial : Joi.string().email().required()
+})
