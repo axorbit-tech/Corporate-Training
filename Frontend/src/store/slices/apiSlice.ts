@@ -186,13 +186,13 @@ export const apiSlices = createApi({
       }),
     }),
 
-    updateTrainerStatus: builder.mutation({
-      query: ({ id, status }) => ({
-        url: `/admin/trainer/${id}`,
-        method: HttpMethod.PATCH,
-        body: {status},   
+     deleteBooking: builder.mutation({
+      query: (id) => ({
+        url: `/admin/booking/${id}`,
+        method: HttpMethod.DELETE,
       }),
     }),
+
 
     updateBookingStatus: builder.mutation({
       query: (data) => ({
@@ -209,6 +209,7 @@ export const apiSlices = createApi({
       }),
     }),
 
+   
     getUserDetails: builder.query({
       query: (id) => ({
         url: `/admin/user/${id}`,
@@ -229,6 +230,22 @@ export const apiSlices = createApi({
         body: formData
       })
     }),
+    updateTrainerApproval: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/admin/trainer/${id}`,
+        method: HttpMethod.PATCH,
+        body: {status},   
+      }),
+    }),
+
+    updateTrainerStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/admin/trainer/status/${id}`,
+        method: HttpMethod.PATCH,
+        body: {status},   
+      }),
+    }),
+    
   }),
 });
 
@@ -258,10 +275,12 @@ export const {
   useGetTrainersQuery,
   useGetRequestesQuery,
   useGetTrainerDetailsQuery,
+  useUpdateTrainerApprovalMutation,
   useUpdateTrainerStatusMutation,
   useGetBookingsQuery,
   useGetBookingDetailsQuery,
   useUpdateBookingStatusMutation,
+  useDeleteBookingMutation,
   useGetUserBookingsQuery,
   useGetUserDetailsQuery,
   useGetDashboardDetailsQuery,

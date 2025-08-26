@@ -2,9 +2,10 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import { Search, Filter, MoreHorizontal, Eye, Trash2, Calendar, Briefcase } from "lucide-react"
 import { useLocation } from "react-router-dom";
-import { useGetBookingsQuery } from "../../../store/slices/apiSlice";
+import { useGetBookingsQuery, useDeleteBookingMutation } from "../../../store/slices/apiSlice";
 import { useNavigate } from "react-router-dom";
-
+import CustomModal from "../common/CustomeModal";
+import { toast } from "react-toastify";
 
 interface IUser {
   _id: number;
@@ -32,14 +33,17 @@ const BookingListing: React.FC = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const filter = params.get("filter") || "all";
+  const [open, setOpen] = useState(false);
+  const [modalAction, setModalAction] = useState<(() => void) | null>(null);
 
-  const {data: bookingResponse} = useGetBookingsQuery(filter);
+  const { data: bookingResponse } = useGetBookingsQuery(filter);
+  const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation();
 
   const [bookings, setBookings] = useState<IBooking[]>([])
 
-  useEffect(()=> {
+  useEffect(() => {
     setBookings(bookingResponse?.data)
-  },[bookingResponse])
+  }, [bookingResponse])
 
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
@@ -61,6 +65,7 @@ const BookingListing: React.FC = () => {
   const startIndex = (currentPage - 1) * itemsPerPage
   const paginatedBookings = filteredBookings?.slice(startIndex, startIndex + itemsPerPage)
 
+
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       setSelectedBookings(paginatedBookings?.map((booking) => booking._id))
@@ -74,6 +79,30 @@ const BookingListing: React.FC = () => {
       setSelectedBookings([...selectedBookings, bookingId])
     } else {
       setSelectedBookings(selectedBookings.filter((id) => id !== bookingId))
+    }
+  }
+
+  const handleBookingAction = (bookingId: number) => {
+    setModalAction(() => () => handleDeleteBooking(bookingId));
+    setOpen(true);
+  }
+
+  const handleDeleteBooking = async (bookingId: number) => {
+    try {
+      const res = await deleteBooking(bookingId).unwrap()
+      if (res.success) {
+        toast.success("Booking deleted successfully");
+
+        // remove from local bookings state
+        setBookings(prev => prev.filter(b => b._id !== bookingId));
+        // also remove from selectedBookings
+        setSelectedBookings(prev => prev.filter(id => id !== bookingId));
+        
+        setOpen(false);
+      }
+    } catch (error) {
+      toast.error("Failed to delete booking");
+      console.error("Delete booking error:", error);
     }
   }
 
@@ -219,10 +248,11 @@ const BookingListing: React.FC = () => {
                   </td>
                   <td className="admin-booking-actions px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center space-x-2">
-                      <button onClick={()=> navigate(`/admin/booking-details/${booking?._id}`)} className="admin-view-btn text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50">
+                      <button onClick={() => navigate(`/admin/booking-details/${booking?._id}`)} className="admin-view-btn text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-50">
                         <Eye className="w-4 h-4" />
                       </button>
-                      <button className="admin-delete-btn text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50">
+                      <button className="admin-delete-btn text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-50"
+                        onClick={() => handleBookingAction(booking._id)}>
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -308,6 +338,24 @@ const BookingListing: React.FC = () => {
             </div>
           </div>
         )}
+
+        <CustomModal
+          open={open}
+          onClose={() => setOpen(false)}
+          title="Are You sure to confirm this action?"
+          // description={`This modal works with TypeScript. Service ID: ${selectedServiceId}`}
+          size={{ width: 300 }}
+          color="#f0f0f0"
+          buttonText="OK"
+          loading={isDeleting}
+          onButtonClick={() => {
+            if (modalAction) {
+              modalAction();
+            } else {
+              toast.error("Something went wrong");
+            }
+          }}
+        />
       </div>
     </div>
   )
