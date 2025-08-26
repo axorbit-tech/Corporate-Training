@@ -159,7 +159,10 @@ router.get('/requests', trainerController.getRequests)
 
 router.get('/booking', bookingController.getBookings)
 
-router.get('/booking/:id',bookingController.getBookingDetails)
+router
+  .route('/booking/:id')
+  .get(bookingController.getBookingDetails)
+  .delete(bookingController.deleteBooking)
 
 router.patch('/booking',bookingController.updateBookingStatus)
 

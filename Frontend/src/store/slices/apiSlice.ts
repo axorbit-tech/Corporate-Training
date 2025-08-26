@@ -186,13 +186,13 @@ export const apiSlices = createApi({
       }),
     }),
 
-    updateTrainerApproval: builder.mutation({
-      query: ({ id, status }) => ({
-        url: `/admin/trainer/${id}`,
-        method: HttpMethod.PATCH,
-        body: {status},   
+     deleteBooking: builder.mutation({
+      query: (id) => ({
+        url: `/admin/booking/${id}`,
+        method: HttpMethod.DELETE,
       }),
     }),
+
 
     updateBookingStatus: builder.mutation({
       query: (data) => ({
@@ -209,6 +209,7 @@ export const apiSlices = createApi({
       }),
     }),
 
+   
     getUserDetails: builder.query({
       query: (id) => ({
         url: `/admin/user/${id}`,
@@ -219,6 +220,14 @@ export const apiSlices = createApi({
       query: () => ({
         url: "/admin/dashboard",
         method: HttpMethod.GET,
+      }),
+    }),
+
+    updateTrainerApproval: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/admin/trainer/${id}`,
+        method: HttpMethod.PATCH,
+        body: {status},   
       }),
     }),
 
@@ -264,6 +273,7 @@ export const {
   useGetBookingsQuery,
   useGetBookingDetailsQuery,
   useUpdateBookingStatusMutation,
+  useDeleteBookingMutation,
   useGetUserBookingsQuery,
   useGetUserDetailsQuery,
   useGetDashboardDetailsQuery

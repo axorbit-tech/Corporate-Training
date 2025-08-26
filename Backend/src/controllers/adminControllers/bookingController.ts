@@ -132,10 +132,36 @@ const getUserBookings = async (req: Request, res: Response) => {
   }
 }
 
+const deleteBooking = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const booking = await BookingModel.findByIdAndDelete(id);
+
+    if (!booking) {
+      return res.status(HttpStatusCode.NOT_FOUND).json({
+        success: false,
+        error: "Booking not found",
+      });
+    }
+
+    res.status(HttpStatusCode.OK).json({
+      success: true,
+      message: "Booking deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      error: "Error deleting booking",
+    });
+  }
+};
+
 const BookingController = {
   getBookings,
   getBookingDetails,
   updateBookingStatus,
+  deleteBooking,
   getUserBookings
 };
 
