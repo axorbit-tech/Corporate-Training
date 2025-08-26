@@ -48,8 +48,6 @@ import AdminChangePasswordPage from "./pages/admin/auth/ChangePassword";
 
 function App() {
 
-  
-
   function AdminLogout() {
     const navigate = useNavigate();
     useEffect(() => {
@@ -90,10 +88,6 @@ function App() {
           <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
           <Route path="/admin/blog-details/:id" element={<AdminBlogDetailsPage />} />
           <Route path="/admin/edit-blog/:id" element={<AdminEditBlogPage />} />
-          <Route
-            path="/admin/blog-details"
-            element={<AdminBlogDetailsPage />}
-          />
 
           <Route path="/admin/events" element={<AdminEventListingPage />} />
           <Route path="/admin/add-event" element={<AddEvent />} />
