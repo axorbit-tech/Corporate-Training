@@ -10,7 +10,7 @@ const BlogHeroSection: React.FC = () => {
           <div className="order-2 lg:order-1">
             <div className="relative">
               <img
-                src="/assets/blog-hero-image.jpg"
+                src="/assets/blog-image.png"
                 alt="Modern workspace with laptop, coffee, smartphone, notebook and plant representing our blog content creation environment"
                 className="blog-hero-image w-full h-auto object-cover shadow-lg"
               />
@@ -28,7 +28,7 @@ const BlogHeroSection: React.FC = () => {
               {/* Description Text */}
               <div className="blog-hero-description text-sm sm:text-base md:text-md text-gray-700 leading-relaxed">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                  Our blog is a space dedicated to sharing meaningful insights, practical strategies, and inspiring stories that support personal growth and emotional well-being. We explore a wide range of topics such as stress management, mindfulness practices, resilience building, and motivational guidance, offering content that empowers readers to reflect and apply positive changes in their daily lives. Each article is carefully crafted by professionals with experience in counselling, therapy, and coaching, ensuring that every post is both relatable and informative. Through storytelling and evidence-based advice, our blogs aim to connect with individuals who are seeking encouragement, clarity, and purpose. We believe that learning does not stop within the therapy room, and this platform provides an opportunity for continuous growth and reflection. Whether you are looking for inspiration, tools to manage challenges, or ways to enhance your mindset, our blog serves as a reliable companion in your journey toward balance, confidence, and overall well-being.
                 </p>
               </div>
             </div>

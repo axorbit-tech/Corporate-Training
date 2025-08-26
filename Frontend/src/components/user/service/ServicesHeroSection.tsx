@@ -5,12 +5,12 @@ const ServicesHeroSection: React.FC = () => {
     <section className="services-overview-section bg-white py-16 sm:py-20 lg:py-24 lg:px-10 lg:mt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
-          
+
           {/* Left Side - Team Image */}
           <div className="lg:col-span-7 order-2 lg:order-1">
             <div className="relative">
               <img
-                src="/assets/servicepageImage1.jpg"
+                src="/assets/service-image.png"
                 alt="Professional team of diverse business experts ready to provide corporate training services"
                 className="services-team-image w-full h-auto shadow-lg object-cover"
               />
@@ -28,10 +28,13 @@ const ServicesHeroSection: React.FC = () => {
               {/* Services Description */}
               <div className="services-description text-sm sm:text-base md:text-md text-gray-700 leading-relaxed space-y-4">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                  We provide compassionate counselling services designed to support personal growth, emotional healing, and overall well-being. Every session is created to offer a safe and confidential space where individuals can openly share, reflect, and discover new perspectives.
                 </p>
                 <p>
-                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                  Our core services include individual therapy, relationship and family counselling, stress and anxiety management, and motivational coaching. Whether you are navigating life’s challenges, building resilience, or seeking clarity, we guide you with empathy and professional expertise.
+                </p>
+                <p>
+                  Each service is rooted in trust, care, and encouragement—helping you reconnect with your inner strengths while developing healthier patterns for daily life. With a focus on long-term growth, we aim to inspire balance, confidence, and meaningful change.
                 </p>
               </div>
             </div>

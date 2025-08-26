@@ -38,7 +38,7 @@ const CompanyStorySection: React.FC = () => {
             {/* Top Nature Image */}
             <div className="relative">
               <img
-                src="/assets/aboutpageImage1.jpg"
+                src="/assets/about-us-2.png"
                 alt="Natural tropical scenery with palm leaves and waterfall"
                 className="story-nature-image w-full h-64 sm:h-80 lg:h-96 object-cover shadow-lg"
               />
