@@ -174,8 +174,8 @@ export const apiSlices = createApi({
       }),
     }),
     getBookings: builder.query({
-      query: (filter) => ({
-        url: `/admin/booking?filter=${filter}`,
+      query: ({filter, page, limit}) => ({
+        url: `/admin/booking?filter=${filter}&page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),

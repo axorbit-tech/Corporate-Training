@@ -9,7 +9,7 @@ interface PaginationProps {
   className?: string,
   onShowLess?: () => void   // 👈 new callback
   variant?: "default" | "loadMore"  // 👈 new prop
-   isLoading?: boolean  
+  isLoading?: boolean  
 }
 
 const Pagination: React.FC<PaginationProps> = ({

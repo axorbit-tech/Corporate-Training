@@ -8,6 +8,11 @@ const getBookings = async (req: Request, res: Response) => {
   try {
     const filter = (req.query.filter as string)?.toLowerCase() || "";
     const now = dayjs();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+     // calculate how many to skip
+    const skip = (page - 1) * limit;
 
     let query: any = {};
 
@@ -31,12 +36,22 @@ const getBookings = async (req: Request, res: Response) => {
 
     const bookings = await BookingModel.find(query)
       .populate("userId")
-      .sort({ date: 1 });
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await BookingModel.countDocuments(query);
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       count: bookings.length,
       data: bookings,
+      pagination: {
+        page,
+        limit,
+        total ,
+        pages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     console.error(error);
