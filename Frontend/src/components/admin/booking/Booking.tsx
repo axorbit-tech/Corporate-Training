@@ -50,6 +50,8 @@ const BookingListing: React.FC = () => {
     setBookings(bookingResponse?.data || [])
   }, [bookingResponse, page])
 
+  console.log(bookingResponse?.data?.length , "lengthhhh")
+
   const pagination = bookingResponse?.pagination;
 
   if (isLoading && page === 1) return <Loader />;
@@ -275,7 +277,7 @@ const BookingListing: React.FC = () => {
                 currentPage={pagination.page}
                 totalPages={pagination.pages}
                 onPageChange={setPage}
-                onShowLess={() => setPage(1)} // ✅ reset to first page
+                onShowLess={() => setPage(1)}
                 isLoading={isLoading && page > 1}
               />
             )}
