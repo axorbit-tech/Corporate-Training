@@ -1,54 +1,71 @@
-import type React from "react"
-import { useEffect, useState } from "react"
-import { Search, Filter, MoreHorizontal, Eye, Trash2, Calendar, Briefcase } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { useGetBookingsQuery, useDeleteBookingMutation } from "../../../store/slices/apiSlice"
-import CustomModal from "../common/CustomeModal"
-import { toast } from "react-toastify"
+import type React from "react";
+import { useEffect, useState } from "react";
+import {
+  Search,
+  Filter,
+  MoreHorizontal,
+  Eye,
+  Trash2,
+  Calendar,
+  Briefcase,
+} from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  useGetBookingsQuery,
+  useDeleteBookingMutation,
+} from "../../../store/slices/apiSlice";
+import CustomModal from "../common/CustomeModal";
+import { toast } from "react-toastify";
 import Loader from "../../common/Loader";
 import Pagination from "../../pagination";
 
 interface IUser {
-  _id: number
-  name: string
-  email: string
-  phone: number
-  age: number
-  sex: string
+  _id: number;
+  name: string;
+  email: string;
+  phone: number;
+  age: number;
+  sex: string;
 }
 
 interface IBooking {
-  _id: number
-  userId: IUser
-  service: string
-  date: string
-  country: string
-  state: string
-  status: string
+  _id: number;
+  userId: IUser;
+  service: string;
+  date: string;
+  country: string;
+  state: string;
+  status: string;
 }
 
 const BookingListing: React.FC = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const params = new URLSearchParams(location.search)
-  const filter = params.get("filter") || "all"
+  const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const filter = params.get("filter") || "all";
 
-  const [open, setOpen] = useState(false)
-  const [modalAction, setModalAction] = useState<(() => void) | null>(null)
+  const [open, setOpen] = useState(false);
+  const [modalAction, setModalAction] = useState<(() => void) | null>(null);
 
   const [page, setPage] = useState(1);
   const limit = 10;
-  const { data: bookingResponse, isLoading } = useGetBookingsQuery({ filter, page, limit })
-  const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation()
+  const { data: bookingResponse, isLoading } = useGetBookingsQuery({
+    filter,
+    page,
+    limit,
+  });
+  const [deleteBooking, { isLoading: isDeleting }] = useDeleteBookingMutation();
 
-  const [bookings, setBookings] = useState<IBooking[]>([])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [selectedBookings, setSelectedBookings] = useState<number[]>([])
+  const [bookings, setBookings] = useState<IBooking[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedBookings, setSelectedBookings] = useState<number[]>([]);
 
   useEffect(() => {
-    setBookings(bookingResponse?.data || [])
-  }, [bookingResponse, page])
+    setBookings(bookingResponse?.data || []);
+  }, [bookingResponse, page]);
+
+  console.log(bookingResponse?.data?.length, "lengthhhh");
 
   const pagination = bookingResponse?.pagination;
 
@@ -58,39 +75,40 @@ const BookingListing: React.FC = () => {
   const filteredBookings = bookings?.filter((booking) => {
     const matchesSearch =
       booking?.userId?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      booking.service.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || booking.status === statusFilter
-    return matchesSearch && matchesStatus
-  })
+      booking.service.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" || booking.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   // Handle selection
   const handleSelectBooking = (bookingId: number, checked: boolean) => {
     if (checked) {
-      setSelectedBookings([...selectedBookings, bookingId])
+      setSelectedBookings([...selectedBookings, bookingId]);
     } else {
-      setSelectedBookings(selectedBookings.filter((id) => id !== bookingId))
+      setSelectedBookings(selectedBookings.filter((id) => id !== bookingId));
     }
-  }
+  };
 
   const handleBookingAction = (bookingId: number) => {
-    setModalAction(() => () => handleDeleteBooking(bookingId))
-    setOpen(true)
-  }
+    setModalAction(() => () => handleDeleteBooking(bookingId));
+    setOpen(true);
+  };
 
   const handleDeleteBooking = async (bookingId: number) => {
     try {
-      const res = await deleteBooking(bookingId).unwrap()
+      const res = await deleteBooking(bookingId).unwrap();
       if (res.success) {
-        toast.success("Booking deleted successfully")
-        setBookings((prev) => prev.filter((b) => b._id !== bookingId))
-        setSelectedBookings((prev) => prev.filter((id) => id !== bookingId))
-        setOpen(false)
+        toast.success("Booking deleted successfully");
+        setBookings((prev) => prev.filter((b) => b._id !== bookingId));
+        setSelectedBookings((prev) => prev.filter((id) => id !== bookingId));
+        setOpen(false);
       }
     } catch (error) {
-      toast.error("Failed to delete booking")
-      console.error("Delete booking error:", error)
+      toast.error("Failed to delete booking");
+      console.error("Delete booking error:", error);
     }
-  }
+  };
 
   const getStatusBadge = (status: string) => {
     const statusStyles = {
@@ -98,17 +116,20 @@ const BookingListing: React.FC = () => {
       pending: "bg-yellow-100 text-yellow-800",
       cancelled: "bg-red-100 text-red-800",
       completed: "bg-blue-100 text-blue-800",
-    }
-    return statusStyles[status as keyof typeof statusStyles] || "bg-gray-100 text-gray-800"
-  }
+    };
+    return (
+      statusStyles[status as keyof typeof statusStyles] ||
+      "bg-gray-100 text-gray-800"
+    );
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   function handleSelectAll(checked: boolean): void {
     setSelectedBookings(
@@ -123,7 +144,9 @@ const BookingListing: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Bookings</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                Bookings
+              </h1>
               <p className="text-sm text-gray-600 hidden sm:block">
                 Manage customer bookings and appointments
               </p>
@@ -205,7 +228,10 @@ const BookingListing: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {filteredBookings.map((booking) => (
-                <tr key={booking._id} className="hover:bg-gray-50 transition-colors">
+                <tr
+                  key={booking._id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
                   <td className="px-6 py-4">
                     <input
                       type="checkbox"
@@ -266,31 +292,37 @@ const BookingListing: React.FC = () => {
                 </tr>
               ))}
             </tbody>
-
-
           </table>
 
-
         </div>
-
 
         {/* Mobile Cards */}
         <div className="md:hidden space-y-4">
           {filteredBookings?.map((booking) => (
-            <div key={booking._id} className="bg-white rounded-lg border border-gray-200 p-4">
+            <div
+              key={booking._id}
+              className="bg-white rounded-lg border border-gray-200 p-4"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex items-center space-x-3 flex-1">
                   <input
                     type="checkbox"
                     checked={selectedBookings.includes(booking._id)}
-                    onChange={(e) => handleSelectBooking(booking._id, e.target.checked)}
+                    onChange={(e) =>
+                      handleSelectBooking(booking._id, e.target.checked)
+                    }
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                    {booking?.userId?.name?.split(" ").map((n) => n[0]).join("")}
+                    {booking?.userId?.name
+                      ?.split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-900 truncate">{booking?.userId?.name}</div>
+                    <div className="text-sm font-medium text-gray-900 truncate">
+                      {booking?.userId?.name}
+                    </div>
                     <div className="text-sm text-gray-600 truncate">
                       <Briefcase className="inline w-3 h-3 mr-1" />
                       {booking.service}
@@ -302,8 +334,13 @@ const BookingListing: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(booking.status)}`}>
-                    {booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
+                  <span
+                    className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(
+                      booking.status
+                    )}`}
+                  >
+                    {booking.status.charAt(0).toUpperCase() +
+                      booking.status.slice(1)}
                   </span>
                   <button className="text-gray-400 hover:text-gray-600 p-1">
                     <MoreHorizontal className="w-4 h-4" />
@@ -338,13 +375,13 @@ const BookingListing: React.FC = () => {
           buttonText="OK"
           loading={isDeleting}
           onButtonClick={() => {
-            if (modalAction) modalAction()
-            else toast.error("Something went wrong")
+            if (modalAction) modalAction();
+            else toast.error("Something went wrong");
           }}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BookingListing
+export default BookingListing;
