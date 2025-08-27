@@ -17,6 +17,7 @@ import CustomModal from '../common/CustomeModal'
 import Loader from "../../common/Loader";
 import SomethingWentWrong from "../../common/error";
 import { formatDate } from "../../../utils/fomatDate";
+import Pagination from "../../pagination";
 
 interface Event {
   _id: number;
@@ -30,17 +31,19 @@ interface Event {
 const EventListing: React.FC = () => {
   const navigate = useNavigate();
 
-  const { data: eventData, isLoading, isError } = useGetEventsQuery(undefined);
+  const [page, setPage] = useState(1);
+  const limit = 10;
 
-
+  const { data: eventData, isLoading, isError } = useGetEventsQuery({ page, limit });
 
   useEffect(() => {
     setEvents(eventData?.data)
-  }, [eventData])
+  }, [eventData, page])
+
+  const pagination = eventData?.pagination;
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedEvents, setSelectedEvents] = useState<number[]>([]);
   const [events, setEvents] = useState<Event[]>([])
 
@@ -49,8 +52,6 @@ const EventListing: React.FC = () => {
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
   const [open, setOpen] = useState(false);
 
-  const eventsPerPage = 10;
-  const totalPages = Math.ceil(events?.length / eventsPerPage);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -74,12 +75,8 @@ const EventListing: React.FC = () => {
     );
   };
 
-  const handleSelectAll = () => {
-    if (selectedEvents.length === events.length) {
-      setSelectedEvents([]);
-    } else {
-      setSelectedEvents(events.map((event: Event) => event._id));
-    }
+  const handleSelectAll = (checked: boolean) => {
+    setSelectedEvents(checked ? events.map((event) => event._id) : []);
   };
 
   const handleFunctionTypes = (eventId: number, type: "status" | "delete") => {
@@ -197,8 +194,10 @@ const EventListing: React.FC = () => {
             <div className="flex items-center space-x-3">
               <input
                 type="checkbox"
-                checked={selectedEvents?.length === events?.length}
-                onChange={handleSelectAll}
+                checked={
+                  selectedEvents?.length === events?.length && events.length > 0
+                }
+                onChange={(e) => handleSelectAll(e.target.checked)}
                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
               <span className="text-sm font-medium text-gray-700">
@@ -231,8 +230,10 @@ const EventListing: React.FC = () => {
                   <th className="admin-table-header-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     <input
                       type="checkbox"
-                      checked={selectedEvents?.length === events?.length}
-                      onChange={handleSelectAll}
+                      checked={
+                        selectedEvents?.length === events?.length && events.length > 0
+                      }
+                      onChange={(e) => handleSelectAll(e.target.checked)}
                       className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
                   </th>
@@ -439,50 +440,19 @@ const EventListing: React.FC = () => {
         </div>
 
         {/* Pagination */}
-        <div className="admin-pagination-container border-t border-gray-200 bg-gray-50 px-6 py-3">
-          <div className="flex items-center justify-between">
-            <div className="admin-pagination-info text-sm text-gray-700">
-              Showing <span className="font-medium">1</span> to{" "}
-              <span className="font-medium">
-                {Math.min(eventsPerPage, events?.length ?? 0)}
-              </span>{" "}
-              of <span className="font-medium">{events?.length}</span> results
-            </div>
-
-            <div className="admin-pagination-controls flex items-center space-x-2">
-              <button
-                disabled={currentPage === 1}
-                className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              >
-                Previous
-              </button>
-
-              <div className="admin-pagination-numbers flex items-center space-x-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${currentPage === page
-                        ? "bg-blue-500 text-white"
-                        : "text-gray-700 hover:bg-gray-100"
-                        }`}
-                    >
-                      {page}
-                    </button>
-                  )
-                )}
-              </div>
-
-              <button
-                disabled={currentPage === totalPages}
-                className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-              >
-                Next
-              </button>
-            </div>
+        {pagination && pagination.pages > 1 ? (
+          <Pagination
+            currentPage={pagination.page}
+            totalPages={pagination.pages}
+            onPageChange={setPage}
+            onShowLess={() => setPage(1)} // ✅ reset to first page
+            isLoading={isLoading && page > 1}
+          />
+        ) : pagination ? (
+          <div className="text-center text-gray-500 text-sm mt-5">
+            <p>Page {pagination.page} of {pagination.pages}</p>
           </div>
-        </div>
+        ) : null}
       </div>
 
       <CustomModal

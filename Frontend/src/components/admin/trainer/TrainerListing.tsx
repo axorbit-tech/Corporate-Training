@@ -1,28 +1,31 @@
 import type React from "react"
 import { useState, useMemo, useEffect } from "react"
-import { Search, Filter, Trash2, Eye, Plus, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search, Filter, Trash2, Eye, Plus} from "lucide-react"
 import type { ITrainer } from "../../../types/types"
 import { generateAvatar } from "../../../utils/generateAvatar"
 import { useGetTrainersQuery } from "../../../store/slices/apiSlice"
 import { useNavigate } from "react-router-dom"
+import Pagination from "../../pagination"
 
 const TrainerListing: React.FC = () => {
 
   const navigate = useNavigate()
+  const [page, setPage] = useState(1)
+  const limit = 10
 
-  const {data: trainersResponse} = useGetTrainersQuery(undefined)
+  const {data: trainersResponse, isLoading} = useGetTrainersQuery({page, limit})
 
   useEffect(()=> {
     setTrainers(trainersResponse?.data)
-  }, [trainersResponse])
+  }, [trainersResponse, page])
+
+  const pagination = trainersResponse?.pagination
 
 
   const [trainers, setTrainers] = useState<ITrainer[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedTrainers, setSelectedTrainers] = useState<number[]>([])
-  const [currentPage, setCurrentPage] = useState(1)
   const [showFilters, setShowFilters] = useState(false)
-  const itemsPerPage = 10
 
   // Filter trainers based on search and designation
   const filteredTrainers = useMemo(() => {
@@ -35,17 +38,11 @@ const TrainerListing: React.FC = () => {
     })
   }, [trainers, searchTerm])
 
-  // Pagination
-  const totalPages = Math.ceil(filteredTrainers?.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedTrainers = filteredTrainers?.slice(startIndex, startIndex + itemsPerPage)
 
   const handleSelectAll = (checked: boolean) => {
-    if (checked) {
-      setSelectedTrainers(paginatedTrainers?.map((trainer) => trainer._id))
-    } else {
-      setSelectedTrainers([])
-    }
+    setSelectedTrainers(
+      checked ? filteredTrainers?.map((trainer) => trainer._id) : []
+    )
   }
 
   const handleSelectTrainer = (trainerId: number, checked: boolean) => {
@@ -146,7 +143,9 @@ const TrainerListing: React.FC = () => {
                   <th className="admin-table-header-cell px-6 py-3 text-left">
                     <input
                       type="checkbox"
-                      checked={selectedTrainers?.length === paginatedTrainers?.length && paginatedTrainers?.length > 0}
+                      checked={
+                        selectedTrainers?.length === filteredTrainers?.length && filteredTrainers?.length > 0
+                      }
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       className="admin-select-all-checkbox rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
@@ -172,7 +171,7 @@ const TrainerListing: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="admin-table-body bg-white divide-y divide-gray-200">
-                {paginatedTrainers?.map((trainer) => {
+                {filteredTrainers?.map((trainer) => {
                   const avatar = generateAvatar(trainer.name)
                   return (
                     <tr key={trainer._id} className="admin-trainer-row hover:bg-gray-50">
@@ -234,7 +233,7 @@ const TrainerListing: React.FC = () => {
 
         {/* Trainers Cards - Mobile */}
         <div className="admin-trainer-cards lg:hidden space-y-4">
-          {paginatedTrainers?.map((trainer) => {
+          {filteredTrainers?.map((trainer) => {
             const avatar = generateAvatar(trainer.name)
             return (
               <div key={trainer._id} className="admin-trainer-card bg-white rounded-lg border border-gray-200 p-4">
@@ -285,35 +284,19 @@ const TrainerListing: React.FC = () => {
         </div>
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="admin-pagination flex items-center justify-between mt-6">
-            <div className="admin-pagination-info text-sm text-gray-700">
-              Showing {startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredTrainers?.length)} of{" "}
-              {filteredTrainers?.length} trainers
-            </div>
-            <div className="admin-pagination-controls flex items-center space-x-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="admin-pagination-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span>Previous</span>
-              </button>
-              <span className="admin-pagination-current px-3 py-2 bg-blue-500 text-white rounded-lg">
-                {currentPage}
-              </span>
-              <button
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                disabled={currentPage === totalPages}
-                className="admin-pagination-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-1"
-              >
-                <span>Next</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+        {pagination && pagination.pages > 1 ? (
+          <Pagination
+            currentPage={pagination.page}
+            totalPages={pagination.pages}
+            onPageChange={setPage}
+            onShowLess={() => setPage(1)} // ✅ reset to first page
+            isLoading={isLoading && page > 1}
+          />
+        ) : pagination ? (
+          <div className="text-center text-gray-500 text-sm mt-5">
+            <p>Page {pagination.page} of {pagination.pages}</p>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   )

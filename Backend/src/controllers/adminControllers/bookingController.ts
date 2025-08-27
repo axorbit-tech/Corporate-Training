@@ -11,7 +11,7 @@ const getBookings = async (req: Request, res: Response) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
 
-     // calculate how many to skip
+    // calculate how many to skip
     const skip = (page - 1) * limit;
 
     let query: any = {};

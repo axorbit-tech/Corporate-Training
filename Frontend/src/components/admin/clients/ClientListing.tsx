@@ -4,11 +4,10 @@ import {
   Eye,
   Trash2,
   Users,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { useGetUsersQuery } from "../../../store/slices/apiSlice";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../pagination";
 
 interface User {
   _id: number;
@@ -21,25 +20,35 @@ interface User {
 const ClientListing: React.FC = () => {
 
   const navigate = useNavigate()
-  const { data: userData, isLoading, isError } = useGetUsersQuery(undefined);
 
-    useEffect(()=> {
-        setUsers(userData?.clients)
-    }, [userData])
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const { data: userData, isLoading, isError } = useGetUsersQuery({
+    page,
+    limit,
+  });
+
+
+
+  useEffect(() => {
+    setUsers(userData?.clients)
+  }, [userData, page]);
 
   const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+
+
 
   useEffect(() => {
     if (userData?.data) {
       setUsers(userData.data);
     }
-  }, [userData]);
+  }, [userData, page]);
+
+  const pagination = userData?.pagination;
 
   const filteredUsers = useMemo(() => {
     return users?.filter((user) => {
@@ -51,16 +60,15 @@ const ClientListing: React.FC = () => {
     });
   }, [users, searchTerm]);
 
-  const paginatedUsers = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredUsers?.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredUsers, currentPage, itemsPerPage]);
 
-  const totalPages = Math.ceil(filteredUsers?.length / itemsPerPage);
 
-  const handleSelectAll = (checked: boolean) => {
-    setSelectedUsers(checked ? paginatedUsers.map((user) => user._id) : []);
-  };
+
+  function handleSelectAll(checked: boolean): void {
+    setSelectedUsers(
+      checked ? filteredUsers.map((user) => user._id) : []
+    );
+  }
+
 
   const handleSelectUser = (userId: number, checked: boolean) => {
     setSelectedUsers((prev) =>
@@ -197,8 +205,8 @@ const ClientListing: React.FC = () => {
                       <input
                         type="checkbox"
                         checked={
-                          selectedUsers?.length === paginatedUsers?.length &&
-                          paginatedUsers?.length > 0
+                          selectedUsers?.length === filteredUsers?.length &&
+                          filteredUsers?.length > 0
                         }
                         onChange={(e) => handleSelectAll(e.target.checked)}
                         className="w-4 h-4 text-blue-600"
@@ -219,7 +227,7 @@ const ClientListing: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {paginatedUsers.map((user) => (
+                  {filteredUsers.map((user) => (
                     <tr
                       key={user._id}
                       className="hover:bg-gray-50 transition-colors"
@@ -278,7 +286,7 @@ const ClientListing: React.FC = () => {
           {/* Mobile Cards */}
           {!isLoading && filteredUsers?.length > 0 && (
             <div className="md:hidden">
-              {paginatedUsers?.map((user) => (
+              {filteredUsers?.map((user) => (
                 <div
                   key={user._id}
                   className="border-b text-center border-gray-200 p-4"
@@ -343,36 +351,19 @@ const ClientListing: React.FC = () => {
         </div>
 
         {/* Pagination */}
-        {filteredUsers?.length > 0 && (
-          <div className="bg-white border-t border-gray-200 px-6 py-3 flex items-center justify-between">
-            <div className="text-sm text-gray-700">
-              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-              {Math.min(currentPage * itemsPerPage, filteredUsers?.length)} of{" "}
-              {filteredUsers?.length} users
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="p-2 text-gray-600 hover:text-gray-900 disabled:text-gray-400"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <span className="text-sm text-gray-700">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() =>
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                }
-                disabled={currentPage === totalPages}
-                className="p-2 text-gray-600 hover:text-gray-900 disabled:text-gray-400"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
+        {pagination && pagination.pages > 1 ? (
+          <Pagination
+            currentPage={pagination.page}
+            totalPages={pagination.pages}
+            onPageChange={setPage}
+            onShowLess={() => setPage(1)} // ✅ reset to first page
+            isLoading={isLoading && page > 1}
+          />
+        ) : pagination ? (
+          <div className="text-center text-gray-500 text-sm mt-5">
+            <p>Page {pagination.page} of {pagination.pages}</p>
           </div>
-        )}
+        ) : null}
       </div>
     </div>
   );

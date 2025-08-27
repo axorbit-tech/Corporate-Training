@@ -35,8 +35,8 @@ export const apiSlices = createApi({
       }),
     }),
     getServices: builder.query({
-      query: () => ({
-        url: "/admin/service",
+      query: ({page, limit}) => ({
+        url: `/admin/service?page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),
@@ -68,8 +68,8 @@ export const apiSlices = createApi({
     }),
 
     getBlogs: builder.query({
-      query: () => ({
-        url: "/admin/blog",
+      query: ({page, limit}) => ({
+        url: `/admin/blog?page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),
@@ -116,8 +116,8 @@ export const apiSlices = createApi({
       }),
     }),
     getEvents: builder.query({
-      query: () => ({
-        url: "/admin/event",
+      query: ({ page, limit }) => ({
+        url: `/admin/event?page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),
@@ -150,14 +150,15 @@ export const apiSlices = createApi({
     }),
 
     getUsers: builder.query({
-      query: () => ({
-        url: `/admin/client`,
+      query: ({ page, limit }) => ({
+        url: `/admin/client?page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),
+
     getTrainers: builder.query({
-      query: () => ({
-        url: `/admin/trainer`,
+      query: ({page, limit}) => ({
+        url: `/admin/trainer?page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),
