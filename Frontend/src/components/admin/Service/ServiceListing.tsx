@@ -34,7 +34,7 @@ const ServiceListing: React.FC = () => {
 
   useEffect(() => {
     setServices(serviceResponse?.data)
-  }, [serviceResponse])
+  }, [serviceResponse, page])
 
 
 
