@@ -270,19 +270,7 @@ const BookingListing: React.FC = () => {
 
           </table>
 
-          {pagination && pagination.pages > 1 ? (
-            <Pagination
-              currentPage={pagination.page}
-              totalPages={pagination.pages}
-              onPageChange={setPage}
-              onShowLess={() => setPage(1)} // ✅ reset to first page
-              isLoading={isLoading && page > 1}
-            />
-          ): (
-            <div className="text-center text-gray-500 text-sm">
-              <p>Page {pagination.page} of {pagination.pages}</p>
-            </div>
-          )}
+
         </div>
 
 
@@ -325,6 +313,20 @@ const BookingListing: React.FC = () => {
             </div>
           ))}
         </div>
+
+        {pagination && pagination.pages > 1 ? (
+          <Pagination
+            currentPage={pagination.page}
+            totalPages={pagination.pages}
+            onPageChange={setPage}
+            onShowLess={() => setPage(1)} // ✅ reset to first page
+            isLoading={isLoading && page > 1}
+          />
+        ) : pagination ? (
+          <div className="text-center text-gray-500 text-sm mt-5">
+            <p>Page {pagination.page} of {pagination.pages}</p>
+          </div>
+        ) : null}
 
         {/* Confirmation Modal */}
         <CustomModal

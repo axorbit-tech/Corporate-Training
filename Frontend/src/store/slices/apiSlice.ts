@@ -150,8 +150,8 @@ export const apiSlices = createApi({
     }),
 
     getUsers: builder.query({
-      query: () => ({
-        url: `/admin/client`,
+      query: ({ page, limit }) => ({
+        url: `/admin/client?page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),
