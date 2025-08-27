@@ -267,18 +267,22 @@ const BookingListing: React.FC = () => {
               ))}
             </tbody>
 
-            
+
           </table>
 
-          {pagination && pagination.pages > 1 && (
-              <Pagination
-                currentPage={pagination.page}
-                totalPages={pagination.pages}
-                onPageChange={setPage}
-                onShowLess={() => setPage(1)} // ✅ reset to first page
-                isLoading={isLoading && page > 1}
-              />
-            )}
+          {pagination && pagination.pages > 1 ? (
+            <Pagination
+              currentPage={pagination.page}
+              totalPages={pagination.pages}
+              onPageChange={setPage}
+              onShowLess={() => setPage(1)} // ✅ reset to first page
+              isLoading={isLoading && page > 1}
+            />
+          ): (
+            <div className="text-center text-gray-500 text-sm">
+              <p>Page {pagination.page} of {pagination.pages}</p>
+            </div>
+          )}
         </div>
 
 
