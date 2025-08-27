@@ -1,6 +1,11 @@
 import "./App.css";
 import { useEffect } from "react";
-import { useNavigate, BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  useNavigate,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./routers/ProtectedRoutes";
@@ -13,7 +18,7 @@ import Blogs from "./pages/user/blog/Blogs";
 import Counsellors from "./pages/user/counsellors/Counsellors";
 import Booking from "./pages/user/booking/Booking";
 
-import ServiceDetails from "./pages/user/service/ServiceDetails"
+import ServiceDetails from "./pages/user/service/ServiceDetails";
 import BlogDetails from "./pages/user/blog/BlogDetails";
 import EventDetails from "./pages/user/event/EventDetails";
 import Contact from "./pages/user/contact/Contact";
@@ -43,11 +48,9 @@ import AdminBookingListingPage from "./pages/admin/booking/BookingListing";
 import AdminBookingDetailsPage from "./pages/admin/booking/BookingDetails";
 import AdminUserBookingsPage from "./pages/admin/booking/UserBooking";
 import AdminChangePasswordPage from "./pages/admin/auth/ChangePassword";
-
-
+import PublicRoute from "./routers/PublicRoutes";
 
 function App() {
-
   function AdminLogout() {
     const navigate = useNavigate();
     useEffect(() => {
@@ -67,13 +70,11 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin/logout" element={<AdminLogout />} />
-          <Route path="/admin/change-password" element={<AdminChangePasswordPage />} />
 
           {/* Userside Details Pages */}
           <Route path="/event-details/:id" element={<EventDetails />} />
           <Route path="/service-details/:id" element={<ServiceDetails />} />
           <Route path="/blog-details/:id" element={<BlogDetails />} />
-
 
           <Route path="/services" element={<Services />} />
           <Route path="/events" element={<Events />} />
@@ -81,52 +82,82 @@ function App() {
           <Route path="/trainers" element={<Counsellors />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/trainer-registration" element={<TrainerRegisterPage />} />
-
-          <Route path="/admin" element={<AdminDashboardPage />} />
-          <Route path="/admin/blogs" element={<AdminBlogListingPage />} />
-          <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
-          <Route path="/admin/blog-details/:id" element={<AdminBlogDetailsPage />} />
-          <Route path="/admin/edit-blog/:id" element={<AdminEditBlogPage />} />
-
-          <Route path="/admin/events" element={<AdminEventListingPage />} />
-          <Route path="/admin/add-event" element={<AddEvent />} />
           <Route
-            path="/admin/event-details/:id"
-            element={<AdminEventDetailsPage />}
-          />
-          <Route path="/admin/edit-event/:id" element={<AdminEditEventPage />} />
-
-          <Route path="/admin/services" element={<AdminServiceListing />} />
-          <Route path="/admin/add-service" element={<AdminAddServicePage />} />
-          <Route
-            path="/admin/service-details/:id"
-            element={<AdminServiceDetailsPage />}
-          />
-          <Route
-            path="/admin/edit-service/:id"
-            element={<AdminEditServicePage />}
+            path="/trainer-registration"
+            element={<TrainerRegisterPage />}
           />
 
-
-          <Route path="/admin/clients" element={<AdminClientListingPage />} />
-          <Route path="/admin/trainers" element={<AdminTrainerListingPage />} />
-          <Route path="/admin/trainer-details/:id" element={<AdminTrainerDetailsPage />} />
-          <Route path="/admin/requests" element={<AdminRequestListingPage />} />
-          <Route path="/admin/bookings" element={<AdminBookingListingPage />} />
-          <Route path="/admin/booking-details/:id" element={<AdminBookingDetailsPage />} />
-          <Route path="/admin/user-bookings/:id" element={<AdminUserBookingsPage />} />
-
-          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route element={<PublicRoute/>}>
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+          </Route>
 
           <Route element={<ProtectedRoute />}>
-            {/* <Route path="/admin" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/addServices" element={<AddServices />} />
-            <Route path="/solutions" element={<Solutions />} />
-            <Route path="/addSolutions" element={<AddSolutions />} />
-            <Route path="/whyUs" element={<WhyUs />} />
-            <Route path="/changePass" element={<ChangePass />} /> */}
+            <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route
+              path="/admin/change-password"
+              element={<AdminChangePasswordPage />}
+            />
+            <Route path="/admin/blogs" element={<AdminBlogListingPage />} />
+            <Route path="/admin/add-blog" element={<AdminAddBlogPage />} />
+            <Route
+              path="/admin/blog-details/:id"
+              element={<AdminBlogDetailsPage />}
+            />
+            <Route
+              path="/admin/edit-blog/:id"
+              element={<AdminEditBlogPage />}
+            />
+
+            <Route path="/admin/events" element={<AdminEventListingPage />} />
+            <Route path="/admin/add-event" element={<AddEvent />} />
+            <Route
+              path="/admin/event-details/:id"
+              element={<AdminEventDetailsPage />}
+            />
+            <Route
+              path="/admin/edit-event/:id"
+              element={<AdminEditEventPage />}
+            />
+
+            <Route path="/admin/services" element={<AdminServiceListing />} />
+            <Route
+              path="/admin/add-service"
+              element={<AdminAddServicePage />}
+            />
+            <Route
+              path="/admin/service-details/:id"
+              element={<AdminServiceDetailsPage />}
+            />
+            <Route
+              path="/admin/edit-service/:id"
+              element={<AdminEditServicePage />}
+            />
+
+            <Route path="/admin/clients" element={<AdminClientListingPage />} />
+            <Route
+              path="/admin/trainers"
+              element={<AdminTrainerListingPage />}
+            />
+            <Route
+              path="/admin/trainer-details/:id"
+              element={<AdminTrainerDetailsPage />}
+            />
+            <Route
+              path="/admin/requests"
+              element={<AdminRequestListingPage />}
+            />
+            <Route
+              path="/admin/bookings"
+              element={<AdminBookingListingPage />}
+            />
+            <Route
+              path="/admin/booking-details/:id"
+              element={<AdminBookingDetailsPage />}
+            />
+            <Route
+              path="/admin/user-bookings/:id"
+              element={<AdminUserBookingsPage />}
+            />
           </Route>
 
           <Route path="*" element={<PageNotFound />}></Route>

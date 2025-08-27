@@ -44,7 +44,7 @@ const ServiceDetailsImageSection: React.FC = () => {
   }
 
   return (
-    <section className="px-4 py-16 sm:px-6 sm:py-8 md:px-12 md:py-16 lg:px-20 lg:py-15">
+    <section className="px-4 py-16 sm:px-6 sm:py-8 md:px-6 md:py-16 lg:px-6 lg:py-15 mt-8">
       <div className="px-2 sm:px-4 sm:py-6 md:px-8 md:py-10 lg:px-12 lg:py-14">
         {/* Service Image */}
         <img
