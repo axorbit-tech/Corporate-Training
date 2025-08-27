@@ -7,16 +7,35 @@ import type { IService, ISubService } from "../../../types/types";
 import { Country, State } from "country-state-city";
 import { successToast, warningToast } from "../../../utils/toast";
 
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  designation: string;
+  website: string;
+  language: string;
+  experience: number;
+  company: string;
+  selectedServices: string[];
+  selectedSubServices: string[];
+  country: string;
+  state: string;
+  description: string;
+}
+
 const TrainerRegister: React.FC = () => {
   const [trainerRegistration] = useTrainerRegisterMutation();
+  const { data: serviceResponse } = useGetServicesQuery(undefined);
+
   const [countries, setCountries] = useState<
     { name: string; isoCode: string }[]
   >([]);
   const [states, setStates] = useState<{ name: string; isoCode: string }[]>([]);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [services, setServices] = useState<IService[]>([]);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     phone: "",
@@ -25,25 +44,20 @@ const TrainerRegister: React.FC = () => {
     language: "",
     experience: 0,
     company: "",
-    selectedServices: [] as string[], // Now stores service titles instead of IDs
-    selectedSubServices: [] as string[],
+    selectedServices: [],
+    selectedSubServices: [],
     country: "",
     state: "",
     description: ""
   });
 
   useEffect(() => {
-    // Load all countries
     const allCountries = Country.getAllCountries().map((c) => ({
       name: c.name,
       isoCode: c.isoCode,
     }));
     setCountries(allCountries);
   }, []);
-
-  const { data: serviceResponse } = useGetServicesQuery(undefined);
-
-  const [services, setServices] = useState<IService[]>([]);
 
   useEffect(() => {
     setServices(serviceResponse?.data || []);
@@ -56,10 +70,8 @@ const TrainerRegister: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (name === "country") {
-      // Reset state when country changes
       setFormData((prev) => ({ ...prev, state: "" }));
 
-      // Find country code
       const selectedCountry = countries.find((c) => c.name === value);
       if (selectedCountry) {
         const statesOfCountry = State.getStatesOfCountry(
@@ -81,64 +93,76 @@ const TrainerRegister: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "experience" ? Number(value) : value,
     }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      // Validate file type
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-      if (!validTypes.includes(file.type)) {
-        alert('Please select a valid image file (JPEG, JPG, PNG, or WebP)');
-        return;
-      }
+    if (!file) return;
 
-      // Validate file size (5MB limit)
-      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
-      if (file.size > maxSize) {
-        warningToast('please select a image less thatn 5 MB');
-        return;
-      }
-
-      setSelectedImage(file);
-
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImagePreview(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      warningToast('Please select a valid image file (JPEG, JPG, PNG, or WebP)');
+      return;
     }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    if (file.size > maxSize) {
+      warningToast('Please select an image less than 5 MB');
+      return;
+    }
+
+    setSelectedImage(file);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImagePreview(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
   };
 
   const removeImage = () => {
     setSelectedImage(null);
     setImagePreview(null);
-    // Reset the file input
     const fileInput = document.getElementById('profileImage') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
   };
 
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      designation: "",
+      website: "",
+      language: "",
+      experience: 0,
+      company: "",
+      selectedServices: [],
+      selectedSubServices: [],
+      country: "",
+      state: "",
+      description: ""
+    });
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-
       const submitData = new FormData();
-
 
       Object.entries(formData).forEach(([key, value]) => {
         if (Array.isArray(value)) {
-
           submitData.append(key, JSON.stringify(value));
         } else {
           submitData.append(key, value.toString());
         }
       });
-
 
       if (selectedImage) {
         submitData.append('image', selectedImage);
@@ -147,31 +171,13 @@ const TrainerRegister: React.FC = () => {
       const res = await trainerRegistration(submitData).unwrap();
 
       if (res.success) {
-        successToast("submitted successfully");
-
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          designation: "",
-          website: "",
-          language: "",
-          experience: 0,
-          company: "",
-          selectedServices: [],
-          selectedSubServices: [],
-          country: "",
-          state: "",
-          description: ""
-        });
-        setSelectedImage(null);
-        setImagePreview(null);
+        successToast("Submitted successfully");
+        resetForm();
       }
     } catch (error) {
-      console.log(error);
+      console.error("Submission error:", error);
     }
   };
-
 
   const getAvailableSubServices = () => {
     if (!formData.selectedServices.length || !services.length) return [];
@@ -194,19 +200,61 @@ const TrainerRegister: React.FC = () => {
 
   const availableSubServices = getAvailableSubServices();
 
+  const handleServiceToggle = (serviceTitle: string) => {
+    const service = services.find((s) => s.title === serviceTitle);
+    const isSelected = formData.selectedServices.includes(serviceTitle);
+
+    if (isSelected) {
+      setFormData((prev) => ({
+        ...prev,
+        selectedServices: prev.selectedServices.filter(
+          (title) => title !== serviceTitle
+        ),
+        selectedSubServices: prev.selectedSubServices.filter(
+          (subServiceTitle) => {
+            return !service?.subServices?.some(
+              (sub) => sub.title === subServiceTitle
+            );
+          }
+        ),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        selectedServices: [...prev.selectedServices, serviceTitle],
+      }));
+    }
+  };
+
+  const handleSubServiceToggle = (subServiceTitle: string) => {
+    const isSelected = formData.selectedSubServices.includes(subServiceTitle);
+
+    if (isSelected) {
+      setFormData((prev) => ({
+        ...prev,
+        selectedSubServices: prev.selectedSubServices.filter(
+          (title) => title !== subServiceTitle
+        ),
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        selectedSubServices: [...prev.selectedSubServices, subServiceTitle],
+      }));
+    }
+  };
+
   return (
     <section className="contact-form-section py-16 sm:py-20 lg:py-24 lg:px-10 lg:mt-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden shadow-xl">
-          {/* Left Side - Text Content */}
-          <div className="contact-text-section bg-green-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col ">
+          {/* Left Side - Text Content (Hidden on mobile) */}
+          <div className="contact-text-section bg-green-100 p-8 sm:p-10 lg:p-12 xl:p-16 hidden lg:flex flex-col">
             <div className="space-y-6 sm:space-y-8">
-              {/* Main Heading */}
               <h2 className="contact-form-heading text-2xl sm:text-3xl md:text-4xl lg:text-3xl xl:text-4xl font-bold text-gray-900 leading-tight">
                 Start Your Journey to Clarity and Well-being
               </h2>
 
-              {/* Description Text */}
               <p className="contact-form-description text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
                 Please fill out the form below to help us understand your needs
                 and match you with the right counselor. All information is kept
@@ -218,15 +266,15 @@ const TrainerRegister: React.FC = () => {
             </div>
             <div className="mt-8">
               <img
-              src="assets/therapist-trainer-reg-2.jpg"
-              alt="Blog Image"
-              className="w-full  h-[400px] sm:h-[400px] md:h-[700px] lg:h-[700px] object-fit"
-            />
+                src="assets/therapist-trainer-reg-2.jpg"
+                alt="Professional registration"
+                className="w-full h-[400px] sm:h-[400px] md:h-[700px] lg:h-[700px] object-cover rounded-lg"
+              />
             </div>
           </div>
 
-          {/* Right Side - Contact Form */}
-          <div className="contact-form-section bg-blue-100 p-8 sm:p-10 lg:p-12 xl:p-16 flex flex-col justify-center">
+          {/* Right Side - Contact Form (Full width on mobile) */}
+          <div className="contact-form-section bg-blue-100 p-4 sm:p-6 lg:p-12 xl:p-16 flex flex-col justify-center lg:col-span-1">
             <form onSubmit={handleSubmit} className="space-y-6" encType="multipart/form-data">
 
               {/* Profile Image Upload Section */}
@@ -235,7 +283,6 @@ const TrainerRegister: React.FC = () => {
                   Profile Image
                 </label>
                 <div className="flex flex-col items-center space-y-4">
-                  {/* Image Preview */}
                   {imagePreview ? (
                     <div className="relative">
                       <img
@@ -247,6 +294,7 @@ const TrainerRegister: React.FC = () => {
                         type="button"
                         onClick={removeImage}
                         className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors duration-200"
+                        aria-label="Remove image"
                       >
                         ×
                       </button>
@@ -269,7 +317,6 @@ const TrainerRegister: React.FC = () => {
                     </div>
                   )}
 
-                  {/* File Input */}
                   <div className="flex flex-col items-center space-y-2">
                     <label
                       htmlFor="profileImage"
@@ -312,7 +359,7 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="name"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Name
+                    Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -320,7 +367,7 @@ const TrainerRegister: React.FC = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
                     required
                   />
                 </div>
@@ -330,7 +377,7 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="email"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Email
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -338,7 +385,7 @@ const TrainerRegister: React.FC = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
                     required
                   />
                 </div>
@@ -351,7 +398,7 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="phone"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Phone
+                    Phone <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -359,7 +406,7 @@ const TrainerRegister: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
                     required
                   />
                 </div>
@@ -369,7 +416,7 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="designation"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Designation
+                    Designation <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -377,7 +424,7 @@ const TrainerRegister: React.FC = () => {
                     name="designation"
                     value={formData.designation}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
                     required
                   />
                 </div>
@@ -390,15 +437,16 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="website"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Website (optional)
+                    Website
                   </label>
                   <input
-                    type="text"
+                    type="url"
                     id="website"
                     name="website"
                     value={formData.website}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
+                    placeholder="https://example.com"
                   />
                 </div>
 
@@ -407,7 +455,7 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="language"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Language
+                    Language <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -415,7 +463,7 @@ const TrainerRegister: React.FC = () => {
                     name="language"
                     value={formData.language}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
                     required
                   />
                 </div>
@@ -427,15 +475,16 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="experience"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Experience ( in years )
+                    Experience (in years)
                   </label>
                   <input
                     type="number"
                     id="experience"
                     name="experience"
+                    min="0"
                     value={formData.experience}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
                   />
                 </div>
 
@@ -444,7 +493,7 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="company"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Company/Individual
+                    Company/Individual <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -452,15 +501,15 @@ const TrainerRegister: React.FC = () => {
                     name="company"
                     value={formData.company}
                     onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md"
                     required
                   />
                 </div>
               </div>
 
-              {/* Services Multi-Select with Custom UI */}
+              {/* Services Multi-Select */}
               <div className="form-group">
-                <label className="form-label block text-xs font-medium text-gray-700 mb-3">
+                <label className="form-label block text-sm font-medium text-gray-700 mb-3">
                   Services <span className="text-red-500">*</span>
                 </label>
                 <div className="space-y-3">
@@ -469,42 +518,17 @@ const TrainerRegister: React.FC = () => {
                       <div
                         key={service._id}
                         className={`p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${formData.selectedServices.includes(service.title)
-                            ? "border-blue-500 bg-blue-50 shadow-md transform scale-105"
-                            : "border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-25"
-                          }`}
-                        onClick={() => {
-                          const serviceTitle = service.title;
-                          const isSelected = formData.selectedServices.includes(serviceTitle);
-
-                          if (isSelected) {
-                            setFormData((prev) => ({
-                              ...prev,
-                              selectedServices: prev.selectedServices.filter(
-                                (title) => title !== serviceTitle
-                              ),
-                              selectedSubServices: prev.selectedSubServices.filter(
-                                (subServiceTitle) => {
-                                  // Remove subservices that belong to this service
-                                  return !service.subServices?.some(
-                                    (sub) => sub.title === subServiceTitle
-                                  );
-                                }
-                              ),
-                            }));
-                          } else {
-                            setFormData((prev) => ({
-                              ...prev,
-                              selectedServices: [...prev.selectedServices, serviceTitle],
-                            }));
-                          }
-                        }}
+                          ? "border-blue-500 bg-blue-50 shadow-md transform scale-105"
+                          : "border-gray-200 bg-white hover:border-blue-300 hover:bg-blue-25"
+                        }`}
+                        onClick={() => handleServiceToggle(service.title)}
                       >
                         <div className="flex items-center space-x-3">
                           <div
                             className={`w-4 h-4 rounded border-2 flex items-center justify-center ${formData.selectedServices.includes(service.title)
-                                ? "border-blue-500 bg-blue-500"
-                                : "border-gray-300"
-                              }`}
+                              ? "border-blue-500 bg-blue-500"
+                              : "border-gray-300"
+                            }`}
                           >
                             {formData.selectedServices.includes(service.title) && (
                               <svg
@@ -521,7 +545,7 @@ const TrainerRegister: React.FC = () => {
                             )}
                           </div>
                           <div>
-                            <h4 className="font-sm text-xs text-gray-900">
+                            <h4 className="text-sm text-gray-900">
                               {service.title}
                             </h4>
                           </div>
@@ -538,11 +562,11 @@ const TrainerRegister: React.FC = () => {
                 </div>
               </div>
 
-              {/* SubServices Multi-Select - Only show if services are selected */}
+              {/* SubServices Multi-Select */}
               {formData.selectedServices.length > 0 &&
                 availableSubServices.length > 0 && (
                   <div className="form-group">
-                    <label className="form-label block text-sm font-semibold text-slate-800 mb-4">
+                    <label className="form-label block text-sm font-medium text-gray-700 mb-4">
                       Choose Sub Services
                     </label>
                     <div className="space-y-4">
@@ -550,84 +574,50 @@ const TrainerRegister: React.FC = () => {
                         {availableSubServices.map((subService, index) => (
                           <div
                             key={`${subService.title}-${index}`}
-                            className={`group relative p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out ${formData.selectedSubServices.includes(
-                              subService.title
-                            )
-                                ? "border-blue-500 bg-blue-50 shadow-lg shadow-blue-100/50 ring-2 ring-blue-100"
-                                : "border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-25 hover:shadow-md hover:-translate-y-0.5"
-                              }`}
-                            onClick={() => {
-                              const isSelected =
-                                formData.selectedSubServices.includes(
-                                  subService.title
-                                );
-
-                              if (isSelected) {
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  selectedSubServices:
-                                    prev.selectedSubServices.filter(
-                                      (title) => title !== subService.title
-                                    ),
-                                }));
-                              } else {
-                                setFormData((prev) => ({
-                                  ...prev,
-                                  selectedSubServices: [
-                                    ...prev.selectedSubServices,
-                                    subService.title,
-                                  ],
-                                }));
-                              }
-                            }}
+                            className={`group relative p-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ease-out ${formData.selectedSubServices.includes(subService.title)
+                              ? "border-blue-500 bg-blue-50 shadow-lg shadow-blue-100/50 ring-2 ring-blue-100"
+                              : "border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-25 hover:shadow-md hover:-translate-y-0.5"
+                            }`}
+                            onClick={() => handleSubServiceToggle(subService.title)}
                           >
                             <div className="flex items-start space-x-3">
                               <div
-                                className={`relative flex-shrink-0 w-5 h-5 rounded-md border-2 transition-all duration-200 ${formData.selectedSubServices.includes(
-                                  subService.title
-                                )
-                                    ? "border-blue-500 bg-blue-500 shadow-sm"
-                                    : "border-slate-300 bg-white group-hover:border-blue-400"
-                                  }`}
+                                className={`relative flex-shrink-0 w-5 h-5 rounded-md border-2 transition-all duration-200 ${formData.selectedSubServices.includes(subService.title)
+                                  ? "border-blue-500 bg-blue-500 shadow-sm"
+                                  : "border-slate-300 bg-white group-hover:border-blue-400"
+                                }`}
                               >
-                                {formData.selectedSubServices.includes(
-                                  subService.title
-                                ) && (
-                                    <svg
-                                      className="w-3 h-3 text-white absolute top-0.5 left-0.5 transition-all duration-200"
-                                      fill="currentColor"
-                                      viewBox="0 0 20 20"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  )}
+                                {formData.selectedSubServices.includes(subService.title) && (
+                                  <svg
+                                    className="w-3 h-3 text-white absolute top-0.5 left-0.5 transition-all duration-200"
+                                    fill="currentColor"
+                                    viewBox="0 0 20 20"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                )}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <h4
-                                  className={`font-semibold text-xs leading-tight transition-colors duration-200 ${formData.selectedSubServices.includes(
-                                    subService.title
-                                  )
-                                      ? "text-blue-900"
-                                      : "text-slate-900 group-hover:text-blue-800"
-                                    }`}
+                                  className={`font-medium text-xs leading-tight transition-colors duration-200 ${formData.selectedSubServices.includes(subService.title)
+                                    ? "text-blue-900"
+                                    : "text-slate-900 group-hover:text-blue-800"
+                                  }`}
                                 >
                                   {subService.title}
                                 </h4>
                               </div>
                             </div>
 
-                            {/* Selection indicator */}
-                            {formData.selectedSubServices.includes(
-                              subService.title
-                            ) && (
-                                <div className="absolute top-2 right-2">
-                                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                                </div>
-                              )}
+                            {formData.selectedSubServices.includes(subService.title) && (
+                              <div className="absolute top-2 right-2">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -636,9 +626,9 @@ const TrainerRegister: React.FC = () => {
                         <div className="flex items-center space-x-2">
                           <div
                             className={`w-2 h-2 rounded-full transition-colors duration-200 ${formData.selectedSubServices.length > 0
-                                ? "bg-blue-500"
-                                : "bg-slate-300"
-                              }`}
+                              ? "bg-blue-500"
+                              : "bg-slate-300"
+                            }`}
                           ></div>
                           <span className="text-sm font-medium text-slate-700">
                             {formData.selectedSubServices.length} selected
@@ -659,14 +649,14 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="country"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Country
+                    Country <span className="text-red-500">*</span>
                   </label>
                   <select
                     id="country"
                     name="country"
                     value={formData.country}
                     onChange={handleCountryInputChange}
-                    className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
+                    className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer rounded-md"
                     required
                   >
                     <option value="">Select Country</option>
@@ -683,14 +673,14 @@ const TrainerRegister: React.FC = () => {
                     htmlFor="state"
                     className="form-label block text-sm font-medium text-gray-700 mb-2"
                   >
-                    State
+                    State <span className="text-red-500">*</span>
                   </label>
                   <select
                     id="state"
                     name="state"
                     value={formData.state}
                     onChange={handleCountryInputChange}
-                    className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer"
+                    className="form-select w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                     required
                     disabled={!states.length}
                   >
@@ -703,33 +693,34 @@ const TrainerRegister: React.FC = () => {
                   </select>
                 </div>
               </div>
-              <div>
-                <div className="form-group">
-                  <label
-                    htmlFor="description"
-                    className="form-label block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    rows={3}
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
-                    required
-                  />
-                </div>
+
+              {/* Description */}
+              <div className="form-group">
+                <label
+                  htmlFor="description"
+                  className="form-label block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Description <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  rows={4}
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  className="form-input w-full px-4 py-3 border border-gray-300 bg-white/80 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 rounded-md resize-vertical"
+                  required
+                  placeholder="Tell us about yourself, your expertise, and what you can offer..."
+                />
               </div>
 
               {/* Submit Button */}
               <div className="pt-4 text-center">
                 <button
                   type="submit"
-                  className="form-submit-btn font-medium px-16 py-1 rounded-full border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 min-w-[120px]"
+                  className="form-submit-btn font-medium px-8 py-3 rounded-full border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 min-w-[120px] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                 >
-                  Submit
+                  Submit Application
                 </button>
               </div>
             </form>
