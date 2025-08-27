@@ -155,9 +155,10 @@ export const apiSlices = createApi({
         method: HttpMethod.GET,
       }),
     }),
+    
     getTrainers: builder.query({
-      query: () => ({
-        url: `/admin/trainer`,
+      query: ({page, limit}) => ({
+        url: `/admin/trainer?page=${page}&limit=${limit}`,
         method: HttpMethod.GET,
       }),
     }),

@@ -104,11 +104,20 @@ const trainerRegistration = async (req: Request, res: Response) => {
 
 const getTrainers = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const skip = (page - 1) * limit;
+
     const trainers = await TrainerModel.aggregate([
       { $match: { isApproved: "approved" } },
       { $sort: { createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit }
     ]);
     console.log(trainers, "trainersssss");
+
+
 
     if (!trainers) {
       res.status(HttpStatusCode.NOT_FOUND).json({
@@ -118,9 +127,19 @@ const getTrainers = async (req: Request, res: Response) => {
       return;
     }
 
+    const total = await TrainerModel.countDocuments({
+      isApproved: "approved",
+    });
+
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: trainers,
+      pagination: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     console.log(error);
