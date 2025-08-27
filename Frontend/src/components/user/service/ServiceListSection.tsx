@@ -1,34 +1,37 @@
-import { useEffect, useState } from 'react'
-import React from 'react'
-import ServiceCard from './ServicePageCard'
-import { useGetServicesQuery } from '../../../store/slices/userApiSlice'
-import Loader from '../../common/Loader'
-import type { IService } from '../../../types/types'
-
+import { useEffect, useState } from "react";
+import React from "react";
+import ServiceCard from "./ServicePageCard";
+import { useGetServicesQuery } from "../../../store/slices/userApiSlice";
+import Loader from "../../common/Loader";
+import type { IService } from "../../../types/types";
 
 const ServiceListSection: React.FC = () => {
-  const { data: getService, isLoading, isError } = useGetServicesQuery(undefined)
-  const [services, setServices] = useState<IService[]>([])
+  const {
+    data: getService,
+    isLoading,
+    isError,
+  } = useGetServicesQuery(undefined);
+  const [services, setServices] = useState<IService[]>([]);
 
   useEffect(() => {
     if (getService) {
-      setServices(getService?.data)
+      setServices(getService?.data);
     }
-  }, [getService])
+  }, [getService]);
 
-  const [showAll, setShowAll] = useState(false)
+  const [showAll, setShowAll] = useState(false);
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <Loader />;
 
   if (isError) {
     return (
       <section className="py-16 text-center text-red-600">
         <p>Failed to load services. Please try again later.</p>
       </section>
-    )
+    );
   }
 
-  const visibleServices = showAll ? services : services.slice(0, 9)
+  const visibleServices = showAll ? services : services.slice(0, 9);
 
   return (
     <section className="services-grid-section bg-gray-50 py-16 sm:py-20 lg:pt-20 lg:pb-16 lg:px-10">
@@ -60,11 +63,11 @@ const ServiceListSection: React.FC = () => {
             )}
           </>
         ) : (
-          <div>No services found</div>
+          <div className="text-center">No services found</div>
         )}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ServiceListSection
+export default ServiceListSection;

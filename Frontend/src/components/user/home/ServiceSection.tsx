@@ -1,33 +1,43 @@
-import ServiceCard from "../cards/ServiceCard"
-import { useNavigate } from "react-router-dom"
-import { useGetServicesQuery } from "../../../store/slices/userApiSlice"
-import Loader from "../../common/Loader"
+import ServiceCard from "../cards/ServiceCard";
+import { useNavigate } from "react-router-dom";
+import { useGetServicesQuery } from "../../../store/slices/userApiSlice";
+import Loader from "../../common/Loader";
+import type { IService } from "../../../types/types";
+import { useEffect, useState } from "react";
 
 interface Service {
-  _id: number
-  image: string
-  title: string
-  content: string
+  _id: number;
+  image: string;
+  title: string;
+  content: string;
 }
 
 const ServiceSection = () => {
+  const {
+    data: serviceResponse,
+    isLoading: isLoadingServices,
+    isError,
+  } = useGetServicesQuery(undefined);
 
-  const { data: serviceResponse, isLoading: isLoadingServices, isError } = useGetServicesQuery(undefined)
-  const services = serviceResponse?.data
+  const [services, setServices] = useState<IService[]>([]);
 
-  const navigate = useNavigate()
-  // Sample service data - you can modify this as needed
+  useEffect(() => {
+    setServices(serviceResponse?.data);
+  }, [serviceResponse]);
 
-  if(isLoadingServices) return <Loader />
-  if(isError) return null
-  
+  const navigate = useNavigate();
+
+  if (isLoadingServices) return <Loader />;
+  if (isError || !services || services.length == 0) return null;
 
   return (
     <section className="service-section py-16 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="service-main-heading text-3xl font-bold text-blue-600 mb-2">Services</h2>
+          <h2 className="service-main-heading text-3xl font-bold text-blue-600 mb-2">
+            Services
+          </h2>
           {/* Blue underline */}
           {/* <div className="w-16 h-1 bg-blue-500 mx-auto"></div> */}
         </div>
@@ -45,12 +55,14 @@ const ServiceSection = () => {
           ))}
         </div>
 
-          <div className="text-center">
-          <button onClick={()=> navigate('/services')} className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+        <div className="text-center">
+          <button
+            onClick={() => navigate("/services")}
+            className="bg-gradient-to-r border border-blue-600 text-blue-600 hover:text-white hover:bg-blue-600 cursor-pointer px-16 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
             ALL SERVICES
           </button>
         </div>
-
 
         {/* Know More Button */}
         {/* <div className="flex justify-center lg:justify-end">
@@ -73,7 +85,7 @@ const ServiceSection = () => {
         </div> */}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ServiceSection
+export default ServiceSection;

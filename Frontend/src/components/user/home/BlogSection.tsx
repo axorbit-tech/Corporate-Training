@@ -17,6 +17,8 @@ const BlogSection = () => {
 
   const { data: blogs, isLoading } = useGetBlogsQuery(undefined);
 
+  console.log(blogs?.data, "blogsss dataaa");
+
   useEffect(() => {
     setBlogPosts(blogs?.data);
   }, [blogs]);
@@ -24,6 +26,7 @@ const BlogSection = () => {
   const [blogPosts, setBlogPosts] = useState<Blogs[]>([]);
 
   if (isLoading) return <Loader />;
+  if (blogPosts?.length <= 0 || !blogPosts) return null;
 
   return (
     <section className="blog-section bg-gray-50 py-10 lg:py-10">
@@ -50,7 +53,7 @@ const BlogSection = () => {
           {blogPosts?.slice(0, 2).map((post) => (
             <article
               key={post._id}
-              onClick={()=> navigate(`/blog-details/${post._id}`)}
+              onClick={() => navigate(`/blog-details/${post._id}`)}
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
             >
               <div className="flex flex-col sm:flex-row">

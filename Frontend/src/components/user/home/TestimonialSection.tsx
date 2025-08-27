@@ -31,7 +31,7 @@ const TestimonialsSection = () => {
   }
 
   return (
-    <section className="testimonial-section bg-gray-50 py-10 lg:pt-10">
+    <section className="testimonial-section bg-gray-50 py-16 lg:pt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-6">
