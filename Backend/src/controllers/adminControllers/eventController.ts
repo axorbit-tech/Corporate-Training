@@ -181,14 +181,24 @@ const deleteEvent = async (req: Request, res: Response): Promise<void> => {
 
 const getAllEvents = async (req: Request, res: Response): Promise<void> => {
   try {
-    const events = await eventModel.find().sort({ createdAt: -1 });
 
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
 
+    const events = await eventModel.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const total = await eventModel.countDocuments();
 
-    res.status(HttpStatusCode.OK).json({
-      success: true,
-      data: events,
-    });
+      res.status(HttpStatusCode.OK).json({
+        success: true,
+        data: events,
+        pagination: {
+          total,
+          page,
+          limit,
+          pages: Math.ceil(total / limit),
+        },
+      });
   } catch (error) {
     console.error(error);
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { HttpStatusCode } from "../../constants/httpStatusCodes";
 import serviceModel from "../../models/adminModels/serviceModel";
 import { serviceValidationSchema } from "../../validations/adminValidation/serviceValidation";
+import { parse } from "path";
 
 // ✅ Add Service
 const addService = async (req: Request, res: Response): Promise<void> => {
@@ -82,13 +83,23 @@ const addService = async (req: Request, res: Response): Promise<void> => {
 
 const getAllServices = async (req: Request, res: Response): Promise<void> => {
   try {
-    const services = await serviceModel.find().sort({ createdAt: -1 });
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
 
-   
+    const services = await serviceModel.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+    const total = await serviceModel.countDocuments();
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: services,
+      pagination: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     console.error(error);

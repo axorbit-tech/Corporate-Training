@@ -6,6 +6,7 @@ import CustomModal from '../common/CustomeModal'
 import { toast } from 'react-toastify'
 import Loader from '../../common/Loader'
 import SomethingWentWrong from '../../common/error'
+import Pagination from '../../pagination'
 
 
 interface BlogPost {
@@ -19,7 +20,10 @@ interface BlogPost {
 const BlogListing: React.FC = () => {
 
   const navigate = useNavigate()
-  const { data: getBlogs, isLoading, isError } = useGetBlogsQuery(undefined)
+  const [page, setPage] = useState(1)
+  const limit = 10
+  const { data: getBlogs, isLoading, isError } = useGetBlogsQuery({ page, limit })
+  const pagination = getBlogs?.pagination
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation()
   const [changeBlogStatus, { isLoading: isUpdating }] = useUpdateBlogStatusMutation();
   const [modalAction, setModalAction] = useState<(() => void) | null>(null);
@@ -28,11 +32,8 @@ const BlogListing: React.FC = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
-  const [currentPage, setCurrentPage] = useState(1)
   const [selectedPosts, setSelectedPosts] = useState<string[]>([])
 
-
-  const postsPerPage = 10
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -52,18 +53,18 @@ const BlogListing: React.FC = () => {
     if (getBlogs?.data) {
       setBlogs(getBlogs.data)
     }
-  }, [getBlogs])
+  }, [getBlogs, page])
 
   if (isLoading) return <Loader />
   if (isError) return <SomethingWentWrong />
 
-  const totalPages = Math.ceil(blogs.length / postsPerPage)
+
 
   const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  const currentPosts = filteredBlogs.slice((currentPage - 1) * postsPerPage, currentPage * postsPerPage)
+  
 
   const handleSelectPost = (postId: string) => {
     setSelectedPosts(prev =>
@@ -73,12 +74,10 @@ const BlogListing: React.FC = () => {
     )
   }
 
-  const handleSelectAll = () => {
-    if (selectedPosts.length === blogs.length) {
-      setSelectedPosts([])
-    } else {
-      setSelectedPosts(blogs.map(post => post._id))
-    }
+  const handleSelectAll = (checked: boolean) => {
+    setSelectedPosts(
+      checked ? filteredBlogs.map((blog) => blog._id) : []
+    )
   }
 
   const handleViewPost = (postId: string) => {
@@ -137,7 +136,7 @@ const BlogListing: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Blog Posts</h1>
           <p className="text-gray-600 mt-1">Manage your blog content</p>
         </div>
-        <button onClick={()=> navigate('/admin/add-blog')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2">
+        <button onClick={() => navigate('/admin/add-blog')} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium text-sm flex items-center space-x-2">
           <Plus className="w-4 h-4" />
           <span>Add New Post</span>
         </button>
@@ -176,8 +175,10 @@ const BlogListing: React.FC = () => {
               <th className="px-6 py-3 text-left">
                 <input
                   type="checkbox"
-                  checked={selectedPosts.length === blogs.length}
-                  onChange={handleSelectAll}
+                  checked={
+                    selectedPosts.length === filteredBlogs.length && filteredBlogs.length > 0
+                  }
+                  onChange={e => handleSelectAll(e.target.checked)}
                   className="w-4 h-4"
                 />
               </th>
@@ -188,7 +189,7 @@ const BlogListing: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {currentPosts.map((post) => (
+            {filteredBlogs.map((post) => (
               <tr key={post._id} className="hover:bg-gray-50">
                 <td className="px-6 py-4">
                   <input
@@ -220,44 +221,19 @@ const BlogListing: React.FC = () => {
       </div>
 
       {/* Pagination */}
-      <div className="admin-pagination-container border-t border-gray-200 bg-gray-50 px-6 py-3">
-        <div className="flex items-center justify-between">
-          <div className="admin-pagination-info text-sm text-gray-700">
-            Showing <span className="font-medium">1</span> to{" "}
-            <span className="font-medium">{Math.min(postsPerPage ?? 0, blogs?.length ?? 0)}</span> of{" "}
-            <span className="font-medium">{blogs?.length}</span> results
-          </div>
-
-          <div className="admin-pagination-controls flex items-center space-x-2">
-            <button
-              disabled={currentPage === 1}
-              className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              Previous
-            </button>
-
-            <div className="admin-pagination-numbers flex items-center space-x-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`admin-pagination-number w-8 h-8 text-sm rounded-md transition-colors duration-200 ${currentPage === page ? "bg-blue-500 text-white" : "text-gray-700 hover:bg-gray-100"
-                    }`}
-                >
-                  {page}
-                </button>
-              ))}
-            </div>
-
-            <button
-              disabled={currentPage === totalPages}
-              className="admin-pagination-btn px-3 py-1 text-sm border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-            >
-              Next
-            </button>
-          </div>
+      {pagination && pagination.pages > 1 ? (
+        <Pagination
+          currentPage={pagination.page}
+          totalPages={pagination.pages}
+          onPageChange={setPage}
+          onShowLess={() => setPage(1)} // ✅ reset to first page
+          isLoading={isLoading && page > 1}
+        />
+      ) : pagination ? (
+        <div className="text-center text-gray-500 text-sm mt-5">
+          <p>Page {pagination.page} of {pagination.pages}</p>
         </div>
-      </div>
+      ) : null}
 
       <CustomModal
         open={open}

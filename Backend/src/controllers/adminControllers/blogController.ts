@@ -147,13 +147,22 @@ const deleteBlog = async (req: Request, res: Response): Promise<void> => {
 
 const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
   try {
-    const blogs = await blogModel.find().sort({ createdAt: -1 });
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
 
-
+    const skip = (page - 1) * limit;
+    const blogs = await blogModel.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const total = await blogModel.countDocuments();
 
     res.status(HttpStatusCode.OK).json({
       success: true,
       data: blogs,
+      pagination: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit),
+      },
     });
 
   } catch (error) {
