@@ -18,7 +18,7 @@ const EventCard: React.FC<EventCardProps> = ({
   title, 
   description, 
   image, 
-  link = "#" 
+
 }) => {
 
   const { readableDate, time} = formatDateTimeWithSuffix(date)
