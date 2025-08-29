@@ -31,10 +31,8 @@ const CounsellorProfileSection: React.FC = () => {
 
   const pagination = trainerData?.pagination;
 
-  // ✅ Handle states
   if (isLoading && page === 1) return <Loader />;
   if (error) return <SomethingWentWrong />;
-  if (!counsellorsList?.length && !isLoading) return <p className="text-center text-gray-500">No counsellors found.</p>;
 
   const abtText =
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod...";

@@ -5,6 +5,8 @@ import EventsHeroSection from "../../../components/user/events/EventHeroSection"
 import EventListSection from "../../../components/user/events/EventListSection";
 import EventAllListSection from "../../../components/user/events/EventAllListSection";
 import { useGetEventsQuery } from "../../../store/slices/userApiSlice";
+import SomethingWentWrong from "../../../components/common/error";
+import LoaderComponent from "../../../components/common/Loader";
 
 export default function Events() {
   const [page, setPage] = useState(1);
@@ -25,22 +27,37 @@ export default function Events() {
     error,
   };
 
+  
   const errorMessage: string = responses.error
-    ? "status" in responses.error
-      ? `Error ${responses.error.status}`
-      : responses.error.message || "Unknown error"
-    : "";
-
+  ? "status" in responses.error
+  ? `Error ${responses.error.status}`
+  : responses.error.message || "Unknown error"
+  : "";
+  
   // Check if there are no events at all
-  const hasNoEvents = !isLoading && allEvents.length === 0 && upcomingEvents.length === 0 && recentEvents.length === 0;
+  const hasNoEvents = !isLoading && !error && allEvents.length === 0 && upcomingEvents.length === 0 && recentEvents.length === 0;
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <EventsHeroSection />
+        <LoaderComponent />
+        <Footer />
+      </div>
+    );
+  }
 
+  
   return (
     <div className="min-h-screen">
       <Header />
       <EventsHeroSection />
-      
-      {/* Show No Events Message if no events exist */}
-      {hasNoEvents ? (
+      {/* Show Error Message if there's an error */}
+      {error ? (
+        <SomethingWentWrong/>
+      ) : 
+      hasNoEvents ? (
         <section className="bg-gray-50 py-16 sm:py-20 lg:py-24">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center py-12 sm:py-16 lg:py-20">

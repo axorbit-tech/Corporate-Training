@@ -3,6 +3,8 @@ import { useState } from "react";
 import BlogPostCard from "./BlogPostCard";
 import { useGetBlogsQuery } from "../../../store/slices/userApiSlice";
 import type { IBlog } from "../../../types/types";
+import SomethingWentWrong from "../../common/error";
+import LoaderComponent from "../../common/Loader";
 
 const BlogPostsSection: React.FC = () => {
   const { data: getBlog, isLoading, isError } = useGetBlogsQuery(undefined);
@@ -19,19 +21,11 @@ const BlogPostsSection: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
 
   if (isLoading) {
-    return (
-      <section className="py-16 text-center">
-        <p>Loading Blogs...</p>
-      </section>
-    );
+    return <LoaderComponent/>
   }
 
   if (isError) {
-    return (
-      <section className="py-16 text-center text-red-600">
-        <p>Failed to load services. Please try again later.</p>
-      </section>
-    );
+    return <SomethingWentWrong/>
   }
 
   const visibleServices = showAll ? blogPosts : blogPosts.slice(0, 4);

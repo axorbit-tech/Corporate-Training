@@ -4,6 +4,7 @@ import ServiceCard from "./ServicePageCard";
 import { useGetServicesQuery } from "../../../store/slices/userApiSlice";
 import Loader from "../../common/Loader";
 import type { IService } from "../../../types/types";
+import SomethingWentWrong from "../../common/error";
 
 const ServiceListSection: React.FC = () => {
   const {
@@ -24,11 +25,7 @@ const ServiceListSection: React.FC = () => {
   if (isLoading) return <Loader />;
 
   if (isError) {
-    return (
-      <section className="py-16 text-center text-red-600">
-        <p>Failed to load services. Please try again later.</p>
-      </section>
-    );
+    return <SomethingWentWrong/>
   }
 
   const visibleServices = showAll ? services : services.slice(0, 9);
