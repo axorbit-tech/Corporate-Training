@@ -76,11 +76,7 @@ const createEnquiry = async (req: Request, res: Response) => {
 
 const getAllServices = async (req: Request, res: Response): Promise<void> => {
   try {
-    const services = await serviceModel
-      .find()
-      .where("status")
-      .equals("active")
-      .sort({ createdAt: -1 });
+    const services = await serviceModel.find({ status: "active" }).sort({ createdAt: -1 });
 
     res.status(HttpStatusCode.OK).json({
       success: true,
