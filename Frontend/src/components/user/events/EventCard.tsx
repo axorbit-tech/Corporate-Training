@@ -61,7 +61,7 @@ const EventCard: React.FC<EventCardProps> = ({
           <div className="pt-2">
             <a 
            
-              className="event-card-link text-sm font-medium text-blue-500 hover:text-blue-600 transition-colors duration-300"
+              className="event-card-link text-sm font-medium cursor-pointer text-blue-500 hover:text-blue-600 transition-colors duration-300"
               onClick={() =>navigate(`/event-details/${id}`)}
             >
               Read More →

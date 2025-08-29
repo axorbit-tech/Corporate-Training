@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useGetServiceDetailsQuery } from "../../../store/slices/userApiSlice";
 import { useParams } from "react-router-dom";
 import type { IService, ISubService } from "../../../types/types";
+import LoaderComponent from "../../common/Loader";
+import SomethingWentWrong from "../../common/error";
 
 type ServiceDetailsImageSectionParams = {
   id: string;
@@ -17,30 +19,11 @@ const ServiceDetailsImageSection: React.FC = () => {
   }, [serviceData]);
 
   if (isLoading) {
-    return (
-      <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading service details...</p>
-        </div>
-      </div>
-    );
+    return <LoaderComponent/>
   }
 
   if (error || !service) {
-    return (
-      <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Error loading service details</p>
-          <button
-            onClick={() => window.history.back()}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
-    );
+    return <SomethingWentWrong/>
   }
 
   return (
@@ -59,7 +42,7 @@ const ServiceDetailsImageSection: React.FC = () => {
             {service?.title}
           </h1>
 
-          <div className="text-sm sm:text-base md:text-lg mx-4 sm:mx-8 md:mx-16 text-justify leading-relaxed text-gray-700 mb-12">
+          <div className="text-sm sm:text-base md:text-lg mx-4 sm:mx-8 md:mx-16 text-justify leading-relaxed text-gray-700 mb-12 whitespace-pre-line">
             {service?.content}
           </div>
         </div>
@@ -82,7 +65,7 @@ const ServiceDetailsImageSection: React.FC = () => {
                       {subservice.title}
                     </h3>
 
-                    <div className="text-sm sm:text-base text-gray-700 leading-relaxed text-justify">
+                    <div className="text-sm sm:text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
                       {subservice.content}
                     </div>
                   </div>

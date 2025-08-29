@@ -14,7 +14,7 @@ const Gallery: React.FC<GalleryProps> = ({ eventImages = [] }) => {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mx-10 mt-10 md:mt-0">
-            {eventImages.map((img, index) => (
+            {eventImages.slice(1).map((img, index) => (
                 <div key={index}>
                     <img
                         className="w-full h-48 md:h-80 object-cover rounded-lg"

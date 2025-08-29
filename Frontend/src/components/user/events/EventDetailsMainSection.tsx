@@ -3,6 +3,8 @@ import Gallery from '../common/Gallery'
 import { useGetEventDetailsQuery } from '../../../store/slices/userApiSlice'
 import { useParams } from 'react-router-dom'
 import { formatDateTimeWithSuffix } from '../../../utils/fomatDate'
+import LoaderComponent from '../../common/Loader'
+import SomethingWentWrong from '../../common/error'
 
 type EventDetailsMainSectionParams = {
     id: string;
@@ -21,30 +23,11 @@ const EventDetailsMainSection: React.FC = () => {
 
 
     if (isLoading) {
-        return (
-            <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading Event details...</p>
-                </div>
-            </div>
-        )
+        return <LoaderComponent/>
     }
 
     if (error || !eventData) {
-        return (
-            <div className="admin-service-details min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-red-600 mb-4">Error loading Events details</p>
-                    <button
-                        onClick={() => window.history.back()}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
-                    >
-                        Go Back
-                    </button>
-                </div>
-            </div>
-        )
+        return <SomethingWentWrong/>
     }
 
     
@@ -60,10 +43,10 @@ const EventDetailsMainSection: React.FC = () => {
                 <div className='mt-6 text-center'>
                     <h2 className="event-details-heading text-xl sm:text-xl md:text-3xl font-bold mb-1">{eventData.title}</h2>
                     <div className="relative">
-                        <p className="absolute top-1 left-8  text-sm text-gray-500">{readableDate} {time}</p>
+                        <p className="absolute top-1 text-sm text-gray-500">{readableDate} {time}</p>
 
                     </div>
-                    <p className="text-sm sm:text-sm md:text-base mx-5 text-justify mt-10">
+                    <p className="text-sm sm:text-sm md:text-base text-justify mt-10 whitespace-pre-line">
                         {eventData.content}
                     </p>
                 </div>
