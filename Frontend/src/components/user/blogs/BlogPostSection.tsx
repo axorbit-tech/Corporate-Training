@@ -21,11 +21,11 @@ const BlogPostsSection: React.FC = () => {
   const [showAll, setShowAll] = useState(false);
 
   if (isLoading) {
-    return <LoaderComponent/>
+    return <LoaderComponent />;
   }
 
   if (isError) {
-    return <SomethingWentWrong/>
+    return <SomethingWentWrong />;
   }
 
   const visibleServices = showAll ? blogPosts : blogPosts.slice(0, 4);
@@ -45,7 +45,7 @@ const BlogPostsSection: React.FC = () => {
               </p>
             </div>
 
-            <div className="space-y-8 sm:space-y-10 lg:space-y-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
               {visibleServices.map((post: IBlog, index: number) => (
                 <BlogPostCard
                   key={post._id}
