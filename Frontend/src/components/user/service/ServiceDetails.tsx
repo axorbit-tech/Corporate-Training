@@ -19,11 +19,11 @@ const ServiceDetailsImageSection: React.FC = () => {
   }, [serviceData]);
 
   if (isLoading) {
-    return <LoaderComponent/>
+    return <LoaderComponent />;
   }
 
   if (error || !service) {
-    return <SomethingWentWrong/>
+    return <SomethingWentWrong />;
   }
 
   return (
@@ -48,26 +48,28 @@ const ServiceDetailsImageSection: React.FC = () => {
         </div>
 
         {/* Subservices Section */}
+        {/* Subservices Section */}
         {service?.subServices && service.subServices.length > 0 && (
           <div className="mt-12 border-t border-gray-200 pt-8">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-center mb-8 text-gray-800">
               Our Services Include
             </h2>
 
-            <div className="space-y-8">
+            {/* Responsive Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {service.subServices.map(
                 (subservice: ISubService, index: number) => (
                   <div
                     key={index}
-                    className="bg-white rounded-lg shadow-md p-6 sm:p-8 border border-gray-100 hover:shadow-lg transition-shadow duration-300"
+                    className="bg-white rounded-lg shadow-md p-6 sm:p-8 border border-gray-100 hover:shadow-lg transition-shadow duration-300 flex flex-col"
                   >
                     <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-4 text-gray-800 border-l-4 border-blue-500 pl-4">
                       {subservice.title}
                     </h3>
 
-                    <div className="text-sm sm:text-base text-gray-700 leading-relaxed text-justify whitespace-pre-line">
+                    <p className="text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-line text-left">
                       {subservice.content}
-                    </div>
+                    </p>
                   </div>
                 )
               )}

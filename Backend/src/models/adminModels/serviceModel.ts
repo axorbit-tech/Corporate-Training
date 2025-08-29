@@ -1,6 +1,7 @@
 import mongoose, { Document } from "mongoose";
 
 export interface ISubService {
+  id: number;
   title: string;
   content: string;
 }
@@ -17,6 +18,7 @@ export interface IServices extends Document {
 
 const subServiceSchema = new mongoose.Schema<ISubService>(
   {
+    id: { type: Number, required: true },
     title: { type: String, required: true },
     content: { type: String, required: true },
   },

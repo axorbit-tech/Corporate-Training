@@ -34,9 +34,6 @@ const addService = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-
-    
-
     if (!req.file) {
       res.status(HttpStatusCode.BAD_REQUEST).json({
         success: false,
@@ -44,8 +41,6 @@ const addService = async (req: Request, res: Response): Promise<void> => {
       }); 
       return;
     }
-
-    
 
     const isServiceExist = await serviceModel.findOne({ title });
 
